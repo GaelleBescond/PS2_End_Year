@@ -25,7 +25,7 @@ io.on('connection', function (socket) {
   console.log('a user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
-    rotation: 0,
+    rotation: Math.floor(Math.random() * 360),
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 500) + 50,
     playerId: socket.id,
@@ -49,6 +49,7 @@ io.on('connection', function (socket) {
     // when a player moves, update the player data
 
   });
+
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
@@ -56,6 +57,10 @@ io.on('connection', function (socket) {
     // emit a message to all players about the player that moved
     socket.broadcast.emit('playerMoved', players[socket.id]);
   });
+
+
+
+
   socket.on('starCollected', function () {
     if (players[socket.id].team === 'red') {
       scores.red += 10;
@@ -67,6 +72,9 @@ io.on('connection', function (socket) {
     io.emit('starLocation', star);
     io.emit('scoreUpdate', scores);
   });
+
+
+
 });
 
 

@@ -1,3 +1,11 @@
+/*main game script for multiplayer
+It will contain all preloads
+It will be responsible for all server communication
+
+
+
+*/
+
 var config = {
   type: Phaser.AUTO,
   parent: 'phaser-example',
@@ -7,7 +15,7 @@ var config = {
     default: 'arcade',
     arcade: {
       debug: true,
-      gravity: { y: false }
+      gravity: { y: false}
     }
   },
   scene: {
@@ -80,9 +88,6 @@ function create() {
     }, null, self);
   });
 }
-
-
-
 function update() {
   if (this.ship) {
     //rotation
@@ -116,7 +121,6 @@ function update() {
   }
 
 }
-
 function addPlayer(self, playerInfo) {
   self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
   if (playerInfo.team === 'blue') {
@@ -128,8 +132,6 @@ function addPlayer(self, playerInfo) {
   self.ship.setAngularDrag(100);
   self.ship.setMaxVelocity(200);
 }
-
-
 function addOtherPlayers(self, playerInfo) {
   const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
   if (playerInfo.team === 'blue') {
