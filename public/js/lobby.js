@@ -5,10 +5,18 @@ Once they are ready, they press the ready button.
 The next level can then begin.
 */
 
+
+import eventsCenter from "./EventsCenter.js"
+import { deplacement } from "./script.js";
+
 class lobby extends Phaser.Scene {
   constructor() {
     super("lobby");
   }
+
+
+
+
   init(data) { };
   preload() { };
   create() { };

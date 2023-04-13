@@ -1,6 +1,6 @@
 /*main game script for multiplayer
 It will contain all preloads
-It will be responsible for all server communication
+It will be responsible for all server communications
 
 
 

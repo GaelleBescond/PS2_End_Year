@@ -15,13 +15,25 @@ It must display:
 
 
 */
+import eventsCenter from "./EventsCenter.js"
 
-class interface extends Phaser.Scene {
+///UI///
+
+
+export class interface extends Phaser.Scene {
   constructor() {
     super("interface");
   }
-  init(data) { };
-  preload() { };
-  create() { };
-  update() { };
+  
+  create() {
+    this.label = this.add.text(10, 10, 'Count: 0', {
+      fontSize: 32
+    })
+
+    eventsCenter.on('update-count', this.updateCount, this);
+  };
+
+  updateCount() {
+    this.label.text = `Count: ${count}`
+  };
 }
