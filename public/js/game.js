@@ -5,7 +5,12 @@ It will be responsible for all server communications
 
 
 */
+import { SceneUn as SceneUn } from "./sceneUn.js";
+import { sceneDeux as sceneDeux } from "./sceneDeux.js";
+import {UiScene as UiScene} from "./uiScene.js"
 
+
+//global game parameters
 var config = {
   type: Phaser.AUTO,
   parent: 'phaser-example',
@@ -18,7 +23,7 @@ var config = {
       gravity: { y: false}
     }
   },
-  scene: {
+  scene: { [lobby, interface, mission5],
     preload: preload,
     create: create,
     update: update
@@ -26,6 +31,27 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+
+export function deplacement(player, cursors){
+    if (cursors.left.isDown) { //si la touche gauche est appuyée
+        player.setVelocityX(-160); //alors vitesse négative en X
+        player.anims.play('left', true); //et animation => gauche
+    }
+    else if (cursors.right.isDown) { //sinon si la touche droite est appuyée
+        player.setVelocityX(160); //alors vitesse positive en X
+        player.anims.play('right', true); //et animation => droite
+    }
+    else { // sinon
+        player.setVelocityX(0); //vitesse nulle
+        player.anims.play('turn'); //animation fait face caméra
+    }
+    if (cursors.up.isDown && player.body.touching.down) {
+        //si touche haut appuyée ET que le perso touche le sol
+        player.setVelocityY(-330); //alors vitesse verticale négative
+        //(on saute)
+    }
+}
+
 
 function preload() {
   this.load.image('ship', 'assets/spaceShips001.png');
