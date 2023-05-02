@@ -1,5 +1,5 @@
 /*Lobby
-Players are supposed to meet, and chose what role they want to pick (driver, shooter).
+Players are supposed to meet, and choose what role they want to pick (driver, shooter).
 Then they will position themselves in front the different modules they want to equip for their roles.
 Once they are ready, they press the ready button.
 The next level can then begin.
@@ -9,17 +9,28 @@ The next level can then begin.
 
 class Lobby extends Phaser.Scene {
   constructor() {
-    super("LobbyScene");
+    super({
+      key: "LobbyScene",
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: true,
+          gravity: { x: 100, y: -150 }
+        }
+      }
+    });
+
   }
   init(data) { };
 
 
   create() {
-    console.log(this);   
+    console.log(this);
     this.scene.run('Interface');
     var self = this;
+
     this.otherPlayers = this.physics.add.group();
-    this.socket.on('currentPlayers', function (players) {
+    socket.on('currentPlayers', function (players) {
       Object.keys(players).forEach(function (id) {
         if (players[id].playerId === self.socket.id) {
           addPlayer(self, players[id]);
@@ -30,11 +41,11 @@ class Lobby extends Phaser.Scene {
     });
 
 
-    this.socket.on('newPlayer', function (playerInfo) {
+    socket.on('newPlayer', function (playerInfo) {
       addOtherPlayers(self, playerInfo);
     });
 
-    this.socket.on('disconnect', function (playerId) {
+    socket.on('disconnect', function (playerId) {
       self.otherPlayers.getChildren().forEach(function (otherPlayer) {
         if (playerId === otherPlayer.playerId) {
           otherPlayer.destroy();
@@ -42,7 +53,7 @@ class Lobby extends Phaser.Scene {
       });
     });
 
-    this.socket.on('playerMoved', function (playerInfo) {
+    socket.on('playerMoved', function (playerInfo) {
       self.otherPlayers.getChildren().forEach(function (otherPlayer) {
         if (playerInfo.playerId === otherPlayer.playerId) {
           otherPlayer.setRotation(playerInfo.rotation);
@@ -51,11 +62,11 @@ class Lobby extends Phaser.Scene {
       });
     });
 
-    this.socket.on('starLocation', function (starLocation) {
+    socket.on('starLocation', function (starLocation) {
       if (self.star) self.star.destroy();
       self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
       self.physics.add.overlap(self.ship, self.star, function () {
-        this.socket.emit('starCollected');
+        socket.emit('starCollected');
       }, null, self);
     });
 
@@ -66,6 +77,10 @@ class Lobby extends Phaser.Scene {
   update() {
     if (this.ship) {
       //rotation
+      if (this.space.isDown) {
+
+      }
+
       if (this.cursors.left.isDown) {
         this.ship.setAngularVelocity(-150);
       } else if (this.cursors.right.isDown) {
@@ -85,7 +100,7 @@ class Lobby extends Phaser.Scene {
       var y = this.ship.y;
       var r = this.ship.rotation;
       if (this.ship.oldPosition && (x !== this.ship.oldPosition.x || y !== this.ship.oldPosition.y || r !== this.ship.oldPosition.rotation)) {
-        this.socket.emit('playerMovement', { x: this.ship.x, y: this.ship.y, rotation: this.ship.rotation });
+        socket.emit('playerMovement', { x: this.ship.x, y: this.ship.y, rotation: this.ship.rotation });
       }
       // save old position data
       this.ship.oldPosition = {
