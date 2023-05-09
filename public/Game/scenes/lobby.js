@@ -1,4 +1,5 @@
 /*Lobby
+This is the testroom
 Players are supposed to meet, and choose what role they want to pick (driver, shooter).
 Then they will position themselves in front the different modules they want to equip for their roles.
 Once they are ready, they press the ready button.
@@ -114,7 +115,7 @@ class Lobby extends Phaser.Scene {
 }
 
 function addPlayer(self, playerInfo) {
-  self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
+  self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'robot').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
   if (playerInfo.team === 'blue') {
     self.ship.setTint(0x0000ff);
   } else {

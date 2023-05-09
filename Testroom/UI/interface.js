@@ -26,12 +26,14 @@ class Interface extends Phaser.Scene {
   constructor() {
     super("Interface");
   }
+  init(data) {
 
+  }
   create() {
     console.log("UI");
     this.scene.bringToTop();
-    this.blueScoreText = this.add.text(16, 16, 'SCORE', { fontSize: '32px', fill: '#0000FF' });
-    this.redScoreText = this.add.text(16, 48, 'SCORE', { fontSize: '32px', fill: '#FF0000' });
+    this.progressBar = this.add.text(16, 16, 'Progress : 10%', { fontSize: '32px', fill: '#0000FF' });
+    this.accel = this.add.text(16, 48, 'Accel :', { fontSize: '32px', fill: '#FF0000' });
 
   };
 }

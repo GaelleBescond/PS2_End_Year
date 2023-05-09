@@ -6,7 +6,7 @@ class Preload extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('ship', 'assets/spaceShips001.png');
+        this.load.image('robot', 'assets/robot.png');
         this.load.image('otherPlayer', 'assets/enemyBlack5.png');
         this.load.image('star', 'assets/stargold.png');
 
