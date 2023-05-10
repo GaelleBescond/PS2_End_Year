@@ -35,7 +35,7 @@ class TestRoom extends Phaser.Scene {
     const layers = this.loadMap(levelMap);
     this.playAmbientMusic();
     //create player
-    this.player = new Player(this, 64, 0, 'robot').setScale(0.15);
+    this.player = new Player(this, 64, 0, 'robot').setScale(0.25);
     this.physics.add.collider(this.player, layers.calc_walls);
     //create weapon slot
     this.gun = new Weapon(this, this.player.x, this.player.y - 48, 'gun');
@@ -77,14 +77,22 @@ class TestRoom extends Phaser.Scene {
 
     const { left, right, up, down, space } = this.cursors;
     //Gravity tool
-    if (true) {
-      if (down.isDown) {
+    if (down.isDown) {
+      if ((this.player.body.velocity.x && this.player.body.velocity.y) != 0) {
+        if (this.player.body.velocity.x > 0) {
+          this.player.body.acceleration.x -= 1;
+        } else if (this.player.body.velocity.x < 0) {
+          this.player.body.acceleration.x += 1;
+        }
+      } else {
         this.physics.world.gravity.y = 2600;
       }
-      else {
-        this.physics.world.gravity.y = 400;
-      };
     }
+    else {
+      this.physics.world.gravity.y = 400;
+    };
+
+
     //camera positioning
     this.cameraFocal.setPosition(this.player.x + (this.pointer_stats.cameraPosX) * 0.7, this.player.y + (this.pointer_stats.cameraPosY) * 0.7)
 
@@ -128,10 +136,10 @@ class TestRoom extends Phaser.Scene {
   createEnemies(layer, calc_walls) {
     const enemies = {};
     layer.objects.forEach(spawn => {
-      console.log(spawn);
+      console.log("spawn");
       let enemy = null;
       enemy = new Enemy(this, spawn.x, spawn.y, 'enemy').setScale(0.15);
-      this.physics.add.collider(enemy, calc_walls, null, this)
+      //this.physics.add.collider(enemy, calc_walls, null, this)
       //enemy.createCollider(calc_walls); 
     })
     return enemies;

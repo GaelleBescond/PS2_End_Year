@@ -1,7 +1,7 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene, x, y) {
-        super(scene, x, y, "rest");
+        super(scene, x, y, "player_run");
         scene.add.existing(this); //Add object to scene
         scene.physics.add.existing(this); //Gives physics.body 
         this.init();
@@ -15,10 +15,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.canMove = true;
         this.canShoot = true;
         this.body.maxVelocity.x = 800;
+        this.body.maxVelocity.y = 800;
         this.body.acceleration.x = 0;
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-
+        //Animations
+        this.scene.anims.create({
+            key: "run_right",
+            frames: this.scene.anims.generateFrameNumbers("player_run", { start: 12, end: 23 }),
+            frameRate: 20,
+            repeat: -1
+        });
+        this.scene.anims.create({
+            key: "run_left",
+            frames: this.scene.anims.generateFrameNumbers("player_run", { start: 0, end: 11 }),
+            frameRate: 20,
+            repeat: -1,
+            reverse: true
+        });
     }
 
     initEvents() {
@@ -37,6 +51,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else {
             this.airMovements(left, right, up, down, space);
         }
+        //Animations
+        this.animate();
     }
 
     groundMovements(left, right, up, down, space) {
@@ -78,19 +94,30 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         //air friction
 
-        else if (this.body.acceleration.x >= 5) {
-            this.body.acceleration.x -= 15;
+        else if (this.body.velocity.x > 5) {
+            this.body.acceleration.x -= 5;
         }
-        else if (this.body.velocity.x <= -5) {
-            this.body.acceleration.x += 15;
+        else if (this.body.velocity.x < -5) {
+            this.body.acceleration.x += 5;
         } else if (-5 < this.velocityX < 5) {
             //ground friction
-            this.body.acceleration.x = 0;
+            this.body.velocity.x = 0;
         }
         this.setVelocityX(this.body.acceleration.x);
 
     }
 
+    animate() {
+        if (this.body.velocity.x > 20 && this.body.blocked.down) {
+            this.play('run_right', true);
+        } else if (this.body.velocity.x < 20 && this.body.blocked.down) {
+            this.play('run_left', true);
+        } else {
+            this.anims.stop();
+            this.setFrame(0);
+        }
+
+    }
     loseHP() {
         this.hp -= 1;
     }
