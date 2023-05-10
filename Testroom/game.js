@@ -4,8 +4,8 @@ It will be responsible for all server communications
 
 //global game parameters
 
-import PreloadScene from './preload.js';
-import LobbyScene from './scenes/lobby.js';
+import PreloadScene from './scenes/preload.js';
+import TestRoom from './scenes/testroom.js';
 import Interface from './UI/interface.js';
 
 
@@ -23,7 +23,7 @@ const SHARED_CONFIG = {
   }
 }
 
-const Scenes = [PreloadScene, LobbyScene, Interface];
+const Scenes = [PreloadScene, TestRoom, Interface];
 const createScene = Scene => new Scene(SHARED_CONFIG) //A voir
 const initScenes = () => Scenes.map(createScene)
 

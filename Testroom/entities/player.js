@@ -1,9 +1,7 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y, hp) {
-        super(scene, x, y, "Player");
-        this.hp = hp;
-
+    constructor(scene, x, y) {
+        super(scene, x, y, "rest");
         scene.add.existing(this); //Add object to scene
         scene.physics.add.existing(this); //Gives physics.body 
         this.init();
@@ -20,7 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.acceleration.x = 0;
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-        console.log("player")
+
     }
 
     initEvents() {
@@ -59,12 +57,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //ground friction
             this.body.acceleration.x = 0;
         }
-
         this.setVelocityX(this.body.acceleration.x);
         //jump
         if (up.isDown) {
-            this.setVelocityY(-660);
+            this.body.acceleration.y = -250;
+        } else {
+            this.body.acceleration.y = 0;
         }
+        this.setVelocityY(this.body.acceleration.y);
     }
     airMovements(left, right, up, down, space) {
         if ((left.isDown) || (right.isDown)) {

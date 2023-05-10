@@ -1,16 +1,14 @@
 class Weapon extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y, ammunition) {
-        super(scene, x, y,"Weapon");
-        this.ammunition = ammunition;
+    constructor(scene, x, y) {
+        super(scene, x, y, "gun");
         scene.add.existing(this); //Add object to scene
-        scene.physics.add.existing(this); //Gives physics.body 
         this.init();
         this.initEvents();
     }
 
     init() {
-  
+
         this.bulletVelocity = 1500;
         this.weaponWeight = 100;
         this.weaponCooldown = 100;
