@@ -18,7 +18,6 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        console.log("Preload");
         this.scene.start("LobbyScene");
 
     }

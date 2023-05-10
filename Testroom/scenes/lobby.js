@@ -4,7 +4,8 @@ Then they will position themselves in front the different modules they want to e
 Once they are ready, they press the ready button.
 The next level can then begin.
 */
-
+import Player from "../entities/player.js";
+import Weapon from "../entities/gun.js";
 
 
 class Lobby extends Phaser.Scene {
@@ -40,16 +41,16 @@ class Lobby extends Phaser.Scene {
     this.calc_terrain = this.carteDuNiveau.createLayer("Background", this.tileset);
     this.calc_walls = this.carteDuNiveau.createLayer("Walls", this.tileset);
     this.calc_walls.setCollisionByProperty({ isSolid: true });
-    //this.sound.play("fleet");
+    //this.sound.play("fleet", { volume: 0.35 });
 
 
-    //loading player
-    this.player = this.physics.add.sprite(128 * 4, 128 * 28, 'robot').setScale(0.25);
-    this.player.body.maxVelocity.x = 800;
-    this.player.body.acceleration.x = 0;
+    //create player
+    //Recréé le joueur dans la scène en lui passant des propriétés qu'il garde de scène en scène (liste heros, hero actuel, hp)
+    this.player = new Player(this, 128 * 4, 128 * 4 * 6, 50);
     this.physics.add.collider(this.player, this.calc_walls);
-    //loading weapon
-    this.gun = this.add.sprite(this.player.x, this.player.y - 48, 'gun');
+    //create weapon slot
+    this.gun = new Weapon(this, this.player.x, this.player.y - 48, 1500);
+
 
     if (this.gun.setParent) {
       this.gun.setParent(this.player);
@@ -80,9 +81,8 @@ class Lobby extends Phaser.Scene {
     this.input.on('pointermove', function gunAngle(pointer) {
       this.pointer_stats.cameraPosX = pointer.x - 1280 / 2;
       this.pointer_stats.cameraPosY = pointer.y - 768 / 2;
-      //console.log(this.pointer_stats.cameraPosX, this.pointer_stats.cameraPosY)
       this.pointer_stats.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
-      //console.log(this.pointer_stats.gunAngle)
+      //console.log(this.player.x,this.player.y)
     }, this);
 
     //mouse actions
@@ -94,62 +94,17 @@ class Lobby extends Phaser.Scene {
 
 
   update() {
-    //ground movements
-    if (this.player.body.blocked.down) {
-      if (this.cursors.left.isDown || this.cursors.right.isDown) {
-        if (this.cursors.left.isDown && this.player.body.acceleration.x > -300) {
-          this.player.body.acceleration.x -= 80;
-        } else
-          if (this.cursors.right.isDown && this.player.body.acceleration.x < 300) {
-            this.player.body.acceleration.x += 80;
-          }
-      } else if (-10 < this.player.velocityX < 10) {
-        //ground friction
-        this.player.body.acceleration.x = 0;
-      } else if (this.player.body.acceleration.x > 0) {
-        this.player.body.acceleration.x -= 60;
-        //console.log('neg');
-      } else if (this.player.body.acceleration.x < 0) {
-        this.player.body.acceleration.x += 60;
-        //console.log('pos');
-      }
 
-      this.player.setVelocityX(this.player.body.acceleration.x);
-      //jump
-      if (this.cursors.up.isDown) {
-        this.player.setVelocityY(-660);
-      }
-    }
-
-    //air movements
-    else {
-      if ((this.cursors.left.isDown) || (this.cursors.right.isDown)) {
-        if (this.cursors.left.isDown && this.player.body.acceleration.x > -300) {
-          this.player.body.acceleration.x -= 60;
-        }
-        if (this.cursors.right.isDown && this.player.body.acceleration.x < 300) {
-          this.player.body.acceleration.x += 60;
-        }
-        this.player.setVelocityX(this.player.body.acceleration.x);
-      }
-      //air friction
-      else {
-        if (this.player.body.acceleration.x > 0) {
-          this.player.body.acceleration.x -= 15;
-        }
-        if (this.player.body.velocity.x < 0) {
-          this.player.body.acceleration.x += 15;
-        }
-      }
-      this.player.setVelocityX(this.player.body.acceleration.x);
-    }
+    const { left, right, up, down, space } = this.cursors;
     //Gravity tool
-    if (this.cursors.down.isDown) {
-      this.physics.world.gravity.y = 2600;
+    if (true) {
+      if (down.isDown) {
+        this.physics.world.gravity.y = 2600;
+      }
+      else {
+        this.physics.world.gravity.y = 400;
+      };
     }
-    else {
-      this.physics.world.gravity.y = 400;
-    };
     //camera positioning
     this.cameraFocal.setPosition(this.player.x + (this.pointer_stats.cameraPosX) * 0.7, this.player.y + (this.pointer_stats.cameraPosY) * 0.7)
 
@@ -165,10 +120,14 @@ class Lobby extends Phaser.Scene {
     //console.log("bullet destroyed")
   }
   shootBullet(bullet, x, y, angle) {
-    //console.log("shoot!")
+    //console.log("shoot!") 
+    this.gun.shoot();
     bullet.create(x, y, 'bullet');
-    this.directionBullet(bullet, angle)
+    bullet.setVelocity(Math.cos(angle) * this.gun.getBulletVelocity(), Math.sin(angle) * this.gun.getBulletVelocity());
+
+
   }
+
   directionBullet(bullet, angle) {
     bullet.setVelocity(Math.cos(angle) * 1500, Math.sin(angle) * 1500);
   }
