@@ -30,7 +30,6 @@ class TestRoom extends Phaser.Scene {
 
 
   create() {
-    this.scene.run('Interface');
     const levelMap = this.add.tilemap("testroom");
     const layers = this.loadMap(levelMap);
     this.playAmbientMusic();
@@ -39,50 +38,53 @@ class TestRoom extends Phaser.Scene {
     this.physics.add.collider(this.player, layers.calc_walls);
     //create weapon slot
     this.gun = new Weapon(this, this.player.x, this.player.y - 48, 'gun');
+    //this.gun.setParent(this.player);
     const enemies = this.createEnemies(layers.spawnPoints, layers.calc_walls);
-    /*if (this.gun.setParent) {
-      this.gun.setParent(this.player);
-    } else {
-      console.log('setParent method not available for this object');
-    }*/
 
-
+    this.physics.add.collider(enemies, layers.calc_walls);
     //light
     //this.light = this.add.light(this.player.x, this.player.y, 0xffffff, 128);
     this.createCamera();
     //mouse variables storage (for an easier later use)
-    this.pointer_stats = {
+    this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
       cameraPosY: 0,
+      ammo: this.gun.ammunition,
+      enemiesNumber: 0,
+      progress: 0,
     }
     //mouse movements
     this.input.on('pointermove', function (pointer) {
-      this.pointer_stats.cameraPosX = pointer.x - 1280 / 2;
-      this.pointer_stats.cameraPosY = pointer.y - 768 / 2;
-      this.pointer_stats.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
-      //console.log(this.player.x, this.player.y)
+      this.data_holder.cameraPosX = pointer.x - 1280 / 2;
+      this.data_holder.cameraPosY = pointer.y - 768 / 2;
+      this.data_holder.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
+      //console.log(this.data_holder)
+      this.events.emit('updateUI', this.data_holder);
     }, this);
 
     //mouse actions
     this.input.on('pointerdown', function (pointer) {
-      this.shootBullet(this.gun.x, this.gun.y, this.pointer_stats.gunAngle, layers);
+      //console.log(this.gun.weaponCanShoot, this.data_holder.ammo)
+      if (this.gun.weaponCanShoot && this.gun.ammunition > 0) {
+        this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
+      }
     }, this);
 
     //keyboard
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.loadInterface();
   };
 
   update() {
-
     const { left, right, up, down, space } = this.cursors;
     //Gravity tool
     if (down.isDown) {
       if ((this.player.body.velocity.x && this.player.body.velocity.y) != 0) {
         if (this.player.body.velocity.x > 0) {
-          this.player.body.acceleration.x -= 1;
+          this.player.body.acceleration.x -= 10;
         } else if (this.player.body.velocity.x < 0) {
-          this.player.body.acceleration.x += 1;
+          this.player.body.acceleration.x += 10;
         }
       } else {
         this.physics.world.gravity.y = 2600;
@@ -91,13 +93,12 @@ class TestRoom extends Phaser.Scene {
     else {
       this.physics.world.gravity.y = 400;
     };
-
-
+    //enemy shooting at player
     //camera positioning
-    this.cameraFocal.setPosition(this.player.x + (this.pointer_stats.cameraPosX) * 0.7, this.player.y + (this.pointer_stats.cameraPosY) * 0.7)
+    this.cameraFocal.setPosition(this.player.x + (this.data_holder.cameraPosX) * 0.7, this.player.y + (this.data_holder.cameraPosY) * 0.7)
 
     //mouse aiming for the gun
-    this.gun.setRotation(this.pointer_stats.gunAngle)
+    this.gun.setRotation(this.data_holder.gunAngle)
     //weaponry (need to be child but doesn't work)
     this.gun.x = this.player.x
     this.gun.y = this.player.y - 36
@@ -123,7 +124,7 @@ class TestRoom extends Phaser.Scene {
   }
 
   playAmbientMusic() {
-    //this.sound.play("fleet", { volume: 0.35 });
+    this.sound.play("fleet", { volume: 0.35 });
   }
 
   getSpawnCoordinates(layer) {
@@ -134,26 +135,38 @@ class TestRoom extends Phaser.Scene {
     }
   }
   createEnemies(layer, calc_walls) {
-    const enemies = {};
+    const enemies = this.physics.add.group();
     layer.objects.forEach(spawn => {
       console.log("spawn");
       let enemy = null;
       enemy = new Enemy(this, spawn.x, spawn.y, 'enemy').setScale(0.15);
-      //this.physics.add.collider(enemy, calc_walls, null, this)
-      //enemy.createCollider(calc_walls); 
+      enemies.add(enemy)
+      this.physics.add.collider(enemy)
     })
     return enemies;
   }
 
-  shootBullet(x, y, angle, layers) {
-    this.gun.shoot();
+  shootBullet(x, y, angle, layers, enemies) {
+    this.data_holder.ammo -= 1;
+    this.gun.weaponCanShoot = false;
     this.bullet = this.physics.add.sprite(x, y, 'bullet')
-    this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy_bullet, null, this)
-    this.bullet.setVelocity(Math.cos(angle) * this.gun.getBulletVelocity(), Math.sin(angle) * this.gun.getBulletVelocity());
+    this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
+    this.physics.add.collider(this.bullet, enemies, this.destroy, null, this)
+    this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
+    this.sound.play("shoot", { volume: 0.15 });
+    this.time.delayedCall(1000, () => {
+      this.gun.weaponCanShoot = true;
+    });
+
   }
 
-  destroy_bullet(bullet) {
-    bullet.destroy()
+  destroy(object) {
+    object.destroy()
+  }
+
+  loadInterface() {
+    this.scene.run('Interface', {
+    });
   }
 }
 

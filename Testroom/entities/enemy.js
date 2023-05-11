@@ -14,9 +14,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.maxSpeed = 0;
         this.canMove = true;
         this.canShoot = true;
+        this.shootAngle = 0;
         this.body.maxVelocity.x = 800;
         this.body.acceleration.x = 0;
-        this.platformCollidersLayer = null; 
+        this.platformCollidersLayer = null;
 
     }
 

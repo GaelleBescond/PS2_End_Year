@@ -26,15 +26,23 @@ class Interface extends Phaser.Scene {
   constructor() {
     super("Interface");
   }
-  init(data) {
+  init() {
 
   }
-  create() {
-    console.log("UI");
-    this.scene.bringToTop();
-    this.progressBar = this.add.text(16, 16, 'Progress : 10%', { fontSize: '32px', fill: '#0000FF' });
-    this.accel = this.add.text(16, 48, 'Accel :', { fontSize: '32px', fill: '#FF0000' });
 
+  create() {
+    this.scene.bringToTop();
+    this.progressBar = this.add.text(16, 16, 'Progress :', { fontSize: '32px', fill: '#0000FF' });
+    this.ammoCount = this.add.text(16, 16 * 3, 'Ammo :', { fontSize: '32px', fill: '#FF0000' });
+    this.weaponDisplay = this.add.text(16, 16 * 5, 'Rifle', { fontSize: '32px', fill: '#00FF00' });
   };
+
+  update() {
+    this.events.on('updateUI', function (data) {
+      console.log("update")
+      this.progressBar.setText('Progress : ' + data.progress)
+      this.ammoCount.setText('Ammo : ' + data.ammo)
+    }, this);
+  }
 }
 export default Interface
