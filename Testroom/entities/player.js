@@ -3,33 +3,36 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "player");
         scene.add.existing(this); //Add object to scene
-        scene.physics.add.existing(this); //Gives physics.body 
+        scene.physics.add.existing(this); //Gives physics to body 
+        this.setPipeline('Light2D');
         this.init();
         this.initEvents();
     }
 
     init() {
         //Variables for player
+        this.hp = 1;
         this.accel = 0;
         this.maxSpeed = 0;
         this.canMove = true;
         this.canShoot = true;
         this.body.maxVelocity.x = 800;
-        this.body.maxVelocity.y = 800;
+        this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
+        this.canThrust = true;
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         //Animations
         this.scene.anims.create({
             key: "run_right",
-            frames: this.scene.anims.generateFrameNumbers("player", { start: 12, end: 23 }),
-            frameRate: 20,
+            frames: this.scene.anims.generateFrameNumbers("player", { start: 14, end: 25 }),
+            frameRate: 18,
             repeat: -1
         });
         this.scene.anims.create({
             key: "run_left",
             frames: this.scene.anims.generateFrameNumbers("player", { start: 0, end: 11 }),
-            frameRate: 20,
+            frameRate: 18,
             repeat: -1,
             reverse: true
         });
@@ -58,32 +61,55 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     groundMovements(left, right, up, down, space) {
         if (left.isDown || right.isDown) {
-            if (left.isDown && this.body.acceleration.x > -400) {
-                this.body.acceleration.x -= 400;
-            } else
-                if (right.isDown && this.body.acceleration.x < 400) {
-                    this.body.acceleration.x += 400;
+            if (left.isDown) {
+                if (this.body.velocity.x > 0) {
+                    this.body.acceleration.x = -2400;
+
+                } else {
+
+                    this.body.acceleration.x = -800;
                 }
+            }
+
+            if (right.isDown) {
+                if (this.body.velocity.x < 0) {
+                    this.body.acceleration.x = 2400;
+
+                } else {
+
+                    this.body.acceleration.x = 800;
+                }
+            }
+
         } else if (this.body.velocity.x >= 50) {
-            this.body.acceleration.x -= 100;
+            this.body.acceleration.x -= 400;
             //console.log('neg');
         } else if (this.body.velocity.x <= - 50) {
-            this.body.acceleration.x += 100;
+            this.body.acceleration.x += 400;
             //console.log('pos');
-        } else if (-20 < this.body.velocity.x < 20) {
+        } else if (-10 < this.body.velocity.x < 10) {
             //ground friction
             this.body.acceleration.x = 0;
-            this.setVelocityX(this.body.acceleration.x);
+            this.setVelocityX(0);
         }
         //jump
         if (up.isDown) {
-            this.body.acceleration.y = -300;
+            this.canThrust = false;
+            this.body.acceleration.y = -400;
         } else {
             this.body.acceleration.y = 0;
         }
         this.setVelocityY(this.body.acceleration.y);
     }
+
+
+
     airMovements(left, right, up, down, space) {
+        this.body.acceleration.y += 20;
+        if (up.isDown && this.canThrust) {
+            console.log("up")
+            this.body.velocity.y = this.body.velocity.y / 2
+        }
         if ((left.isDown) || (right.isDown)) {
             if (left.isDown && this.body.acceleration.x > -400) {
                 this.body.acceleration.x -= 60;
@@ -123,7 +149,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.play('run_left', true);
         } else {
             this.anims.stop();
-            this.setFrame(0);
+            this.setFrame(12);
         }
 
     }

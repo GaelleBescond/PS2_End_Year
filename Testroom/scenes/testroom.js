@@ -17,7 +17,7 @@ class TestRoom extends Phaser.Scene {
         default: 'arcade',
         arcade: {
           debug: true,
-          gravity: { y: 400 }
+          gravity: { y: 800 }
         }
       },
       render: {
@@ -33,45 +33,24 @@ class TestRoom extends Phaser.Scene {
     const levelMap = this.add.tilemap("testroom");
     const layers = this.loadMap(levelMap);
     this.playAmbientMusic();
-    //create player
-    this.player = new Player(this, 64, 0, 'robot').setScale(0.25);
+    this.player = new Player(this, 64, 0, 'player').setScale(0.25);
     this.physics.add.collider(this.player, layers.calc_walls);
-    //create weapon slot
-    this.gun = new Weapon(this, this.player.x, this.player.y - 48, 'gun');
-    //this.gun.setParent(this.player);
+    this.gun = new Weapon(this, this.player.x, this.player.y - 48, 'gun').setScale(0.07);
     const enemies = this.createEnemies(layers.spawnPoints, layers.calc_walls);
-
     this.physics.add.collider(enemies, layers.calc_walls);
-    //light
-    //this.light = this.add.light(this.player.x, this.player.y, 0xffffff, 128);
+    this.createLights();
     this.createCamera();
-    //mouse variables storage (for an easier later use)
+    //variables storage (for an easier later use)
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
       cameraPosY: 0,
       ammo: this.gun.ammunition,
       enemiesNumber: 0,
-      progress: 0,
+      progress: 0
     }
-    //mouse movements
-    this.input.on('pointermove', function (pointer) {
-      this.data_holder.cameraPosX = pointer.x - 1280 / 2;
-      this.data_holder.cameraPosY = pointer.y - 768 / 2;
-      this.data_holder.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
-      //console.log(this.data_holder)
-      this.events.emit('updateUI', this.data_holder);
-    }, this);
-
-    //mouse actions
-    this.input.on('pointerdown', function (pointer) {
-      //console.log(this.gun.weaponCanShoot, this.data_holder.ammo)
-      if (this.gun.weaponCanShoot && this.gun.ammunition > 0) {
-        this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
-      }
-    }, this);
-
-    //keyboard
+    this.mouseMovements();
+    this.mouseActions(layers, enemies);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.loadInterface();
   };
@@ -93,15 +72,35 @@ class TestRoom extends Phaser.Scene {
     else {
       this.physics.world.gravity.y = 400;
     };
-    //enemy shooting at player
     //camera positioning
     this.cameraFocal.setPosition(this.player.x + (this.data_holder.cameraPosX) * 0.7, this.player.y + (this.data_holder.cameraPosY) * 0.7)
 
-    //mouse aiming for the gun
+    //mouse aiming and updated location for the gun
     this.gun.setRotation(this.data_holder.gunAngle)
-    //weaponry (need to be child but doesn't work)
-    this.gun.x = this.player.x
+    if (this.data_holder.cameraPosX > 0) {
+      this.gun.x = this.player.x + 10
+    }
+    else if (this.data_holder.cameraPosX < 0) {
+      this.gun.x = this.player.x - 10
+
+    }
     this.gun.y = this.player.y - 36
+    this.playerLight.setPosition(this.gun.x, this.gun.y);
+    //data export for facing animations
+    this.playerOrientation();
+  }
+
+  loadMap(levelMap) {
+    this.skyparallax = this.add.tileSprite(0, 0, 1600, 1600, "background").setScale(2);
+    this.skyparallax.setOrigin(0, 0).setScrollFactor(0.2).setTint(0x555555);
+    const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
+    const calc_terrain = levelMap.createLayer("Background", tileset);
+    const calc_walls = levelMap.createLayer("Walls", tileset)
+    calc_walls.setPipeline('Light2D');
+    calc_terrain.setPipeline('Light2D');
+    const spawnPoints = levelMap.getObjectLayer("Spawn");
+    calc_walls.setCollisionByProperty({ isSolid: true });
+    return { spawnPoints, calc_walls, calc_terrain, tileset }
 
   }
 
@@ -113,27 +112,6 @@ class TestRoom extends Phaser.Scene {
     this.cameras.main.setZoom(0.55);
   }
 
-  loadMap(levelMap) {
-    const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
-    const calc_terrain = levelMap.createLayer("Background", tileset);
-    const calc_walls = levelMap.createLayer("Walls", tileset);
-    const spawnPoints = levelMap.getObjectLayer("Spawn");
-    calc_walls.setCollisionByProperty({ isSolid: true });
-    return { spawnPoints, calc_walls, calc_terrain, tileset }
-
-  }
-
-  playAmbientMusic() {
-    this.sound.play("fleet", { volume: 0.35 });
-  }
-
-  getSpawnCoordinates(layer) {
-    const spawnPoints = layer.objects;
-    return {
-      start: spawnPoints[0],
-      end: spawnPoints[1]
-    }
-  }
   createEnemies(layer, calc_walls) {
     const enemies = this.physics.add.group();
     layer.objects.forEach(spawn => {
@@ -144,6 +122,42 @@ class TestRoom extends Phaser.Scene {
       this.physics.add.collider(enemy)
     })
     return enemies;
+  }
+
+  mouseMovements() {
+    this.input.on('pointermove', function (pointer) {
+      this.data_holder.cameraPosX = pointer.x - 1280 / 2;
+      this.data_holder.cameraPosY = pointer.y - 768 / 2;
+      this.data_holder.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
+      //console.log(this.data_holder)
+      this.events.emit('updateUI', this.data_holder);
+    }, this);
+  }
+
+  mouseActions(layers, enemies) {
+    this.input.on('pointerdown', function (pointer) {
+      //console.log(this.gun.weaponCanShoot, this.data_holder.ammo)
+      if (this.gun.weaponCanShoot && this.gun.ammunition > 0) {
+        this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
+        for (let i = 0; i < 3; i++) {
+          this.time.delayedCall(100 * i, () => {
+            this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
+          });
+        }
+      }
+    }, this);
+  }
+  
+  playAmbientMusic() {
+    this.sound.play("fleet", { volume: 0.35 });
+  }
+
+  getSpawnCoordinates(layer) {
+    const spawnPoints = layer.objects;
+    return {
+      start: spawnPoints[0],
+      end: spawnPoints[1]
+    }
   }
 
   shootBullet(x, y, angle, layers, enemies) {
@@ -157,17 +171,45 @@ class TestRoom extends Phaser.Scene {
     this.time.delayedCall(1000, () => {
       this.gun.weaponCanShoot = true;
     });
+    this.time.delayedCall(20000, () => {
+      this.bullet.destroy();
+    });
 
   }
 
-  destroy(object) {
-    object.destroy()
+  damage(object) {
+    console.log(object)
+    this.object.loseHP();
+    console.log(object.hp)
+    if (object.hp <= 0) {
+      this.destroy(object)
+    }
+  }
+
+  destroy(object1, object2) {
+    object1.destroy()
+    object2.destroy()
   }
 
   loadInterface() {
     this.scene.run('Interface', {
     });
   }
+  playerOrientation() {
+    if (this.data_holder.cameraPosX >= 0) {
+      this.gun.setFrame(1);
+    } else if (this.data_holder.cameraPosX < 0) {
+      this.gun.setFrame(0);
+    }
+  }
+  createLights() {
+    this.lights.enable();
+    this.playerLight = this.lights.addLight(this.gun.x, this.gun.y, 512);
+    this.playerLight.setColor(0xffffff)
+    this.playerLight.setIntensity(2)
+  }
+
 }
+
 
 export default TestRoom

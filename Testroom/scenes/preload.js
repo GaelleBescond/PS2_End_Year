@@ -7,14 +7,18 @@ class Preload extends Phaser.Scene {
     preload() {
         //Images
         this.load.image('enemy', 'assets/enemy.png');
-        this.load.image('gun', 'assets/gun.png');
         this.load.image('bullet', 'assets/bullet.png');
+        this.load.image('background', 'assets/bg.jpg');
         //SpriteSheets
         this.load.spritesheet("player", "assets/AnimSheet.png",
             { frameWidth: 666, frameHeight: 581 });
+        this.load.spritesheet("gun", "assets/gun.png",
+            { frameWidth: 1698*2, frameHeight: 368 });
         //Audio
         this.load.audio('fleet', 'assets/sound/Fleet.mp3');
         this.load.audio('shoot', 'assets/sound/LaserShoot.mp3');
+        this.load.audio('menu', 'assets/sound/Menu.mp3');
+
 
         //Maps
         this.load.image("tileset_image", "assets/Tileset_testroom.png");
@@ -23,7 +27,7 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start("TestRoom");
+        this.scene.start("MainMenu");
 
     }
 }

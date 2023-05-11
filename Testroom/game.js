@@ -7,6 +7,7 @@ It will be responsible for all server communications
 import PreloadScene from './scenes/preload.js';
 import TestRoom from './scenes/testroom.js';
 import Interface from './UI/interface.js';
+import MainMenu from './UI/mainMenu.js';
 
 
 const WIDTH = 1280;
@@ -23,7 +24,7 @@ const SHARED_CONFIG = {
   }
 }
 
-const Scenes = [PreloadScene, TestRoom, Interface];
+const Scenes = [PreloadScene, TestRoom, Interface, MainMenu];
 const createScene = Scene => new Scene(SHARED_CONFIG) //A voir
 const initScenes = () => Scenes.map(createScene)
 
@@ -33,7 +34,7 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true
+      debug: false
     },
   },
   scene: initScenes()

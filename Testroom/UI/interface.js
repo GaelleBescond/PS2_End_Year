@@ -16,6 +16,8 @@ It must display:
 
 */
 
+import TestRoom from "../scenes/testroom.js";
+
 /*Debug:
 32: Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'setText')
 */
