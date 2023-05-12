@@ -1,2 +1,0 @@
-SetParent() QUI MARCHE PAS
-Ajouter sprite aux objets

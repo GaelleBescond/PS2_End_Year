@@ -1,0 +1,6 @@
+Finish character animations and equipment
+Level Design (2 asteroids (grav tool good), 1 ceres (grav tool medium), 3 earth (no grav tool))
+Enemies
+More guns
+Light on cursor
+terrain texture
