@@ -5,7 +5,9 @@ Once they are ready, they press the ready button.
 The next level can then begin.
 */
 import Player from "../entities/player.js";
-import Weapon from "../entities/gun.js";
+import Rifle from "../entities/gun_rifle.js";
+import Sniper from "../entities/gun_sniper.js";
+import Mortar from "../entities/gun_mortar.js";
 import Enemy from "../entities/enemy.js";
 
 
@@ -35,7 +37,7 @@ class TestRoom extends Phaser.Scene {
     this.playAmbientMusic();
     this.player = new Player(this, 64, 0, 'player').setScale(0.25);
     this.physics.add.collider(this.player, layers.calc_walls);
-    this.gun = new Weapon(this, this.player.x, this.player.y - 48, 'gun').setScale(0.07);
+    this.gun = new Rifle(this, this.player.x, this.player.y - 48).setScale(0.07);
     const enemies = this.createEnemies(layers.spawnPoints, layers.calc_walls);
     this.physics.add.collider(enemies, layers.calc_walls);
     this.createLights();
@@ -139,7 +141,7 @@ class TestRoom extends Phaser.Scene {
       //console.log(this.gun.weaponCanShoot, this.data_holder.ammo)
       if (this.gun.weaponCanShoot && this.gun.ammunition > 0) {
         this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < this.gun.projectilesPerShoot; i++) {
           this.time.delayedCall(100 * i, () => {
             this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
           });
@@ -149,6 +151,7 @@ class TestRoom extends Phaser.Scene {
   }
   
   playAmbientMusic() {
+    this.game.sound.stopAll()
     this.sound.play("fleet", { volume: 0.35 });
   }
 

@@ -34,7 +34,8 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: false
+      debug: false,
+      tileBias:128
     },
   },
   scene: initScenes()

@@ -11,7 +11,7 @@ class Preload extends Phaser.Scene {
         this.load.image('background', 'assets/bg.jpg');
         //SpriteSheets
         this.load.spritesheet("player", "assets/AnimSheet.png",
-            { frameWidth: 666, frameHeight: 581 });
+            { frameWidth: 1024, frameHeight: 1024 });
         this.load.spritesheet("gun", "assets/gun.png",
             { frameWidth: 1698*2, frameHeight: 368 });
         //Audio
