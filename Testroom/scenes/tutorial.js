@@ -21,7 +21,7 @@ class Tutorial extends LevelTemplate {
 
   create() {
     console.log(this.musicVolume)
-    const levelMap = this.add.tilemap("tutorial");
+    const levelMap = this.add.tilemap("Tutorial");
     const layers = this.loadMap(levelMap);
     this.loadPlayer(64, 0, layers);
     this.physics.add.collider(this.player, layers.calc_walls);

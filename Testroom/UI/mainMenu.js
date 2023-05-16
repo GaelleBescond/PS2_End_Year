@@ -16,7 +16,7 @@ class MainMenu extends Phaser.Scene {
         this.colorNA = '#DD0000'
         this.colorOver = '#f39c12'
         this.increment = 16
-        this.font = 'Arial'
+        this.font = 'Mecha'
         //    this.playAmbientMusic()
 
 

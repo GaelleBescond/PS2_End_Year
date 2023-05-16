@@ -14,7 +14,7 @@ class Settings extends Phaser.Scene {
         console.log(this.musicVolume)
         this.colorMain = '#DD0000'
         this.colorOver = '#f39c12'
-        this.font = 'Arial'
+        this.font = 'Mecha'
         this.volume();
         this.soundEffects();
         this.keys();

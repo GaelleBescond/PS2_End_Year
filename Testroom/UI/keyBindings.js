@@ -22,7 +22,7 @@ class Key_Bindings extends Phaser.Scene {
         this.increment = 16
         this.colorMain = '#DD0000'
         this.colorOver = '#f39c12'
-        this.font = 'Arial'
+        this.font = 'Mecha'
         this.createButtons()
         this.createBack()
         this.buttonBack.on('pointerdown', () => this.startScene.call(this, 'Settings'));

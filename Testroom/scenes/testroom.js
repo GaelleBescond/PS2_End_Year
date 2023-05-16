@@ -22,7 +22,7 @@ class TestRoom extends LevelTemplate {
 
   create() {
     console.log(this.musicVolume)
-    const levelMap = this.add.tilemap("testroom");
+    const levelMap = this.add.tilemap("Testroom");
     const layers = this.loadMap(levelMap);
     this.loadPlayer(64, 0, layers);
     this.physics.add.collider(this.player, layers.calc_walls);
