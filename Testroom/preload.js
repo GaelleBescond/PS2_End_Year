@@ -20,15 +20,21 @@ class Preload extends Phaser.Scene {
         this.load.audio('fleet', 'assets/sound/Fleet.mp3');
         this.load.audio('shoot', 'assets/sound/LaserShoot.mp3');
         this.load.audio('menu', 'assets/sound/Menu.mp3');
+        this.load.audio('empty_gun', 'assets/sound/GunEmpty.mp3');
 
 
         //Maps & levels
         this.load.image("tileset_image", "assets/Tileset_testroom.png");
-        this.load.tilemapTiledJSON("testroom", "assets/levels/Testroom.json");
+        this.load.image("tileset_game", "assets/Tileset_game.png");
+        this.load.tilemapTiledJSON("Testroom", "assets/levels/Testroom.json");
+        this.load.tilemapTiledJSON("Tutorial", "assets/levels/Tutorial.json");
+        this.load.tilemapTiledJSON("Mission01", "assets/levels/Mission01.json");
 
     }
 
     create() {
+        const musicVolume = 0.35
+        const fxVolume = 0.15
         this.anims.create({
             key: "player_idle_left",
             frames: this.anims.generateFrameNumbers("player", { start: 0, end: 29 }),
@@ -55,9 +61,10 @@ class Preload extends Phaser.Scene {
             frameRate: 20,
             repeat: -1,
         });
-        this.scene.start("MainMenu");
-
-
+        this.scene.start("MainMenu", {
+            musicVolume: musicVolume,
+            fxVolume: fxVolume
+        });
     }
 }
 export default Preload

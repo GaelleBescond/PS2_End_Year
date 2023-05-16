@@ -6,7 +6,16 @@ class Key_Bindings extends Phaser.Scene {
     }
 
     Init(data) {
-
+        this.data_holder = {
+            gunAngle: 0,
+            cameraPosX: 0,
+            cameraPosY: 0,
+            ammo: 0,
+            enemiesNumber: 0,
+            progress: 0,
+            musicVolume: 0,
+            fxVolume: 0,
+        }
     }
 
     create() {
@@ -17,13 +26,6 @@ class Key_Bindings extends Phaser.Scene {
         this.createButtons()
         this.createBack()
         this.buttonBack.on('pointerdown', () => this.startScene.call(this, 'Settings'));
-        /*
-                this.moveLeft.on('pointerdown', () => this.startScene.call(this, +1));
-                this.moveRight.on('pointerdown', () => this.startScene.call(this, -1));
-                this.moveJump.on('pointerdown', () => this.startScene.call(this, +1));
-                this.toolGravity.on('pointerdown', () => this.startScene.call(this, -1));
-                this.buttonKeys.on('pointerdown', () => this.startScene.call(this, 'Key_Binding'));
-        */
     }
 
 
@@ -75,17 +77,10 @@ class Key_Bindings extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.toolGravity.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.toolGravity.setStyle({ fill: this.colorMain }))
-        this.textJump = this.add.text(this.increment * 26, this.increment * 16, 'G', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
+        this.textGrav = this.add.text(this.increment * 26, this.increment * 16, 'G', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
             .setOrigin(0, 0.5)
             .setPadding(10);
 
-        this.buttonKeys = this.add.text(this.increment * 22, this.increment * 27, 'Key Bindings', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
-            .setOrigin(1, 0.5)
-            .setPadding(10)
-            .setStyle({ backgroundColor: '#555' })
-            .setInteractive({ useHandCursor: true })
-            .on('pointerover', () => this.buttonKeys.setStyle({ fill: this.colorOver }))
-            .on('pointerout', () => this.buttonKeys.setStyle({ fill: this.colorMain }))
     }
 
 
@@ -100,8 +95,9 @@ class Key_Bindings extends Phaser.Scene {
     }
 
     startScene(sceneName) {
-        console.log(sceneName)
-        this.scene.switch(sceneName);
+        this.scene.switch(sceneName, {
+            data_holder: this.data_holder
+        });
     }
 
     setKey() {

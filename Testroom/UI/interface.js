@@ -33,10 +33,11 @@ class Interface extends Phaser.Scene {
   }
 
   create() {
+    this.increment = 16;
     this.scene.bringToTop();
-    this.progressBar = this.add.text(16, 16, 'Progress :', { fontSize: '32px', fill: '#0000FF' });
-    this.ammoCount = this.add.text(16, 16 * 3, 'Ammo :', { fontSize: '32px', fill: '#FF0000' });
-    this.weaponDisplay = this.add.text(16, 16 * 5, 'Rifle', { fontSize: '32px', fill: '#00FF00' });
+    this.progressBar = this.add.text(this.increment, this.increment, 'Progress :', { fontSize: '32px', fill: '#0000FF' });
+    this.ammoCount = this.add.text(this.increment, this.increment * 3, 'Ammo :', { fontSize: '32px', fill: '#FF0000' });
+    this.weaponDisplay = this.add.text(this.increment, this.increment * 5, 'Rifle', { fontSize: '32px', fill: '#00FF00' });
     this.events.on('updateUI', function (data) {
       console.log("update")
       this.progressBar.setText('Progress : ' + data.progress)

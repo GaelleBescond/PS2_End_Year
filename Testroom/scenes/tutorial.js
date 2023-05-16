@@ -1,7 +1,7 @@
 import LevelTemplate from "../scenes_templates/level_template.js";
-class TestRoom extends LevelTemplate {
+class Tutorial extends LevelTemplate {
   constructor() {
-    super("TestRoom")
+    super("Tutorial")
   }
 
   init(data) {
@@ -13,16 +13,15 @@ class TestRoom extends LevelTemplate {
       cameraPosY: 0,
       ammo: 99,
       enemiesNumber: 0,
-      progress: 0
+      progress: 0,
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
-
   };
 
   create() {
     console.log(this.musicVolume)
-    const levelMap = this.add.tilemap("testroom");
+    const levelMap = this.add.tilemap("tutorial");
     const layers = this.loadMap(levelMap);
     this.loadPlayer(64, 0, layers);
     this.physics.add.collider(this.player, layers.calc_walls);
@@ -45,4 +44,4 @@ class TestRoom extends LevelTemplate {
 
 
 }
-export default TestRoom
+export default Tutorial

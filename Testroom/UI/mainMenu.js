@@ -1,4 +1,3 @@
-
 class MainMenu extends Phaser.Scene {
 
     constructor(config) {
@@ -6,18 +5,22 @@ class MainMenu extends Phaser.Scene {
         this.config = config;
     }
 
-    Init(data) {
-
+    init(data) {
+        this.musicVolume = data.musicVolume
+        this.fxVolume = data.fxVolume
     }
 
     create() {
+        console.log(this.musicVolume)
         this.colorMain = '#00DD00'
         this.colorNA = '#DD0000'
         this.colorOver = '#f39c12'
         this.increment = 16
         this.font = 'Arial'
+        //    this.playAmbientMusic()
 
-        this.buttonResume = this.add.text(this.increment * 36, this.increment * 6, 'Resume Campain (N/A)', { fontFamily: this.font, fontSize: '32px', fill: this.colorNA })
+
+        this.buttonResume = this.add.text(this.increment * 36, this.increment * 6, 'Resume (N/A)', { fontFamily: this.font, fontSize: '32px', fill: this.colorNA })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -34,7 +37,7 @@ class MainMenu extends Phaser.Scene {
             .on('pointerover', () => this.buttonGame.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.buttonGame.setStyle({ fill: this.colorMain }))
 
-        this.buttonMpGame = this.add.text(this.increment * 36, this.increment * 18, 'Multiplayer Lobby (N/A)', { fontFamily: this.font, fontSize: '32px', fill: this.colorNA })
+        this.buttonMpGame = this.add.text(this.increment * 36, this.increment * 18, 'Multiplayer (N/A)', { fontFamily: this.font, fontSize: '32px', fill: this.colorNA })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -61,7 +64,15 @@ class MainMenu extends Phaser.Scene {
             .on('pointerout', () => this.buttonTestroom.setStyle({ fill: this.colorMain }))
 
 
-        this.buttonQuit = this.add.text(this.increment * 36, this.increment * 36, 'Quit', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
+        this.buttonTutorial = this.add.text(this.increment * 36, this.increment * 36, 'Tutorial', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
+            .setOrigin(0.5)
+            .setPadding(10)
+            .setStyle({ backgroundColor: '#555' })
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => this.buttonTutorial.setStyle({ fill: this.colorOver }))
+            .on('pointerout', () => this.buttonTutorial.setStyle({ fill: this.colorMain }))
+
+        this.buttonQuit = this.add.text(this.increment * 36, this.increment * 42, 'Quit', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -70,31 +81,40 @@ class MainMenu extends Phaser.Scene {
             .on('pointerout', () => this.buttonQuit.setStyle({ fill: this.colorMain }))
 
 
-        this.buttonResume.on('pointerdown', () => this.startScene.call(this, '0'));
-        this.buttonGame.on('pointerdown', () => this.startScene.call(this, 'mission_01'));
-        this.buttonSettings.on('pointerdown', () => this.startScene.call(this, 'Settings'));
-        this.buttonTestroom.on('pointerdown', () => this.startScene.call(this, 'TestRoom'));
-        this.buttonMpGame.on('pointerdown', () => this.startScene.call(this, 'MultiPlayer'));
-        this.buttonQuit.on('pointerdown', () => this.startScene.call(this, 'Quit'));
+        this.buttonResume.on('pointerdown', () => this.switchMenu.call(this, '0'));
+        this.buttonGame.on('pointerdown', () => this.startLevel.call(this, 'Mission01'));
+        this.buttonTutorial.on('pointerdown', () => this.startLevel.call(this, 'Tutorial'));
+        this.buttonSettings.on('pointerdown', () => this.switchMenu.call(this, 'Settings'));
+        this.buttonTestroom.on('pointerdown', () => this.startLevel.call(this, 'TestRoom'));
+        this.buttonMpGame.on('pointerdown', () => this.switchMenu.call(this, 'MultiPlayer'));
+        this.buttonQuit.on('pointerdown', () => this.switchMenu.call(this, 'Quit'));
     }
 
 
     update() {
     }
 
-    startScene(sceneName) {
-        console.log(sceneName)
+    startLevel(sceneName) {
+        console.log(this.musicVolume)
         this.scene.start(sceneName, {
-            mapName: this.nextLevel,
             mapTileset: "Tileset_testroom",
-            mapTilesetImage: "tileset_image",
+            mapTilesetImage: "Tileset_game",
+            musicVolume: this.musicVolume,
+            fxVolume: this.fxVolume,
         });
         this.game.sound.stopAll()
+    }
 
+    switchMenu(sceneName) {
+        console.log(this.musicVolume)
+        this.scene.start(sceneName, {
+            musicVolume: this.musicVolume,
+            fxVolume: this.fxVolume,
+        });
     }
 
     playAmbientMusic() {
-        this.music = this.sound.play("menu", { volume: 0.35 });
+        this.music = this.sound.play("menu", { volume: this.data_holder.musicVolume });
     }
 }
 

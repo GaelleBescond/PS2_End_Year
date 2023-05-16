@@ -4,11 +4,11 @@ Then they will position themselves in front the different modules they want to e
 Once they are ready, they press the ready button.
 The next level can then begin.
 */
-import Player from "../entities/player.js";
-import Rifle from "../entities/gun_rifle.js";
-import Sniper from "../entities/gun_sniper.js";
-import Mortar from "../entities/gun_mortar.js";
-import Enemy from "../entities/enemy.js";
+import Player from "../../entities/player.js";
+import Rifle from "../../entities/gun_rifle.js";
+import Sniper from "../../entities/gun_sniper.js";
+import Mortar from "../../entities/gun_mortar.js";
+import Enemy from "../../entities/enemy.js";
 
 class TestRoom extends Phaser.Scene {
   constructor() {
@@ -27,14 +27,18 @@ class TestRoom extends Phaser.Scene {
     });
 
   }
-  init(data) { };
+  init(data) {
+    this.mapName = data.mapName;
+    this.mapTileset = data.mapTileset;
+    this.mapTilesetImage = data.mapTilesetImage
+  };
 
 
   create() {
     const levelMap = this.add.tilemap("testroom");
     const layers = this.loadMap(levelMap);
     this.playAmbientMusic();
-    this.player = new Player(this, 64, 0, 'player').setScale(0.25);
+    this.player = new Player(this, 64, 0, 'player').setScale(0.55).setSize(150, 450, 50, 0);
     this.physics.add.collider(this.player, layers.calc_walls);
     this.gun = new Rifle(this, this.player.x, this.player.y - 48).setScale(0.07);
     const enemies = this.createEnemies(layers.spawnPoints, layers.calc_walls);
@@ -57,9 +61,9 @@ class TestRoom extends Phaser.Scene {
   };
 
   update() {
-    const { left, right, up, down, space } = this.cursors;
+    const gKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
     //Gravity tool
-    if (down.isDown) {
+    if (gKey.isDown) {
       if ((this.player.body.velocity.x && this.player.body.velocity.y) != 0) {
         if (this.player.body.velocity.x > 0) {
           this.player.body.acceleration.x -= 10;
@@ -79,16 +83,16 @@ class TestRoom extends Phaser.Scene {
     //mouse aiming and updated location for the gun
     this.gun.setRotation(this.data_holder.gunAngle)
     if (this.data_holder.cameraPosX > 0) {
-      this.gun.x = this.player.x + 10
+      this.gun.x = this.player.x + 5
     }
     else if (this.data_holder.cameraPosX < 0) {
-      this.gun.x = this.player.x - 10
+      this.gun.x = this.player.x - 5
 
     }
-    this.gun.y = this.player.y - 36
+    this.gun.y = this.player.y - 5
     this.playerLight.setPosition(this.gun.x, this.gun.y);
     //data export for facing animations
-    this.playerOrientation();
+    this.gunOrientation();
   }
 
   loadMap(levelMap) {
@@ -97,8 +101,8 @@ class TestRoom extends Phaser.Scene {
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
     const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
-    calc_walls.setPipeline('Light2D');
-    calc_terrain.setPipeline('Light2D');
+    //calc_walls.setPipeline('Light2D');
+    // calc_terrain.setPipeline('Light2D');
     const spawnPoints = levelMap.getObjectLayer("Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
     return { spawnPoints, calc_walls, calc_terrain, tileset }
@@ -138,7 +142,7 @@ class TestRoom extends Phaser.Scene {
   mouseActions(layers, enemies) {
     this.input.on('pointerdown', function (pointer) {
       //console.log(this.gun.weaponCanShoot, this.data_holder.ammo)
-      if (this.gun.weaponCanShoot && this.gun.ammunition > 0) {
+      if (this.gun.weaponCanShoot && this.data_holder.ammo > 0) {
         this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
         for (let i = 0; i < this.gun.projectilesPerShoot; i++) {
           this.time.delayedCall(100 * i, () => {
@@ -146,11 +150,13 @@ class TestRoom extends Phaser.Scene {
           });
         }
       }
+      if (this.gun.weaponCanShoot && this.data_holder.ammo <= 0) {
+        this.sound.play("empty_gun")
+      }
     }, this);
   }
-  
+
   playAmbientMusic() {
-    this.game.sound.stopAll()
     this.sound.play("fleet", { volume: 0.35 });
   }
 
@@ -163,7 +169,7 @@ class TestRoom extends Phaser.Scene {
   }
 
   shootBullet(x, y, angle, layers, enemies) {
-    this.data_holder.ammo -= 1;
+    this.data_holder.ammo -= 3;
     this.gun.weaponCanShoot = false;
     this.bullet = this.physics.add.sprite(x, y, 'bullet')
     this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
@@ -197,7 +203,7 @@ class TestRoom extends Phaser.Scene {
     this.scene.run('Interface', {
     });
   }
-  playerOrientation() {
+  gunOrientation() {
     if (this.data_holder.cameraPosX >= 0) {
       this.gun.setFrame(1);
     } else if (this.data_holder.cameraPosX < 0) {

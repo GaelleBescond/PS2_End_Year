@@ -1,16 +1,17 @@
-
 class Settings extends Phaser.Scene {
 
     constructor(config) {
         super("Settings");
-        this.config = config;
     }
 
-    Init(data) {
-
+    
+    init(data) {
+        this.musicVolume = data.musicVolume;
+        this.fxVolume = data.fxVolume;
     }
 
     create() {
+        console.log(this.musicVolume)
         this.colorMain = '#DD0000'
         this.colorOver = '#f39c12'
         this.font = 'Arial'
@@ -19,10 +20,10 @@ class Settings extends Phaser.Scene {
         this.keys();
         this.back();
 
-        this.buttonVolumePlus.on('pointerdown', () => this.startScene.call(this, +1));
-        this.buttonVolumeLess.on('pointerdown', () => this.startScene.call(this, -1));
-        this.buttonFxPlus.on('pointerdown', () => this.startScene.call(this, +1));
-        this.buttonFxLess.on('pointerdown', () => this.startScene.call(this, -1));
+        this.buttonVolumePlus.on('pointerdown', () => this.changeMusicVolume.call(this, +0.05));
+        this.buttonVolumeLess.on('pointerdown', () => this.changeMusicVolume.call(this, -0.05));
+        this.buttonFxPlus.on('pointerdown', () => this.changeFxVolume.call(this, +0.05));
+        this.buttonFxLess.on('pointerdown', () => this.changeFxVolume.call(this, -0.05));
         this.buttonKeys.on('pointerdown', () => this.startScene.call(this, 'Key_Bindings'));
         this.buttonBack.on('pointerdown', () => this.startScene.call(this, 'MainMenu'));
 
@@ -32,6 +33,23 @@ class Settings extends Phaser.Scene {
     update() {
     }
 
+    changeMusicVolume(value) {
+        this.musicVolume += value;
+        if (this.musicVolume < 0) {
+            this.musicVolume = 0;
+        }
+        this.game.sound.stopAll()
+        this.playAmbientMusic()
+    }
+
+    changeFxVolume(value) {
+        this.fxVolume += value;
+        if (this.fxVolume < 0) {
+            this.fxVolume = 0;
+        }
+        this.game.sound.stopAll()
+        this.sound.play("shoot", { volume: this.fxVolume })
+    }
 
     volume() {
         this.textVolume = this.add.text(16 * 22, 16 * 9, 'Music Volume', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
@@ -98,12 +116,14 @@ class Settings extends Phaser.Scene {
     }
 
     startScene(sceneName) {
-        console.log(sceneName)
-        this.scene.switch(sceneName);
+        this.scene.start(sceneName, {
+            musicVolume: this.musicVolume,
+            fxVolume: this.fxVolume,
+        });
     }
 
     playAmbientMusic() {
-        this.music = this.sound.play("menu", { volume: 0.35 });
+        this.music = this.sound.play("menu", { volume: this.musicVolume });
     }
 }
 

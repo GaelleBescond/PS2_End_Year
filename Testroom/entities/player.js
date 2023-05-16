@@ -86,10 +86,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         } else if (this.body.velocity.x >= 50) {
             this.body.acceleration.x -= 400;
-            //console.log('neg');
         } else if (this.body.velocity.x <= - 50) {
             this.body.acceleration.x += 400;
-            //console.log('pos');
         } else if (-10 < this.body.velocity.x < 10) {
             //ground friction
             this.body.acceleration.x = 0;
@@ -144,20 +142,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //create jump/thrust animation
         //Run animation
         if (this.body.velocity.x > 20 && this.body.blocked.down) {
-            console.log("run right")
             this.play('player_run_right', true);
         } else if (this.body.velocity.x < -20 && this.body.blocked.down) {
             this.play('player_run_left', true);
-            console.log("run left")
         } else if (this.body.blocked.down)
         //idle animation
             if (this.facing) {
                 this.play('player_idle_left', true);
-                console.log("idle left")
             }
             else {
                 this.play('player_idle_right', true);
-                console.log("idle right")
             }
 
 

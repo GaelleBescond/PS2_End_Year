@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Testroom.json",
+    "activeFile": "E:/Github/PS2_End_Year/Testroom/assets/levels/LevelMaker.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -11,12 +11,34 @@
         "": {
             "scaleInDock": 1
         },
-        "Testroom.json": {
+        "E:/Github/PS2_End_Year/Testroom/assets/Testroom.tmx": {
             "scale": 0.20618896484375,
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 2053.9411520928306,
                 "y": 2056.3661121307205
+            }
+        },
+        "E:/Github/PS2_End_Year/Testroom/assets/Testroom.tmx#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "E:/Github/PS2_End_Year/Testroom/assets/levels/LevelMaker.tmx": {
+            "scale": 0.14588623046875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2052.969625972722,
+                "y": 2052.9696259727216
+            }
+        },
+        "E:/Github/PS2_End_Year/Testroom/assets/levels/LevelMaker.tmx#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "Testroom.json": {
+            "scale": 0.20618896484375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1025.7580960274704,
+                "y": 1028.1830560653607
             }
         },
         "Testroom.json#Tileset": {
@@ -49,12 +71,15 @@
     "map.tileWidth": 128,
     "map.width": 120,
     "openFiles": [
-        "Testroom.json"
+        "Testroom.json",
+        "E:/Github/PS2_End_Year/Testroom/assets/levels/LevelMaker.tmx"
     ],
     "project": "PS2.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "Testroom.json",
+        "E:/Github/PS2_End_Year/Testroom/assets/levels/LevelMaker.tmx",
+        "E:/Github/PS2_End_Year/Testroom/assets/Testroom.tmx",
         "Testroom.tmx"
     ],
     "tileset.embedInMap": true,
