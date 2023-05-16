@@ -17,12 +17,13 @@ class TestRoom extends Phaser.Scene {
       physics: {
         default: 'arcade',
         arcade: {
+          debug: true,
           gravity: { y: 800 }
         }
-      },/*
+      },
       render: {
         pipeline: 'Light2D'
-      }*/
+      }
     });
 
   }
@@ -37,7 +38,7 @@ class TestRoom extends Phaser.Scene {
     const levelMap = this.add.tilemap("testroom");
     const layers = this.loadMap(levelMap);
     this.playAmbientMusic();
-    this.player = new Player(this, 64, 0, 'player').setScale(0.25);
+    this.player = new Player(this, 64, 0, 'player').setScale(0.45).setSize(150,512,);
     this.physics.add.collider(this.player, layers.calc_walls);
     this.gun = new Rifle(this, this.player.x, this.player.y - 48).setScale(0.07);
     const enemies = this.createEnemies(layers.spawnPoints, layers.calc_walls);
@@ -82,13 +83,13 @@ class TestRoom extends Phaser.Scene {
     //mouse aiming and updated location for the gun
     this.gun.setRotation(this.data_holder.gunAngle)
     if (this.data_holder.cameraPosX > 0) {
-      this.gun.x = this.player.x + 10
+      this.gun.x = this.player.x + 5
     }
     else if (this.data_holder.cameraPosX < 0) {
-      this.gun.x = this.player.x - 10
+      this.gun.x = this.player.x - 5
 
     }
-    this.gun.y = this.player.y - 36
+    this.gun.y = this.player.y - 5
     this.playerLight.setPosition(this.gun.x, this.gun.y);
     //data export for facing animations
     this.playerOrientation();
@@ -153,7 +154,6 @@ class TestRoom extends Phaser.Scene {
   }
 
   playAmbientMusic() {
-    this.game.sound.stopAll()
     this.sound.play("fleet", { volume: 0.35 });
   }
 

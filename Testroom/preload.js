@@ -10,8 +10,9 @@ class Preload extends Phaser.Scene {
         this.load.image('bullet', 'assets/bullet.png');
         this.load.image('background', 'assets/bg.jpg');
         //SpriteSheets
-        this.load.spritesheet("player", "assets/AnimSheet.png",
-            { frameWidth: 100, frameHeight: 100 });
+        this.load.spritesheet("player", "assets/PlayerSheet.png",
+            { frameWidth: 512, frameHeight: 512 });
+
         this.load.spritesheet("gun", "assets/gun.png",
             { frameWidth: 1698 * 2, frameHeight: 368 });
 
@@ -29,17 +30,30 @@ class Preload extends Phaser.Scene {
 
     create() {
         this.anims.create({
-            key: "player_run_right",
-            frames: this.anims.generateFrameNumbers("player", { start: 14, end: 25 }),
-            frameRate: 18,
-            repeat: -1
+            key: "player_idle_left",
+            frames: this.anims.generateFrameNumbers("player", { start: 0, end: 29 }),
+            frameRate: 20,
+            repeat: -1,
+            reverse: true
+        });
+        this.anims.create({
+            key: "player_idle_right",
+            frames: this.anims.generateFrameNumbers("player", { start: 30, end: 59 }),
+            frameRate: 20,
+            repeat: -1,
         });
         this.anims.create({
             key: "player_run_left",
-            frames: this.anims.generateFrameNumbers("player", { start: 0, end: 11 }),
-            frameRate: 18,
+            frames: this.anims.generateFrameNumbers("player", { start: 89, end: 60 }),
+            frameRate: 20,
             repeat: -1,
-            reverse: true
+            //reverse: true
+        });
+        this.anims.create({
+            key: "player_run_right",
+            frames: this.anims.generateFrameNumbers("player", { start: 90, end: 119 }),
+            frameRate: 20,
+            repeat: -1,
         });
         this.scene.start("MainMenu");
 

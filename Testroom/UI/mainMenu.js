@@ -89,6 +89,7 @@ class MainMenu extends Phaser.Scene {
             mapTileset: "Tileset_testroom",
             mapTilesetImage: "tileset_image",
         });
+        this.game.sound.stopAll()
 
     }
 

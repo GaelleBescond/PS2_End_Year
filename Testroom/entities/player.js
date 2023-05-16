@@ -4,13 +4,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, "player");
         scene.add.existing(this); //Add object to scene
         scene.physics.add.existing(this); //Gives physics to body 
-      //  this.setPipeline('Light2D');
+        //  this.setPipeline('Light2D');
         this.init();
         this.initEvents();
     }
 
     init() {
         //Variables for player
+        this.facing = false;
         this.hp = 1;
         this.accel = 0;
         this.maxSpeed = 0;
@@ -20,6 +21,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
         this.canThrust = true;
+        this.jetPackFuel = 300;
         this.currentRifleAmmo = 0;
         this.currentMortarAmmo = 0;
         this.currentSniperAmmo = 0;
@@ -43,6 +45,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //movements
         if (this.body.blocked.down) {
+            this.jetPackFuel = 300;
             this.groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
         }
         else {
@@ -50,6 +53,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         //Animations
+        if (this.body.velocity.x > 0) {
+            this.facing = false
+        }
+        else if (this.body.velocity.x < 0) {
+            this.facing = true
+        }
         this.animate();
     }
 
@@ -87,8 +96,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(0);
         }
         //jump
-        if (up.isDown || wKey.isDown) {
-            this.body.acceleration.y = -400;
+        if (space.isDown || wKey.isDown) {
+            this.body.acceleration.y = -500;
         } else {
             this.body.acceleration.y = 0;
         }
@@ -97,9 +106,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
         this.body.acceleration.y += 20;
-        if ((up.isDown || wKey.isDown) && this.canThrust) {
-            console.log("hover")
+        if ((space.isDown || wKey.isDown) && this.canThrust && (this.body.velocity.y > 0) && this.jetPackFuel > 0) {
             this.body.velocity.y = this.body.velocity.y / 2
+            this.jetPackFuel -= 1;
         }
         if ((left.isDown || aKey.isDown) || (right.isDown || dKey.isDown)) {
             if ((left.isDown || aKey.isDown) && this.body.acceleration.x > -400) {
@@ -133,15 +142,25 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //create walk animation
         //create fall animation
         //create jump/thrust animation
-        //
+        //Run animation
         if (this.body.velocity.x > 20 && this.body.blocked.down) {
+            console.log("run right")
             this.play('player_run_right', true);
         } else if (this.body.velocity.x < -20 && this.body.blocked.down) {
             this.play('player_run_left', true);
-        } else {
-            this.anims.stop();
-            this.setFrame(12);
-        }
+            console.log("run left")
+        } else if (this.body.blocked.down)
+        //idle animation
+            if (this.facing) {
+                this.play('player_idle_left', true);
+                console.log("idle left")
+            }
+            else {
+                this.play('player_idle_right', true);
+                console.log("idle right")
+            }
+
+
 
     }
     loseHP() {
