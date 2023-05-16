@@ -1,6 +1,33 @@
 Finish character animations and equipment
-Level Design (2 asteroids (grav tool good), 1 ceres (grav tool medium), 3 earth (no grav tool))
+
+Level Design
+    - 1 training field (weapons)
+    - 2 asteroids (grav tool)
+    - 3 ceres (lights)
+    - 4 earth (orbital strikes but high grav)
+
+Change keys from arrows
+
+Create mobs spawners
+
+Add weapon swap
+
+Make UI work
+
+Main Menu:
+- Campaign
+- Multiplayer (N/A, WiP)
+- Settings
+    - keys
+    - volume music
+    - volume fx 
+    - player name?
+
+- Testroom (map/tool/weapon explorer)
+
+
 Enemies
 More guns
 Light on cursor
 terrain texture
+
