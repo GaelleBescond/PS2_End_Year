@@ -4,7 +4,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, "enemy");
         scene.add.existing(this); //Add object to scene
         scene.physics.add.existing(this); //Gives physics.body 
-        this.setPipeline('Light2D');
+      //  this.setPipeline('Light2D');
         this.init();
         this.initEvents();
     }

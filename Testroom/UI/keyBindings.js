@@ -13,6 +13,7 @@ class Key_Bindings extends Phaser.Scene {
         this.increment = 16
         this.colorMain = '#DD0000'
         this.colorOver = '#f39c12'
+        this.font = 'Arial'
         this.createButtons()
         this.createBack()
         this.buttonBack.on('pointerdown', () => this.startScene.call(this, 'Settings'));
@@ -31,54 +32,54 @@ class Key_Bindings extends Phaser.Scene {
 
     createButtons() {
         //Left
-        this.moveLeft = this.add.text(this.increment * 22, this.increment * 4, 'Move Left', { fontSize: '32px', fill: this.colorMain })
+        this.moveLeft = this.add.text(this.increment * 22, this.increment * 4, 'Move Left', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(1, 0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.moveLeft.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.moveLeft.setStyle({ fill: this.colorMain }))
-        this.textLeft = this.add.text(this.increment * 26, this.increment * 4, 'Q', { fontSize: '32px', fill: '#FF0000' })
+        this.textLeft = this.add.text(this.increment * 26, this.increment * 4, 'Q', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
             .setOrigin(0, 0.5)
             .setPadding(10);
 
         //Right
-        this.moveRight = this.add.text(this.increment * 22, this.increment * 8, 'Move Right', { fontSize: '32px', fill: this.colorMain })
+        this.moveRight = this.add.text(this.increment * 22, this.increment * 8, 'Move Right', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(1, 0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.moveRight.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.moveRight.setStyle({ fill: this.colorMain }))
-        this.textRight = this.add.text(this.increment * 26, this.increment * 8, 'D', { fontSize: '32px', fill: '#FF0000' })
+        this.textRight = this.add.text(this.increment * 26, this.increment * 8, 'D', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
             .setOrigin(0, 0.5)
             .setPadding(10);
 
         //Jump
-        this.moveJump = this.add.text(this.increment * 22, this.increment * 12, 'Jump/Hover', { fontSize: '32px', fill: this.colorMain })
+        this.moveJump = this.add.text(this.increment * 22, this.increment * 12, 'Jump/Hover', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(1, 0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.moveJump.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.moveJump.setStyle({ fill: this.colorMain }))
-        this.textJump = this.add.text(this.increment * 26, this.increment * 12, 'Z', { fontSize: '32px', fill: '#FF0000' })
+        this.textJump = this.add.text(this.increment * 26, this.increment * 12, 'Z', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
             .setOrigin(0, 0.5)
             .setPadding(10);
 
         //Gravity tool
-        this.toolGravity = this.add.text(this.increment * 22, this.increment * 16, 'Gravity Tool', { fontSize: '32px', fill: this.colorMain })
+        this.toolGravity = this.add.text(this.increment * 22, this.increment * 16, 'Gravity Tool', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(1, 0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.toolGravity.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.toolGravity.setStyle({ fill: this.colorMain }))
-        this.textJump = this.add.text(this.increment * 26, this.increment * 16, 'G', { fontSize: '32px', fill: '#FF0000' })
+        this.textJump = this.add.text(this.increment * 26, this.increment * 16, 'G', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
             .setOrigin(0, 0.5)
             .setPadding(10);
 
-        this.buttonKeys = this.add.text(this.increment * 22, this.increment * 27, 'Key Bindings', { fontSize: '32px', fill: this.colorMain })
+        this.buttonKeys = this.add.text(this.increment * 22, this.increment * 27, 'Key Bindings', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(1, 0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -89,7 +90,7 @@ class Key_Bindings extends Phaser.Scene {
 
 
     createBack() {
-        this.buttonBack = this.add.text(this.increment * 8, this.increment * 40, 'Back', { fontSize: '32px', fill: this.colorMain })
+        this.buttonBack = this.add.text(this.increment * 8, this.increment * 40, 'Back', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -103,8 +104,8 @@ class Key_Bindings extends Phaser.Scene {
         this.scene.switch(sceneName);
     }
 
-    setKey(){
-        
+    setKey() {
+
     }
     playAmbientMusic() {
         this.music = this.sound.play("menu", { volume: 0.35 });

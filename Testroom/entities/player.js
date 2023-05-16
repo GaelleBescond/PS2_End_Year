@@ -88,7 +88,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         //jump
         if (up.isDown || wKey.isDown) {
-            this.canThrust = false;
             this.body.acceleration.y = -400;
         } else {
             this.body.acceleration.y = 0;
@@ -99,7 +98,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
         this.body.acceleration.y += 20;
         if ((up.isDown || wKey.isDown) && this.canThrust) {
-            console.log("up")
+            console.log("hover")
             this.body.velocity.y = this.body.velocity.y / 2
         }
         if ((left.isDown || aKey.isDown) || (right.isDown || dKey.isDown)) {

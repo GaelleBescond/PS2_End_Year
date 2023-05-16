@@ -29,7 +29,8 @@ class TestRoom extends Phaser.Scene {
   init(data) {
     this.mapName = data.mapName;
     this.mapTileset = data.mapTileset;
-    this.mapTilesetImage = data.mapTilesetImage };
+    this.mapTilesetImage = data.mapTilesetImage
+  };
 
 
   create() {
@@ -99,8 +100,8 @@ class TestRoom extends Phaser.Scene {
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
     const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
-    calc_walls.setPipeline('Light2D');
-    calc_terrain.setPipeline('Light2D');
+    //calc_walls.setPipeline('Light2D');
+    // calc_terrain.setPipeline('Light2D');
     const spawnPoints = levelMap.getObjectLayer("Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
     return { spawnPoints, calc_walls, calc_terrain, tileset }
@@ -150,7 +151,7 @@ class TestRoom extends Phaser.Scene {
       }
     }, this);
   }
-  
+
   playAmbientMusic() {
     this.game.sound.stopAll()
     this.sound.play("fleet", { volume: 0.35 });

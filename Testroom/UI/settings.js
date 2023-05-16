@@ -13,9 +13,7 @@ class Settings extends Phaser.Scene {
     create() {
         this.colorMain = '#DD0000'
         this.colorOver = '#f39c12'
-
-        this.cursors = this.input.keyboard.createCursorKeys();
-
+        this.font = 'Arial'
         this.volume();
         this.soundEffects();
         this.keys();
@@ -36,10 +34,10 @@ class Settings extends Phaser.Scene {
 
 
     volume() {
-        this.textVolume = this.add.text(16 * 22, 16 * 9, 'Music Volume', { fontSize: '32px', fill: '#FF0000' })
-            .setOrigin(1,0.5)
+        this.textVolume = this.add.text(16 * 22, 16 * 9, 'Music Volume', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
+            .setOrigin(1, 0.5)
             .setPadding(10);
-        this.buttonVolumeLess = this.add.text(16 * 28, 16 * 9, '-', { fontSize: '32px', fill: this.colorMain })
+        this.buttonVolumeLess = this.add.text(16 * 28, 16 * 9, '-', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -47,7 +45,7 @@ class Settings extends Phaser.Scene {
             .on('pointerover', () => this.buttonVolumeLess.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.buttonVolumeLess.setStyle({ fill: this.colorMain }))
 
-        this.buttonVolumePlus = this.add.text(16 * 24, 16 * 9, '+', { fontSize: '32px', fill: this.colorMain })
+        this.buttonVolumePlus = this.add.text(16 * 24, 16 * 9, '+', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -57,10 +55,10 @@ class Settings extends Phaser.Scene {
     }
 
     soundEffects() {
-        this.textFxVolume = this.add.text(16 * 22, 16 * 18, 'FX Volume', { fontSize: '32px', fill: '#FF0000' })
-            .setOrigin(1,0.5)
+        this.textFxVolume = this.add.text(16 * 22, 16 * 18, 'FX Volume', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
+            .setOrigin(1, 0.5)
             .setPadding(10);
-        this.buttonFxLess = this.add.text(16 * 28, 16 * 18, '-', { fontSize: '32px', fill: this.colorMain })
+        this.buttonFxLess = this.add.text(16 * 28, 16 * 18, '-', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -68,7 +66,7 @@ class Settings extends Phaser.Scene {
             .on('pointerover', () => this.buttonFxLess.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.buttonFxLess.setStyle({ fill: this.colorMain }))
 
-        this.buttonFxPlus = this.add.text(16 * 24, 16 * 18, '+', { fontSize: '32px', fill: this.colorMain })
+        this.buttonFxPlus = this.add.text(16 * 24, 16 * 18, '+', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
@@ -79,8 +77,8 @@ class Settings extends Phaser.Scene {
     }
 
     keys() {
-        this.buttonKeys = this.add.text(16 * 22, 16 * 27, 'Key Bindings', { fontSize: '32px', fill: this.colorMain })
-            .setOrigin(1,0.5)
+        this.buttonKeys = this.add.text(16 * 22, 16 * 27, 'Key Bindings', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
+            .setOrigin(1, 0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
@@ -90,7 +88,7 @@ class Settings extends Phaser.Scene {
 
 
     back() {
-        this.buttonBack = this.add.text(16 * 8, 16 * 40, 'Back', { fontSize: '32px', fill: this.colorMain })
+        this.buttonBack = this.add.text(16 * 8, 16 * 40, 'Back', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })

@@ -4,7 +4,7 @@ It will be responsible for all server communications
 
 //global game parameters
 
-import PreloadScene from './scenes/preload.js';
+import PreloadScene from './preload.js';
 import TestRoom from './scenes/testroom.js';
 import Interface from './UI/interface.js';
 import MainMenu from './UI/mainMenu.js';
