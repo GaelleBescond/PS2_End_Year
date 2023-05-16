@@ -4,7 +4,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, "player");
         scene.add.existing(this); //Add object to scene
         scene.physics.add.existing(this); //Gives physics to body 
-        this.setPipeline('Light2D');
+      //  this.setPipeline('Light2D');
         this.init();
         this.initEvents();
     }
@@ -20,22 +20,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
         this.canThrust = true;
-
+        this.currentRifleAmmo = 0;
+        this.currentMortarAmmo = 0;
+        this.currentSniperAmmo = 0;
+        this.currentEquipedWeapon = "Rifle";
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-        //Animations
-        this.scene.anims.create({
-            key: "run_right",
-            frames: this.scene.anims.generateFrameNumbers("player", { start: 14, end: 25 }),
-            frameRate: 18,
-            repeat: -1
-        });
-        this.scene.anims.create({
-            key: "run_left",
-            frames: this.scene.anims.generateFrameNumbers("player", { start: 0, end: 11 }),
-            frameRate: 18,
-            repeat: -1,
-            reverse: true
-        });
     }
 
     initEvents() {
@@ -43,25 +32,30 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+
         const { left, right, up, down, space } = this.cursors;
-        const aKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        const wKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        const aKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        const sKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        const dKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         const eKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         const rKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
         //movements
         if (this.body.blocked.down) {
-            this.groundMovements(left, right, up, down, space);
+            this.groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
         }
         else {
-            this.airMovements(left, right, up, down, space);
+            this.airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
         }
 
         //Animations
         this.animate();
     }
 
-    groundMovements(left, right, up, down, space) {
-        if (left.isDown || right.isDown) {
-            if (left.isDown) {
+    groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
+        if (left.isDown || right.isDown || aKey.isDown || dKey.isDown) {
+            if (left.isDown || aKey.isDown) {
                 if (this.body.velocity.x > 0) {
                     this.body.acceleration.x = -2400;
 
@@ -71,7 +65,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
 
-            if (right.isDown) {
+            if (right.isDown || dKey.isDown) {
                 if (this.body.velocity.x < 0) {
                     this.body.acceleration.x = 2400;
 
@@ -93,7 +87,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(0);
         }
         //jump
-        if (up.isDown) {
+        if (up.isDown || wKey.isDown) {
             this.canThrust = false;
             this.body.acceleration.y = -400;
         } else {
@@ -102,19 +96,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setVelocityY(this.body.acceleration.y);
     }
 
-
-
-    airMovements(left, right, up, down, space) {
+    airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
         this.body.acceleration.y += 20;
-        if (up.isDown && this.canThrust) {
+        if ((up.isDown || wKey.isDown) && this.canThrust) {
             console.log("up")
             this.body.velocity.y = this.body.velocity.y / 2
         }
-        if ((left.isDown) || (right.isDown)) {
-            if (left.isDown && this.body.acceleration.x > -400) {
+        if ((left.isDown || aKey.isDown) || (right.isDown || dKey.isDown)) {
+            if ((left.isDown || aKey.isDown) && this.body.acceleration.x > -400) {
                 this.body.acceleration.x -= 60;
             }
-            if (right.isDown && this.body.acceleration.x < 400) {
+            if ((right.isDown || dKey.isDown) && this.body.acceleration.x < 400) {
                 this.body.acceleration.x += 60;
             }
             this.setVelocityX(this.body.acceleration.x);
@@ -144,9 +136,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //create jump/thrust animation
         //
         if (this.body.velocity.x > 20 && this.body.blocked.down) {
-            this.play('run_right', true);
+            this.play('player_run_right', true);
         } else if (this.body.velocity.x < -20 && this.body.blocked.down) {
-            this.play('run_left', true);
+            this.play('player_run_left', true);
         } else {
             this.anims.stop();
             this.setFrame(12);

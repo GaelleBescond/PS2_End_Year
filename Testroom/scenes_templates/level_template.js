@@ -13,7 +13,6 @@ import Enemy from "../entities/enemy.js";
 class TestRoom extends Phaser.Scene {
   constructor() {
     super({
-      key: "TestRoom",
       physics: {
         default: 'arcade',
         arcade: {
@@ -54,12 +53,10 @@ class TestRoom extends Phaser.Scene {
     }
     this.mouseMovements();
     this.mouseActions(layers, enemies);
-    this.cursors = this.input.keyboard.createCursorKeys();
     this.loadInterface();
   };
 
   update() {
-    const gKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
     //Gravity tool
     if (gKey.isDown) {
       if ((this.player.body.velocity.x && this.player.body.velocity.y) != 0) {

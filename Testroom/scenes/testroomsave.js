@@ -17,19 +17,17 @@ class TestRoom extends Phaser.Scene {
       physics: {
         default: 'arcade',
         arcade: {
+          debug: true,
           gravity: { y: 800 }
         }
-      },/*
+      },
       render: {
         pipeline: 'Light2D'
-      }*/
+      }
     });
 
   }
-  init(data) {
-    this.mapName = data.mapName;
-    this.mapTileset = data.mapTileset;
-    this.mapTilesetImage = data.mapTilesetImage };
+  init(data) { };
 
 
   create() {
@@ -59,9 +57,9 @@ class TestRoom extends Phaser.Scene {
   };
 
   update() {
-    const gKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
+    const { left, right, up, down, space } = this.cursors;
     //Gravity tool
-    if (gKey.isDown) {
+    if (down.isDown) {
       if ((this.player.body.velocity.x && this.player.body.velocity.y) != 0) {
         if (this.player.body.velocity.x > 0) {
           this.player.body.acceleration.x -= 10;

@@ -16,8 +16,8 @@ Make UI work
 
 Main Menu:
 - Campaign
-- Multiplayer (N/A, WiP)
-- Settings
+- Multiplayer (N/A)
+- Settings (WiP)
     - keys
     - volume music
     - volume fx 

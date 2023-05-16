@@ -11,35 +11,60 @@ class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        this.playAmbientMusic();
-        this.cursors = this.input.keyboard.createCursorKeys();
+        this.colorMain = '#DDA000'
+        this.colorOver = '#f39c12'
 
-
-
-        this.startButton = this.add.text(16 * 24, 16 * 6, 'Start game', { fontSize: '32px', fill: '#DDDDDD' })
+        this.buttonResume = this.add.text(16 * 24, 16 * 6, 'Resume Campain', { fontSize: '32px', fill: this.colorMain })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
-            .on('pointerdown', this.startGame, this)
-            .on('pointerover', () => this.startButton.setStyle({ fill: '#f39c12' }))
-            .on('pointerout', () => this.startButton.setStyle({ fill: '#FFF' }))
+            .on('pointerover', () => this.buttonResume.setStyle({ fill: this.colorOver }))
+            .on('pointerout', () => this.buttonResume.setStyle({ fill: this.colorMain }))
 
 
+        this.buttonGame = this.add.text(16 * 24, 16 * 12, 'Start Campain', { fontSize: '32px', fill: this.colorMain })
+            .setOrigin(0.5)
+            .setPadding(10)
+            .setStyle({ backgroundColor: '#555' })
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => this.buttonGame.setStyle({ fill: this.colorOver }))
+            .on('pointerout', () => this.buttonGame.setStyle({ fill: this.colorMain }))
 
-        /* this.ammoCount = this.add.text(16 * 16, 16 * 9, 'New Game', { fontSize: '32px', fill: '#FF0000' });
-         this.customize = this.add.text(16 * 16, 16 * 12, 'Customize', { fontSize: '32px', fill: '#FF0000' });
-         this.testroom = this.add.text(16 * 16, 16 * 15, 'Testroom', { fontSize: '32px', fill: '#FF0000' });
- 
-         this.config = this.add.text(16 * 16, 16 * 18, 'Parameters', { fontSize: '32px', fill: '#FF0000' });*/
+        this.buttonSettings = this.add.text(16 * 24, 16 * 18, 'Settings', { fontSize: '32px', fill: this.colorMain })
+            .setOrigin(0.5)
+            .setPadding(10)
+            .setStyle({ backgroundColor: '#555' })
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => this.buttonSettings.setStyle({ fill: this.colorOver }))
+            .on('pointerout', () => this.buttonSettings.setStyle({ fill: this.colorMain }))
+
+        this.buttonTestroom = this.add.text(16 * 24, 16 * 24, 'Testroom', { fontSize: '32px', fill: this.colorMain })
+            .setOrigin(0.5)
+            .setPadding(10)
+            .setStyle({ backgroundColor: '#555' })
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => this.buttonTestroom.setStyle({ fill: this.colorOver }))
+            .on('pointerout', () => this.buttonTestroom.setStyle({ fill: this.colorMain }))
+
+        this.buttonResume.on('pointerdown', () => this.startScene.call(this, '0'));
+        this.buttonGame.on('pointerdown', () => this.startScene.call(this, 'mission_01'));
+        this.buttonSettings.on('pointerdown', () => this.startScene.call(this, 'Settings'));
+        this.buttonTestroom.on('pointerdown', () => this.startScene.call(this, 'TestRoom'));
     }
 
 
     update() {
     }
 
-    startGame() {
-        this.scene.start("TestRoom");
+    startScene(sceneName) {
+        console.log(sceneName)
+        this.scene.start(sceneName, {
+            mapName: this.nextLevel,
+            mapTileset: "Tileset_testroom",
+            mapTilesetImage: "tileset_image",
+        });
+
     }
 
     playAmbientMusic() {

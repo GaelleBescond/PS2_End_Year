@@ -6,12 +6,20 @@ So that only the Level design aspect and local paramaters are present here
 It has to import the weapons and modules chosen by the players in the lobby
 */
 
-class mission5 extends Phaser.Scene {
+import LevelTemplate from "../scenes_templates/level_template";
+
+class Mission01 extends LevelTemplate {
   constructor() {
-    super("mission5");
+    super("Mission01");
   }
+
   init(data) { };
+
   preload() { };
-  create() { };
+  
+  create() {
+    console.log("mdr")
+  };
   update() { };
 }
+export default Mission01
