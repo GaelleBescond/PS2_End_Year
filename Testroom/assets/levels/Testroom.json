@@ -319,13 +319,13 @@
         {
          "draworder":"topdown",
          "id":4,
-         "name":"Spawn",
+         "name":"Enemies_Spawn",
          "objects":[
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":3,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -333,10 +333,10 @@
                  "y":1536
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":4,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -344,10 +344,10 @@
                  "y":1024
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":5,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -355,10 +355,10 @@
                  "y":1280
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":6,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -366,10 +366,10 @@
                  "y":2560
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":7,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -377,10 +377,10 @@
                  "y":2688
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":8,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -388,10 +388,10 @@
                  "y":256
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":9,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -399,10 +399,10 @@
                  "y":512
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":10,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -410,10 +410,10 @@
                  "y":2176
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":16,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -421,10 +421,10 @@
                  "y":256
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":17,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -432,10 +432,10 @@
                  "y":3200
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":18,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -443,10 +443,10 @@
                  "y":3712
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":19,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -454,10 +454,10 @@
                  "y":3584
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":20,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -465,10 +465,10 @@
                  "y":3712
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":21,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -476,10 +476,10 @@
                  "y":3840
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":22,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -487,10 +487,10 @@
                  "y":3328
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":23,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -499,10 +499,10 @@
                 },
             
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":26,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -510,10 +510,10 @@
                  "y":1536
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":27,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -521,10 +521,10 @@
                  "y":1920
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":28,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -532,10 +532,10 @@
                  "y":2816
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":29,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -543,10 +543,10 @@
                  "y":3328
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":30,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -554,10 +554,10 @@
                  "y":2304
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":31,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -565,10 +565,10 @@
                  "y":2048
                 }, 
                 {
-                 "class":"",
+                 "class":"soldier",
                  "height":128,
                  "id":32,
-                 "name":"",
+                 "name":"soldier",
                  "rotation":0,
                  "visible":true,
                  "width":128,
@@ -580,9 +580,20 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "name":"Player_Spawn",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":33,
+ "nextlayerid":7,
+ "nextobjectid":34,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

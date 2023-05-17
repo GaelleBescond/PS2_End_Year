@@ -11,7 +11,6 @@ class Settings extends Phaser.Scene {
     }
 
     create() {
-        console.log(this.musicVolume)
         this.colorMain = '#DD0000'
         this.colorOver = '#f39c12'
         this.font = 'Mecha'
@@ -38,8 +37,8 @@ class Settings extends Phaser.Scene {
         if (this.musicVolume < 0) {
             this.musicVolume = 0;
         }
-        this.game.sound.stopAll()
-        this.playAmbientMusic()
+        console.log(this.musicVolume)
+        this.sound.setVolume(this.musicVolume, "fleet")
     }
 
     changeFxVolume(value) {
@@ -47,7 +46,7 @@ class Settings extends Phaser.Scene {
         if (this.fxVolume < 0) {
             this.fxVolume = 0;
         }
-        this.game.sound.stopAll()
+        console.log(this.fxVolume)
         this.sound.play("shoot", { volume: this.fxVolume })
     }
 

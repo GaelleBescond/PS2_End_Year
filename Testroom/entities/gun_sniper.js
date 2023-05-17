@@ -6,12 +6,13 @@ class Sniper extends Weapon {
     }
 
     init() {
-        this.bulletVelocity = 3500;
-        this.weaponWeight = 100;
-        this.weaponCooldown = 100;
+        this.bulletVelocity = 4500;
+        this.damage= 5;
+        this.weaponCooldown = 200;
         this.weaponCanShoot = true;
         this.ammunition = 10;
         this.projectilesPerShoot = 1;
+        this.camZoom = 0.35;
 
     }
 

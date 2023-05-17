@@ -11,13 +11,11 @@ class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        console.log(this.musicVolume)
         this.colorMain = '#00DD00'
         this.colorNA = '#DD0000'
         this.colorOver = '#f39c12'
         this.increment = 16
         this.font = 'Mecha'
-        //    this.playAmbientMusic()
 
 
         this.buttonResume = this.add.text(this.increment * 36, this.increment * 6, 'Resume (N/A)', { fontFamily: this.font, fontSize: '32px', fill: this.colorNA })
@@ -95,7 +93,6 @@ class MainMenu extends Phaser.Scene {
     }
 
     startLevel(sceneName) {
-        console.log(this.musicVolume)
         this.scene.start(sceneName, {
             mapTileset: "Tileset_testroom",
             mapTilesetImage: "Tileset_game",
@@ -106,7 +103,6 @@ class MainMenu extends Phaser.Scene {
     }
 
     switchMenu(sceneName) {
-        console.log(this.musicVolume)
         this.scene.start(sceneName, {
             musicVolume: this.musicVolume,
             fxVolume: this.fxVolume,
@@ -114,7 +110,7 @@ class MainMenu extends Phaser.Scene {
     }
 
     playAmbientMusic() {
-        this.music = this.sound.play("menu", { volume: this.data_holder.musicVolume });
+        this.sound.play("fleet", { volume: this.musicVolume });
     }
 }
 

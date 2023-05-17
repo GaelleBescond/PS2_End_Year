@@ -17,24 +17,22 @@ class TestRoom extends LevelTemplate {
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
-
   };
 
   create() {
-    console.log(this.musicVolume)
-    const levelMap = this.add.tilemap("Testroom");
+    const levelMap = this.add.tilemap("TestRoom");
     const layers = this.loadMap(levelMap);
-    this.loadPlayer(64, 0, layers);
+    this.loadPlayer(64, 0, 'player');
     this.physics.add.collider(this.player, layers.calc_walls);
-    const enemies = this.loadEnemies(layers.spawnPoints, layers.calc_walls);
+    const enemies = this.loadEnemies(layers.enemy_SpawnPoints, layers.calc_walls);
     this.physics.add.collider(enemies, layers.calc_walls);
+    this.mouseActions(layers, enemies);
     this.loadGun(this.player.x, this.player.y);
     this.createCamera();
     this.playAmbientMusic();
     this.createLights();
     this.loadInterface();
     this.mouseMovements();
-    this.mouseActions(layers, enemies);
   };
 
   update() {
@@ -42,7 +40,5 @@ class TestRoom extends LevelTemplate {
     this.generalPositioning();
     this.gravityTool();
   };
-
-
 }
 export default TestRoom

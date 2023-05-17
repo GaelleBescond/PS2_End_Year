@@ -2,8 +2,10 @@ import Player from "../entities/player.js";
 import Rifle from "../entities/gun_rifle.js";
 import Sniper from "../entities/gun_sniper.js";
 import Mortar from "../entities/gun_mortar.js";
-import Enemy from "../entities/enemy.js";
-
+import Soldier from "../entities/enemy_soldier.js";
+import Tank from "../entities/enemy_tank.js";
+import Hover from "../entities/enemy_hover.js";
+import Turret from "../entities/enemy_turret.js";
 class LevelTemplate extends Phaser.Scene {
   constructor(name) {
     super({
@@ -27,6 +29,7 @@ class LevelTemplate extends Phaser.Scene {
     this.data_holder = data.data_holder;
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
+    this.chosenGun = 0;
   }
 
   create() {
@@ -39,31 +42,38 @@ class LevelTemplate extends Phaser.Scene {
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
     const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
-    //calc_walls.setPipeline('Light2D');
-    // calc_terrain.setPipeline('Light2D');
-    const spawnPoints = levelMap.getObjectLayer("Spawn");
+    const spawnPoints = levelMap.getObjectLayer("Player_Spawn");
+    const enemy_SpawnPoints = levelMap.getObjectLayer("Enemies_Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
-    return { spawnPoints, calc_walls, calc_terrain, tileset }
+    return { spawnPoints, calc_walls, calc_terrain, tileset, enemy_SpawnPoints }
   }
 
   loadBackground() {
-    this.skyparallax = this.add.tileSprite(0, 0, 1600, 1600, "background").setScale(2);
-    this.skyparallax.setOrigin(0, 0).setScrollFactor(0.2).setTint(0x555555);
+    this.skyparallax = this.add.tileSprite(0, 0, 0, 0, "background")
+      .setScale(2.5)
+      .setOrigin(0.5)
+      .setScrollFactor(0.2)
+    //.setTint(0x555555);
   }
 
   playAmbientMusic(value) {
     this.sound.play("fleet", { volume: this.musicVolume });
   }
 
-  loadPlayer(x, y, layers) {
-    this.player = new Player(this, x, y, 'player').setScale(0.55).setSize(150, 450, 50, 0);
+  loadPlayer(x, y, sprite) {
+    this.player = new Player(this, x, y, sprite).setScale(0.55).setSize(150, 450, 50, 0);
   }
 
   loadGun(x, y) {
-    this.gun = new Rifle(this, x, y - 48).setScale(0.07);
-
+    this.gun.destroy();
+    if (this.chosenGun == 0) {
+      this.gun = new Rifle(this, x, y - 48).setScale(0.07);
+    } else if (this.chosenGun == 1) {
+      this.gun = new Sniper(this, x, y - 48).setScale(0.07);
+    } else if (this.chosenGun == 2) {
+      this.gun = new Mortar(this, x, y - 48).setScale(0.07);
+    }
   }
-
   gunOrientation() {
     if (this.data_holder.cameraPosX >= 0) {
       this.gun.setFrame(1);
@@ -73,15 +83,24 @@ class LevelTemplate extends Phaser.Scene {
     this.gun.setRotation(this.data_holder.gunAngle)
   }
 
-  loadEnemies(layers) {
-    const enemies = this.physics.add.group();
-    layers.objects.forEach(spawn => {
-      console.log("spawn");
+  loadEnemies(spawner, ground) {
+    const enemies = this.add.group();
+    spawner.objects.forEach(spawn => {
       let enemy = null;
-      enemy = new Enemy(this, spawn.x, spawn.y, 'enemy').setScale(0.15);
+
+      console.log(spawn.name);
+      if (spawn.name == "soldier") {
+        enemy = new Soldier(this, spawn.x, spawn.y, "enemy_1").setScale(0.25);
+      } else if (spawn.name == "tank") {
+        enemy = new Tank(this, spawn.x, spawn.y, "enemy_2").setScale(0.25);
+      } else if (spawn.name == "hover") {
+        enemy = new Hover(this, spawn.x, spawn.y, "enemy_3").setScale(0.25);
+      } else if (spawn.name == "turret") {
+        enemy = new Turret(this, spawn.x, spawn.y, "enemy_4").setScale(0.25);
+      }
+      this.physics.add.collider(enemy, ground)
       enemies.add(enemy)
-      this.physics.add.collider(enemy)
-    })
+    });
     return enemies;
   }
 
@@ -97,7 +116,10 @@ class LevelTemplate extends Phaser.Scene {
     this.cameraFocal = this.physics.add.sprite(this.player.x, this.player.y);
     this.cameraFocal.body.setAllowGravity(false);
     this.cameras.main.startFollow(this.cameraFocal);
-    this.cameras.main.setZoom(0.55);
+  }
+
+  updateCamera() {
+    this.cameras.main.setZoom(this.gun.camZoom);
   }
 
   loadInterface() {
@@ -114,29 +136,27 @@ class LevelTemplate extends Phaser.Scene {
     }, this);
   }
 
-  mouseActions(layers, enemies) {
-    this.input.on('pointerdown', function (pointer) {
-      //console.log(this.gun.weaponCanShoot, this.data_holder.ammo)
+  mouseActions(layers, target) {
+    this.input.on('pointerdown', (pointer) => {
       if (this.gun.weaponCanShoot && this.data_holder.ammo > 0) {
-        this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
         for (let i = 0; i < this.gun.projectilesPerShoot; i++) {
           this.time.delayedCall(100 * i, () => {
-            this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, enemies);
+            this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, target);
           });
         }
       }
       if (this.gun.weaponCanShoot && this.data_holder.ammo <= 0) {
-        this.sound.play("empty_gun")
+        this.sound.play("empty_gun", { volume: this.fxVolume })
       }
-    }, this);
+    });
   }
 
-  shootBullet(x, y, angle, layers, enemies) {
+  shootBullet(x, y, angle, layers, target) {
     this.data_holder.ammo -= 3;
     this.gun.weaponCanShoot = false;
     this.bullet = this.physics.add.sprite(x, y, 'bullet')
     this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
-    this.physics.add.collider(this.bullet, enemies, this.destroy, null, this)
+    this.physics.add.collider(this.bullet, target, this.damage, null, this)
     this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
     this.sound.play("shoot", { volume: this.fxVolume });
     this.time.delayedCall(1000, () => {
@@ -146,10 +166,17 @@ class LevelTemplate extends Phaser.Scene {
       this.bullet.destroy();
     });
   }
-
-  destroy(object1, object2) {
+  damage(bullet, target) {
+    bullet.destroy()
+    target.loseHP(this.gun.damage)
+    console.log(target.hp)
+    if (target.hp <= 0) {
+      this.events.off(Phaser.Scenes.Events.UPDATE, target.update, target);
+      target.destroy()
+    }
+  }
+  destroy(object1) {
     object1.destroy()
-    object2.destroy()
   }
 
   generalPositioning() {

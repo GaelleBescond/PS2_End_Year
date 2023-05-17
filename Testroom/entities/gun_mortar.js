@@ -7,13 +7,14 @@ class Mortar extends Weapon {
 
     init() {
         this.bulletVelocity = 700;
-        this.weaponWeight = 100;
+        this.damage= 25;
         this.weaponCooldown = 100;
         this.weaponCanShoot = true;
         this.ammunition = 10;
         this.projectilesPerShoot = 1;
         this.splashRadius = 0;
         this.splashDamage = 0;
+        this.camZoom = 0.55;
 
     }
 

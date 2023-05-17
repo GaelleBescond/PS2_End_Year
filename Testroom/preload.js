@@ -7,6 +7,12 @@ class Preload extends Phaser.Scene {
     preload() {
         //Images
         this.load.image('enemy', 'assets/enemy.png');
+        this.load.image('enemy_1', 'assets/enemy_1.png');
+        this.load.image('enemy_2', 'assets/enemy_2.png');
+        this.load.image('enemy_3', 'assets/enemy_3.png');
+
+
+
         this.load.image('bullet', 'assets/bullet.png');
         this.load.image('background', 'assets/bg.jpg');
         //SpriteSheets
@@ -35,6 +41,7 @@ class Preload extends Phaser.Scene {
     create() {
         const musicVolume = 0.35
         const fxVolume = 0.15
+        this.sound.play("fleet", { volume: this.musicVolume });
         this.anims.create({
             key: "player_idle_left",
             frames: this.anims.generateFrameNumbers("player", { start: 0, end: 29 }),

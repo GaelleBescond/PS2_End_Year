@@ -1,10 +1,9 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y) {
-        super(scene, x, y, "player");
+    constructor(scene, x, y, sprite) {
+        super(scene, x, y, sprite);
         scene.add.existing(this); //Add object to scene
         scene.physics.add.existing(this); //Gives physics to body 
-        //  this.setPipeline('Light2D');
         this.init();
         this.initEvents();
     }
@@ -12,11 +11,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     init() {
         //Variables for player
         this.facing = false;
-        this.hp = 1;
-        this.accel = 0;
-        this.maxSpeed = 0;
+        this.hp = 10;
         this.canMove = true;
-        this.canShoot = true;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
@@ -34,14 +30,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-
+        //made for QWERTY, configured in AZERT
         const { left, right, up, down, space } = this.cursors;
         const wKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         const aKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         const sKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         const dKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        const eKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-        const rKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         //movements
         if (this.body.blocked.down) {
@@ -146,7 +140,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else if (this.body.velocity.x < -20 && this.body.blocked.down) {
             this.play('player_run_left', true);
         } else if (this.body.blocked.down)
-        //idle animation
+            //idle animation
             if (this.facing) {
                 this.play('player_idle_left', true);
             }
@@ -157,8 +151,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 
     }
-    loseHP() {
-        this.hp -= 1;
+    loseHP(value) {
+        this.hp -= value;
     }
 }
 

@@ -1,14 +1,4 @@
-/*Level 5
-This will be the level played by the testers.
-It has to call the Interface scene on top of it (Alexandre)
-It has to import the functions from other scenes,
-So that only the Level design aspect and local paramaters are present here
-It has to import the weapons and modules chosen by the players in the lobby
-*/
-
 import LevelTemplate from "../scenes_templates/level_template.js";
-
-
 class Mission01 extends LevelTemplate {
   constructor() {
     super("Mission01");
@@ -30,24 +20,25 @@ class Mission01 extends LevelTemplate {
   };
 
   create() {
-    console.log(this.musicVolume)
-    const levelMap = this.add.tilemap("Testroom");
+    const levelMap = this.add.tilemap("Mission01");
     const layers = this.loadMap(levelMap);
-    this.loadPlayer(64, 0, layers);
+    this.loadPlayer(64, 0, 'player');
     this.physics.add.collider(this.player, layers.calc_walls);
-    const enemies = this.loadEnemies(layers.spawnPoints, layers.calc_walls);
+    const enemies = this.loadEnemies(layers.enemy_SpawnPoints, layers.calc_walls);
     this.physics.add.collider(enemies, layers.calc_walls);
+    this.mouseActions(layers, enemies);
     this.loadGun(this.player.x, this.player.y);
     this.createCamera();
     this.playAmbientMusic();
     this.createLights();
     this.loadInterface();
     this.mouseMovements();
-    this.mouseActions(layers, enemies);
   };
+
   update() {
     this.gunOrientation();
     this.generalPositioning();
+    this.updateCamera();
   };
 }
 export default Mission01
