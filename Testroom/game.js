@@ -10,6 +10,7 @@ import Key_Bindings from './UI/keyBindings.js';
 import TestRoom from './scenes/testroom.js';
 import Tutorial from './scenes/tutorial.js';
 import Mission01 from './scenes/mission01.js';
+import Mission02 from './scenes/mission02.js';
 
 const WIDTH = 1280;
 const HEIGHT = 768;
@@ -25,7 +26,7 @@ const SHARED_CONFIG = {
   }
 }
 
-const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate, Tutorial, Mission01];
+const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate  , Tutorial, Mission01, Mission02];
 const createScene = Scene => new Scene(SHARED_CONFIG) //A voir
 const initScenes = () => Scenes.map(createScene)
 

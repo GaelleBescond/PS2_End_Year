@@ -6,7 +6,7 @@ class Mortar extends Weapon {
     }
 
     init() {
-        this.bulletVelocity = 700;
+        this.bulletVelocity = 1200;
         this.damage= 25;
         this.weaponCooldown = 100;
         this.weaponCanShoot = true;
@@ -19,7 +19,7 @@ class Mortar extends Weapon {
     }
 
     initEvents() {
-
+        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
 
     update() {

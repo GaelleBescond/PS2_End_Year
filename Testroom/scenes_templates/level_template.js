@@ -30,6 +30,7 @@ class LevelTemplate extends Phaser.Scene {
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
     this.chosenGun = 0;
+    this.canSwap = true;
   }
 
   create() {
@@ -65,13 +66,12 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   loadGun(x, y) {
-    this.gun.destroy();
     if (this.chosenGun == 0) {
-      this.gun = new Rifle(this, x, y - 48).setScale(0.07);
+      this.gun = new Rifle(this, x, y - 48,'gun').setScale(0.07);
     } else if (this.chosenGun == 1) {
-      this.gun = new Sniper(this, x, y - 48).setScale(0.07);
+      this.gun = new Sniper(this, x, y - 48,'gun').setScale(0.07);
     } else if (this.chosenGun == 2) {
-      this.gun = new Mortar(this, x, y - 48).setScale(0.07);
+      this.gun = new Mortar(this, x, y - 48,'gun').setScale(0.07);
     }
   }
   gunOrientation() {
@@ -189,7 +189,7 @@ class LevelTemplate extends Phaser.Scene {
     }
     this.gun.y = this.player.y - 5
     this.cameraFocal.setPosition(this.player.x + (this.data_holder.cameraPosX) * 0.7, this.player.y + (this.data_holder.cameraPosY) * 0.7)
-    this.playerLight.setPosition(this.gun.x, this.gun.y);
+   // this.playerLight.setPosition(this.gun.x, this.gun.y);
   }
 
   gravityTool() {

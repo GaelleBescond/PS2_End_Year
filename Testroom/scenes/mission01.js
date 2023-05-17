@@ -17,6 +17,7 @@ class Mission01 extends LevelTemplate {
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
+    this.chosenGun = 0;
   };
 
   create() {
@@ -30,9 +31,9 @@ class Mission01 extends LevelTemplate {
     this.loadGun(this.player.x, this.player.y);
     this.createCamera();
     this.playAmbientMusic();
-    this.createLights();
     this.loadInterface();
     this.mouseMovements();
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
   };
 
   update() {

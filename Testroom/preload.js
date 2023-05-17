@@ -35,13 +35,14 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON("Testroom", "assets/levels/Testroom.json");
         this.load.tilemapTiledJSON("Tutorial", "assets/levels/Tutorial.json");
         this.load.tilemapTiledJSON("Mission01", "assets/levels/Mission01.json");
+        this.load.tilemapTiledJSON("Mission02", "assets/levels/Mission02.json");
 
     }
 
     create() {
         const musicVolume = 0.35
         const fxVolume = 0.15
-        this.sound.play("fleet", { volume: this.musicVolume });
+       // this.sound.play("fleet", { volume: this.musicVolume });
         this.anims.create({
             key: "player_idle_left",
             frames: this.anims.generateFrameNumbers("player", { start: 0, end: 29 }),

@@ -17,7 +17,7 @@ class Sniper extends Weapon {
     }
 
     initEvents() {
-
+        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
 
     update() {
