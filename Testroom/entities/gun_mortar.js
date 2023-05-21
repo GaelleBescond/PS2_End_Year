@@ -14,7 +14,7 @@ class Mortar extends Weapon {
         this.projectilesPerShoot = 1;
         this.splashRadius = 0;
         this.splashDamage = 0;
-        this.camZoom = 0.55;
+        this.camZoom = 0.25;
 
     }
 

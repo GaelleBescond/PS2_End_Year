@@ -11,6 +11,8 @@ class Soldier extends Enemy {
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.velocity.x = 100;
+        this.patrolRange = 0;
+        this.lineOfSight = 0;
     }
 
     update() {

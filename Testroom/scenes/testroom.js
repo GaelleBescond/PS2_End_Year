@@ -5,8 +5,6 @@ class TestRoom extends LevelTemplate {
   }
 
   init(data) {
-    this.mapTileset = data.mapTileset;
-    this.mapTilesetImage = data.mapTilesetImage;
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,

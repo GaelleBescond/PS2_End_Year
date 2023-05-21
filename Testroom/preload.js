@@ -7,17 +7,23 @@ class Preload extends Phaser.Scene {
     preload() {
         //Images
         this.load.image('enemy', 'assets/enemy.png');
-        this.load.image('enemy_1', 'assets/enemy_1.png');
-        this.load.image('enemy_2', 'assets/enemy_2.png');
-        this.load.image('enemy_3', 'assets/enemy_3.png');
+        this.load.image('enemy_soldier', 'assets/enemy_soldier.png');
+        this.load.image('enemy_tank', 'assets/enemy_tank.png');
+        this.load.image('enemy_turret', 'assets/enemy_hovercraft.png');
+        this.load.image('crosshair', 'assets/crosshair.png');
 
 
 
         this.load.image('bullet', 'assets/bullet.png');
-        this.load.image('background', 'assets/bg.jpg');
+        this.load.image('asteroidBackground', 'assets/bg.jpg');
+        this.load.image('backgroundSpace', 'assets/backgroundSpace.png');
+        this.load.image('asteroidBackground2', 'assets/asteroidsFar.png');
+        this.load.image('asteroidBackground3', 'assets/asteroidsNear.png');
         //SpriteSheets
         this.load.spritesheet("player", "assets/PlayerSheet.png",
             { frameWidth: 512, frameHeight: 512 });
+            this.load.spritesheet("enemy_hovercraft", "assets/hovercraft_spritesheet.png",
+                { frameWidth: 512, frameHeight: 256 });
 
         this.load.spritesheet("gun", "assets/gun.png",
             { frameWidth: 1698 * 2, frameHeight: 368 });
@@ -30,12 +36,11 @@ class Preload extends Phaser.Scene {
 
 
         //Maps & levels
-        this.load.image("tileset_image", "assets/Tileset_testroom.png");
-        this.load.image("tileset_game", "assets/Tileset_game.png");
-        this.load.tilemapTiledJSON("Testroom", "assets/levels/Testroom.json");
-        this.load.tilemapTiledJSON("Tutorial", "assets/levels/Tutorial.json");
-        this.load.tilemapTiledJSON("Mission01", "assets/levels/Mission01.json");
-        this.load.tilemapTiledJSON("Mission02", "assets/levels/Mission02.json");
+        this.load.image("tileset_image", "assets/Tileset_game.png");
+        this.load.tilemapTiledJSON("Testroom", "levels/Testroom.json");
+        this.load.tilemapTiledJSON("Tutorial", "levels/Tutorial.json");
+        this.load.tilemapTiledJSON("Mission01", "levels/Mission01.json");
+        this.load.tilemapTiledJSON("Mission02", "levels/Mission02.json");
 
     }
 

@@ -15,6 +15,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
+        this.patrolRange = 0;
+        this.lineOfSight = 0;
 
     }
 
@@ -32,9 +34,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    patrol(range, sight){
-
-    }
 
 
 }

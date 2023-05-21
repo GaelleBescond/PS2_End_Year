@@ -8,7 +8,14 @@ It has to import the weapons and modules chosen by the players in the lobby
 
 class Mission05 extends Phaser.Scene {
   constructor() {
-    super("Mission05");
+    super({
+      key: "Mission05",
+      physics: {
+        arcade: {
+          gravity: { y: 1000 }
+        }
+      }
+    });
   }
   init(data) { };
   preload() { };

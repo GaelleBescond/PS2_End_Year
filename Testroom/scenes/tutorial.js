@@ -1,12 +1,10 @@
 import LevelTemplate from "../scenes_templates/level_template.js";
-class Mission01 extends LevelTemplate {
+class Tutorial extends LevelTemplate {
   constructor() {
-    super("Mission01");
+    super("Tutorial");
   }
 
   init(data) {
-    this.mapTileset = data.mapTileset;
-    this.mapTilesetImage = data.mapTilesetImage;
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
@@ -17,10 +15,12 @@ class Mission01 extends LevelTemplate {
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
+    this.chosenGun = 0;
+    this.canSwap = true;
   };
 
   create() {
-    const levelMap = this.add.tilemap("Mission01");
+    const levelMap = this.add.tilemap("Tutorial");
     const layers = this.loadMap(levelMap);
     this.loadPlayer(64, 0, 'player');
     this.physics.add.collider(this.player, layers.calc_walls);
@@ -30,14 +30,17 @@ class Mission01 extends LevelTemplate {
     this.loadGun(this.player.x, this.player.y);
     this.createCamera();
     this.playAmbientMusic();
-    this.createLights();
     this.loadInterface();
     this.mouseMovements();
+    this.cursors = this.input.keyboard.createCursorKeys();
   };
-  
+
   update() {
+    const eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    const qKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.gunOrientation();
     this.generalPositioning();
+    this.updateCamera();
   };
 }
-export default Mission01
+export default Tutorial

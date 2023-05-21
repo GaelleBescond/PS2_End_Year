@@ -12,8 +12,7 @@ class LevelTemplate extends Phaser.Scene {
       key: name,
       physics: {
         arcade: {
-          debug: true,
-          gravity: { y: 800 }
+          debug: false
         }
       },
       render: {
@@ -24,13 +23,14 @@ class LevelTemplate extends Phaser.Scene {
   }
   init(data) {
     this.mapName = data.mapName;
-    this.mapTileset = data.mapTileset;
-    this.mapTilesetImage = data.mapTilesetImage;
     this.data_holder = data.data_holder;
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
     this.chosenGun = 0;
     this.canSwap = true;
+    this.targetZoom = 0.55;
+    this.physics.world.gravity.y = 1000;
+    this.baseGravity = this.physics.world.gravity.y
   }
 
   create() {
@@ -50,11 +50,19 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   loadBackground() {
-    this.skyparallax = this.add.tileSprite(0, 0, 0, 0, "background")
-      .setScale(2.5)
+    this.skyparallax = this.add.tileSprite(0, 0, 0, 0, "backgroundSpace")
+      //.setScale(2.5)
+      .setOrigin(0.5)
+      .setScrollFactor(0.1)
+    //.setTint(0x555555);
+    this.skyparallax2 = this.add.tileSprite(0, 0, 0, 0, "asteroidBackground2")
+      .setScale(1.5)
       .setOrigin(0.5)
       .setScrollFactor(0.2)
-    //.setTint(0x555555);
+    this.skyparallax3 = this.add.tileSprite(0, 0, 0, 0, "asteroidBackground3")
+      .setScale(1.5)
+      .setOrigin(0.5)
+      .setScrollFactor(0.3)
   }
 
   playAmbientMusic(value) {
@@ -67,11 +75,11 @@ class LevelTemplate extends Phaser.Scene {
 
   loadGun(x, y) {
     if (this.chosenGun == 0) {
-      this.gun = new Rifle(this, x, y - 48,'gun').setScale(0.07);
+      this.gun = new Rifle(this, x, y - 48, 'gun').setScale(0.07);
     } else if (this.chosenGun == 1) {
-      this.gun = new Sniper(this, x, y - 48,'gun').setScale(0.07);
+      this.gun = new Sniper(this, x, y - 48, 'gun').setScale(0.07);
     } else if (this.chosenGun == 2) {
-      this.gun = new Mortar(this, x, y - 48,'gun').setScale(0.07);
+      this.gun = new Mortar(this, x, y - 48, 'gun').setScale(0.07);
     }
   }
   gunOrientation() {
@@ -90,13 +98,13 @@ class LevelTemplate extends Phaser.Scene {
 
       console.log(spawn.name);
       if (spawn.name == "soldier") {
-        enemy = new Soldier(this, spawn.x, spawn.y, "enemy_1").setScale(0.25);
+        enemy = new Soldier(this, spawn.x, spawn.y, "enemy_soldier").setScale(0.25);
       } else if (spawn.name == "tank") {
-        enemy = new Tank(this, spawn.x, spawn.y, "enemy_2").setScale(0.25);
+        enemy = new Tank(this, spawn.x, spawn.y, "enemy_tank").setScale(1);
       } else if (spawn.name == "hover") {
-        enemy = new Hover(this, spawn.x, spawn.y, "enemy_3").setScale(0.25);
+        enemy = new Hover(this, spawn.x, spawn.y, "enemy_hovercraft").setScale(1);
       } else if (spawn.name == "turret") {
-        enemy = new Turret(this, spawn.x, spawn.y, "enemy_4").setScale(0.25);
+        enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25);
       }
       this.physics.add.collider(enemy, ground)
       enemies.add(enemy)
@@ -113,13 +121,23 @@ class LevelTemplate extends Phaser.Scene {
 
   createCamera() {
     //set camera between player and mouse (average coordinates)
-    this.cameraFocal = this.physics.add.sprite(this.player.x, this.player.y);
+    this.cameraFocal = this.physics.add.sprite(this.player.x, this.player.y, "crosshair")
+      .setScale(0.15);
     this.cameraFocal.body.setAllowGravity(false);
     this.cameras.main.startFollow(this.cameraFocal);
+    this.cameras.main.setZoom(this.targetZoom);
   }
 
   updateCamera() {
-    this.cameras.main.setZoom(this.gun.camZoom);
+    if (this.targetZoom < this.gun.camZoom) {
+      this.targetZoom += 0.005;
+    } else if (this.targetZoom > this.gun.camZoom) {
+      this.targetZoom -= 0.005;
+    }
+    if (Math.abs(this.targetZoom - this.gun.camZoom) < 0.005) {
+      this.targetZoom = this.gun.camZoom;
+    }
+    this.cameras.main.setZoom(this.targetZoom);
   }
 
   loadInterface() {
@@ -189,7 +207,7 @@ class LevelTemplate extends Phaser.Scene {
     }
     this.gun.y = this.player.y - 5
     this.cameraFocal.setPosition(this.player.x + (this.data_holder.cameraPosX) * 0.7, this.player.y + (this.data_holder.cameraPosY) * 0.7)
-   // this.playerLight.setPosition(this.gun.x, this.gun.y);
+    // this.playerLight.setPosition(this.gun.x, this.gun.y);
   }
 
   gravityTool() {
@@ -207,8 +225,47 @@ class LevelTemplate extends Phaser.Scene {
       }
     }
     else {
-      this.physics.world.gravity.y = 400;
+      this.physics.world.gravity.y = this.baseGravity;
     };
+  }
+
+  victory(sceneName) {
+    this.scene.start(sceneName, {
+      musicVolume: this.musicVolume,
+      fxVolume: this.fxVolume,
+    });
+  }
+
+  swapGun(eKey, qKey) {
+    if ((eKey.isDown || qKey.isDown) && this.canSwap) {
+      this.canSwap = false;
+      if (eKey.isDown) {
+        if (this.chosenGun <= 2) {
+          this.chosenGun += 1;
+          if (this.chosenGun > 2) {
+            this.chosenGun = 0;
+          }
+          this.gun.destroy();
+          this.loadGun(this.player.x, this.player.y)
+        }
+      }
+      if (qKey.isDown) {
+        if (this.chosenGun >= 0) {
+          this.chosenGun -= 1;
+          if (this.chosenGun < 0) {
+            this.chosenGun = 2;
+          }
+          this.gun.destroy();
+          this.loadGun(this.player.x, this.player.y)
+        }
+      }
+      this.time.delayedCall(200, () => {
+        this.swapCooldown();
+      });
+    };
+  }
+  swapCooldown() {
+    this.canSwap = true;
   }
 }
 

@@ -8,16 +8,18 @@ class Turret extends Enemy {
     init() {
         this.hp = 20;
         this.canMove = false;
-        this.range = 
+        this.range = 5000;
         this.body.velocity.x = -100;
+        this.patrolRange = 0;
+        this.lineOfSight = 0;
     }
-    create(){
-        
+    create() {
+
     }
 
     update() {
         if (this.body) {
-        
+
         }
 
 

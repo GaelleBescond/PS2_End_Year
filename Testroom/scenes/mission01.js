@@ -5,8 +5,6 @@ class Mission01 extends LevelTemplate {
   }
 
   init(data) {
-    this.mapTileset = data.mapTileset;
-    this.mapTilesetImage = data.mapTilesetImage;
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
@@ -18,6 +16,10 @@ class Mission01 extends LevelTemplate {
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
     this.chosenGun = 0;
+    this.canSwap = true;
+    this.targetZoom = 0.55;
+    this.physics.world.gravity.y = 1000;
+    this.baseGravity = this.physics.world.gravity.y
   };
 
   create() {
@@ -33,13 +35,19 @@ class Mission01 extends LevelTemplate {
     this.playAmbientMusic();
     this.loadInterface();
     this.mouseMovements();
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    this.qKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   };
 
   update() {
-    this.gunOrientation();
+    //gameplay methods
+    this.gunOrientation();  
     this.generalPositioning();
     this.updateCamera();
+    //level tools for player
+    this.swapGun(this.eKey, this.qKey);
+    this.gravityTool();
   };
 }
 export default Mission01

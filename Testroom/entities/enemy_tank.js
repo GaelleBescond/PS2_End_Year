@@ -6,12 +6,14 @@ class Tank extends Enemy {
     }
 
     init() {
-        this.hp = 20;
+        this.hp = 30;
         this.canMove = true;
-        this.range =
-            this.body.maxVelocity.x = 800;
+        this.range = 1500;
+        this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.velocity.x = -100;
+        this.patrolRange = 0;
+        this.lineOfSight = 0;
     }
 
     update() {

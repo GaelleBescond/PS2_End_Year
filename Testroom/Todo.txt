@@ -1,4 +1,16 @@
 Finish character animations and equipment
+In order of priority:
+- Simple gun
+- Enemies behaviour
+- Enemies drops
+- Tutorial in level Design
+- Main campain post Tutorial
+
+
+
+
+
+
 
 Level Design
     - 1 training field (weapons)
@@ -8,22 +20,17 @@ Level Design
 
 Create mobs spawners
 
-Add weapon swap
-
 Make UI work
 
 Main Menu:
-- Campaign (start scenario)
 - Settings
     - keys (WiP)
-    - volume music (WiP)
-    - volume fx  (WiP)
 
 - Testroom (map/tool/weapon explorer)
 
 
 Enemies and patterns
-Simple gun
+
 Light on cursor
 terrain texture
 
