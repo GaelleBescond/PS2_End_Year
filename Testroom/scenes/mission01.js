@@ -9,9 +9,8 @@ class Mission01 extends LevelTemplate {
       gunAngle: 0,
       cameraPosX: 0,
       cameraPosY: 0,
-      ammo: 99,
       enemiesNumber: 0,
-      progress: 0,
+      progress: 0
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
@@ -23,29 +22,30 @@ class Mission01 extends LevelTemplate {
     this.offset = 36
   };
 
-  create() {    
+  create() {
     const offset = 36
     const levelMap = this.add.tilemap("Mission01");
     const layers = this.loadMap(levelMap);
     //const spawn = this.createSpawns(layers);
-    this.loadPlayer(-128*12,-128*4, 'player');
-    this.loadGun(this.player.x, this.player.y,offset);
+    this.loadPlayer(-128 * 12, -128 * 4, 'player');
+    this.loadGun(this.player.x, this.player.y, offset);
     this.physics.add.collider(this.player, layers.calc_walls);
     const enemies = this.loadEnemies(layers.enemy_SpawnPoints, layers.calc_walls, layers.calc_jumpBlocks);
     this.physics.add.collider(enemies, layers.calc_walls);
     this.mouseActions(layers, enemies);
     this.createCamera();
     this.playAmbientMusic();
-    this.loadInterface();
+    this.loadInterface("Mission01", this.player.energy, this.gun.name);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
     this.eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.qKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.updateUI = new Phaser.Events.EventEmitter();
   };
 
   update() {
+    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp);
     //gameplay methods
-    this.gunOrientation();  
     this.generalPositioning();
     this.updateCamera();
     //level tools for player

@@ -17,6 +17,7 @@ class Weapon extends Phaser.Physics.Arcade.Sprite {
         this.splashRadius = 0;
         this.splashDamage = 0;
         this.camZoom = 0;
+        this.name = "gun";
     }
 
     initEvents() {

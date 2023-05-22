@@ -18,12 +18,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.acceleration.x = 0;
         this.canThrust = true;
         this.jetPackFuel = 300;
-        this.currentRifleAmmo = 0;
-        this.currentMortarAmmo = 0;
-        this.currentSniperAmmo = 0;
+        this.energy = 300
         this.cursors = this.scene.input.keyboard.createCursorKeys();
     }
-
     initEvents() {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
@@ -40,12 +37,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.body.blocked.down) {
             this.jetPackFuel = 300;
             this.groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
+            if (this.body.velocity.x == 0 && this.energy < 300) {
+                this.energy += 1;
+            }
         }
         else {
             this.airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
         }
         //Animations
         this.animate();
+
     }
 
     groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
@@ -53,19 +54,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (left.isDown || aKey.isDown) {
                 if (this.body.velocity.x > 0) {
                     this.body.acceleration.x = -2400;
-
                 } else {
-
                     this.body.acceleration.x = -800;
                 }
             }
-
             if (right.isDown || dKey.isDown) {
                 if (this.body.velocity.x < 0) {
                     this.body.acceleration.x = 2400;
-
                 } else {
-
                     this.body.acceleration.x = 800;
                 }
             }
@@ -90,7 +86,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
-         this.body.acceleration.y += 20;
+        this.body.acceleration.y += 20;
         if ((space.isDown || wKey.isDown) && this.canThrust && (this.body.velocity.y > 0) && this.jetPackFuel > 0) {
             this.body.velocity.y = this.body.velocity.y / 2
             this.jetPackFuel -= 1;
@@ -123,11 +119,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     animate() {
         //create a variable containing previous accel to create slide effects
         //create walk animation
-        //create backwards animation
+        //fix backwards animation
         if (this.body.blocked.down) {
             if (this.body.velocity.x > 20) {
                 if (this.facing) {
-                    this.play('player_run_backwards_right', true).setFlipX(this.facing);
+                    this.play('player_backwards_right', true).setFlipX(this.facing);
                 } else {
                     this.play('player_run_right', true).setFlipX(this.facing);
                 }
@@ -135,7 +131,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.facing) {
                     this.play('player_run_right', true).setFlipX(this.facing);
                 } else {
-                    this.play('player_run_backwards_right', true).setFlipX(this.facing);
+                    this.play('player_backwards_right', true).setFlipX(this.facing);
                 }
             } else {
                 this.play('player_idle_right', true).setFlipX(this.facing);

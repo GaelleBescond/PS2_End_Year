@@ -2,17 +2,18 @@ import Weapon from "./gun.js";
 class Sniper extends Weapon {
 
     constructor(scene, x, y) {
-        super(scene, x, y, "gun");
+        super(scene, x, y,);
     }
 
     init() {
         this.bulletVelocity = 4500;
         this.damage = 5;
-        this.consumption = 10
+        this.consumption = 50
         this.weaponCooldown = 200;
         this.weaponCanShoot = true;
         this.projectilesPerShoot = 1;
         this.camZoom = 0.25;
+        this.name = "Railgun";
 
     }
 
@@ -24,6 +25,17 @@ class Sniper extends Weapon {
 
     }
 
+    animate(bool) {
+
+        if (bool) {
+            this.play('rifle_effects', true).setFlipX(bool);
+            this.play('rifle_effects', true).setFlipY(bool);
+        }
+        else {
+            this.play('rifle_effects', true).setFlipX(!bool);
+            this.play('rifle_effects', true).setFlipY(bool);
+        }
+    }
 }
 
 export default Sniper;

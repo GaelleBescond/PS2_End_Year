@@ -17,9 +17,10 @@ class Mission02 extends LevelTemplate {
     this.fxVolume = data.fxVolume;
     this.chosenGun = 0;
     this.canSwap = true;
-    this.targetZoom = 0;
+    this.targetZoom = 0.55;
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
+    this.offset = 36
   };
 
   create() {

@@ -53,13 +53,13 @@ class MainMenu extends Phaser.Scene {
             .on('pointerover', () => this.buttonSettings.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.buttonSettings.setStyle({ fill: this.colorMain }))
 
-        this.buttonTestroom = this.add.text(this.increment * 36, this.increment * 30, 'Testroom', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
+        this.buttonTestroom = this.add.text(this.increment * 36, this.increment * 30, 'Testroom (N/A)', { fontFamily: this.font, fontSize: '32px', fill: this.colorNA })
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#555' })
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.buttonTestroom.setStyle({ fill: this.colorOver }))
-            .on('pointerout', () => this.buttonTestroom.setStyle({ fill: this.colorMain }))
+            .on('pointerout', () => this.buttonTestroom.setStyle({ fill: this.colorNA }))
 
 
         this.buttonTutorial = this.add.text(this.increment * 36, this.increment * 36, 'Tutorial', { fontFamily: this.font, fontSize: '32px', fill: this.colorMain })
@@ -83,7 +83,7 @@ class MainMenu extends Phaser.Scene {
         this.buttonGame.on('pointerdown', () => this.startLevel.call(this, 'Mission01'));
         this.buttonTutorial.on('pointerdown', () => this.startLevel.call(this, 'Tutorial'));
         this.buttonSettings.on('pointerdown', () => this.switchMenu.call(this, 'Settings'));
-        this.buttonTestroom.on('pointerdown', () => this.startLevel.call(this, 'TestRoom'));
+        this.buttonTestroom.on('pointerdown', () =>  this.switchMenu.call(this, '0'));
         this.buttonMpGame.on('pointerdown', () => this.switchMenu.call(this, 'MultiPlayer'));
         this.buttonQuit.on('pointerdown', () => this.switchMenu.call(this, 'Quit'));
     }

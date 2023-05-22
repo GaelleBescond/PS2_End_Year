@@ -12,9 +12,9 @@ import Tutorial from './scenes/tutorial.js';
 import Mission01 from './scenes/mission01.js';
 import Mission02 from './scenes/mission02.js';
 
-const WIDTH = 1280;
-const HEIGHT = 768;
-const ZOOM_FACTOR = 3;
+const WIDTH = 1920;
+const HEIGHT = 1080;
+const ZOOM_FACTOR = 2;
 
 const SHARED_CONFIG = {
   width: WIDTH,
@@ -26,7 +26,7 @@ const SHARED_CONFIG = {
   }
 }
 
-const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate  , Tutorial, Mission01, Mission02];
+const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate, Tutorial, Mission01, Mission02];
 const createScene = Scene => new Scene(SHARED_CONFIG) //A voir
 const initScenes = () => Scenes.map(createScene)
 

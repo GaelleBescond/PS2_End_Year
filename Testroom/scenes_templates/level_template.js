@@ -12,7 +12,7 @@ class LevelTemplate extends Phaser.Scene {
       key: name,
       physics: {
         arcade: {
-          debug: true
+          debug: false
         }
       },
       render: {
@@ -82,28 +82,21 @@ class LevelTemplate extends Phaser.Scene {
 
   loadGun(x, y) {
     if (this.chosenGun == 0) {
-      this.gun = new Rifle(this, x, y - this.offset, 'gun').setScale(0.07).setDepth(2);
+      this.gun = new Rifle(this, x, y - this.offset, 'gun').setScale(0.3).setDepth(2);
     } else if (this.chosenGun == 1) {
-      this.gun = new Sniper(this, x, y - this.offset, 'gun').setScale(0.07).setDepth(2);
+      this.gun = new Sniper(this, x, y - this.offset, 'gun').setScale(0.6).setDepth(2);
     } else if (this.chosenGun == 2) {
-      this.gun = new Mortar(this, x, y - this.offset, 'gun').setScale(0.07).setDepth(2);
+      this.gun = new Mortar(this, x, y - this.offset, 'gun').setScale(0.8).setDepth(2);
     }
   }
-  gunOrientation() {
-    if (this.data_holder.cameraPosX >= 0) {
-      this.gun.setFrame(1);
-    } else if (this.data_holder.cameraPosX < 0) {
-      this.gun.setFrame(0);
-    }
-    this.gun.setRotation(this.data_holder.gunAngle)
-  }
+
 
   loadEnemies(spawner, ground, calc_jumpObjects) {
     const enemies = this.add.group();
     spawner.objects.forEach(spawn => {
       let enemy = null;
       let jumpObjects = this.loadJumpBlocks(calc_jumpObjects);
-      console.log(spawn.name);
+      //console.log(spawn.name);
       if (spawn.name == "soldier") {
         enemy = new Soldier(this, spawn.x, spawn.y, "enemy_soldier").setScale(0.25).setDepth(0);
         this.physics.add.overlap(enemy, jumpObjects, enemy.jump, null, enemy)
@@ -143,7 +136,7 @@ class LevelTemplate extends Phaser.Scene {
       .setScale(0.15);
     this.cameraFocal.body.setAllowGravity(false);
     this.cameras.main.startFollow(this.cameraFocal);
-    this.cameras.main.setZoom(this.targetZoom);
+    this.cameras.main.setZoom(this.targetZoom * 2);
   }
 
   updateCamera() {
@@ -155,20 +148,22 @@ class LevelTemplate extends Phaser.Scene {
     if (Math.abs(this.targetZoom - this.gun.camZoom) < 0.005) {
       this.targetZoom = this.gun.camZoom;
     }
-    this.cameras.main.setZoom(this.targetZoom);
+    this.cameras.main.setZoom(this.targetZoom * 1.2);
   }
 
-  loadInterface() {
+  loadInterface(sceneName, energy, gunName) {
     this.scene.run('Interface', {
+      sceneName,
+      energy,
+      gunName,
     });
   }
 
   mouseMovements() {
-    this.input.on('pointermove', function (pointer) {
-      this.data_holder.cameraPosX = pointer.x - 1280 / 2;
-      this.data_holder.cameraPosY = pointer.y - 768 / 2;
+    this.input.on('pointermove', (pointer) => {
+      this.data_holder.cameraPosX = pointer.x - 1920 / 2;
+      this.data_holder.cameraPosY = pointer.y - 1080 / 2;
       this.data_holder.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
-      this.events.emit('updateUI', this.data_holder);
       if (this.data_holder.cameraPosX >= 0) {
         this.player.facing = false;
       } else {
@@ -179,21 +174,21 @@ class LevelTemplate extends Phaser.Scene {
 
   mouseActions(layers, target) {
     this.input.on('pointerdown', (pointer) => {
-      if (this.gun.weaponCanShoot && this.data_holder.ammo > 0) {
+      if (this.gun.weaponCanShoot && this.player.energy >= this.gun.consumption * this.gun.projectilesPerShoot) {
         for (let i = 0; i < this.gun.projectilesPerShoot; i++) {
           this.time.delayedCall(100 * i, () => {
             this.shootBullet(this.gun.x, this.gun.y, this.data_holder.gunAngle, layers, target);
           });
         }
       }
-      if (this.gun.weaponCanShoot && this.data_holder.ammo <= 0) {
+      if (this.gun.weaponCanShoot && this.player.energy < this.gun.consumption * this.gun.projectilesPerShoot) {
         this.sound.play("empty_gun", { volume: this.fxVolume })
       }
     });
   }
 
   shootBullet(x, y, angle, layers, target) {
-    this.data_holder.ammo -= 3;
+    this.player.energy -= this.gun.consumption;
     this.gun.weaponCanShoot = false;
     this.bullet = this.physics.add.sprite(x, y, 'bullet')
     this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
@@ -210,7 +205,7 @@ class LevelTemplate extends Phaser.Scene {
   damage(bullet, target) {
     bullet.destroy()
     target.loseHP(this.gun.damage)
-    console.log(target.hp)
+    //console.log(target.hp)
     if (target.hp <= 0) {
       this.events.off(Phaser.Scenes.Events.UPDATE, target.update, target);
       target.destroy()
@@ -221,15 +216,16 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   generalPositioning() {
-
     //mouse aiming and updated location for the gun
     if (this.data_holder.cameraPosX > 0) {
-      this.gun.x = this.player.x + this.offset
+      this.gun.x = this.player.x
     }
     else if (this.data_holder.cameraPosX < 0) {
-      this.gun.x = this.player.x - this.offset
+      this.gun.x = this.player.x
     }
     this.gun.y = this.player.y - this.offset
+    this.gun.animate(this.player.facing)
+    this.gun.setRotation(this.data_holder.gunAngle)
     this.cameraFocal.setPosition(this.player.x + (this.data_holder.cameraPosX) * 0.7, this.player.y + (this.data_holder.cameraPosY) * 0.7)
     // this.playerLight.setPosition(this.gun.x, this.gun.y);
   }

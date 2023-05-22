@@ -1,53 +1,33 @@
-Finish character animations and equipment
 In order of priority:
 - Enemies behaviour
     - shoot on sight
     - aggro
-    - hover intervention
     - turret periodic shooting
 - Enemies drops
-    - ammo
-    - hp?
+    - Better models and texture
+    - merit
 
-- Tutorial in level Design
-- Main campain post Tutorial
 - Win conditions
     - kill count 
     - object reach
 
 -Guns:
-    - Simple gun
-        - low stats but infinite ammo
-            - slow reload
-            - 1 damage
-            - medium bullet velocity
     - Create unique sprites
     - Create unique Bullets
-    - Remake gun orientation (this.facing, change sprite)
+    - Create splash damage for mortar
 
 
-Level Design
-    - Training field (movements then weapons)
-
-
-
-    - 1 training field (weapons)
-    - 2 asteroids (grav tool)
-    - 3 ceres (lights)
-    - 4 earth (orbital strikes but high grav)
-
-Create mobs spawners
-
-Make UI work
+-Campain Level Design
+    env 3/1 - Training field (movements then weapons)
+    env 1/2 - First scene (only soldiers)
+    env 2/3 - Second scene (tanks + soldiers, go inside base)
+    env 3   - Third scene (inside base, soldiers + lights)
+    env 3/2 - Fourth scene (go outside base, soldiers + tanks + hovers)
+    env 2   - Fifth scene (entrenched, grav tool + all enemies converging) -> Create mobs spawners
 
 Main Menu:
 - Settings
     - keys (WiP)
-
-- Testroom (map/tool/weapon explorer)
-
-
-Enemies and patterns
 
 Light on cursor
 terrain texture

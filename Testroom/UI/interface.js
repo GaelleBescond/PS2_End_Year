@@ -11,24 +11,17 @@ It must display:
     The menu option has to include:
     - A pause/quit game vote option
     - A options/parameters to rebind keys locally?
--
-
-
 */
 
 import TestRoom from "../scenes/testroom.js";
-
-/*Debug:
-32: Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'setText')
-*/
-
-
-///UI///
 class Interface extends Phaser.Scene {
   constructor() {
     super("Interface");
   }
-  init() {
+  init(data) {
+    this.sceneName = data.sceneName;
+    this.energy = data.energy;
+    this.gunName = data.gunName;
 
   }
 
@@ -36,18 +29,43 @@ class Interface extends Phaser.Scene {
     this.font = 'Mecha'
     this.increment = 16;
     this.scene.bringToTop();
-    this.progressBar = this.add.text(this.increment, this.increment, 'Progress :', { fontFamily: this.font, fontSize: '32px', fill: '#0000FF' });
-    this.ammoCount = this.add.text(this.increment, this.increment * 3, 'Ammo :', { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' });
-    this.weaponDisplay = this.add.text(this.increment, this.increment * 5, 'Rifle', { fontFamily: this.font, fontSize: '32px', fill: '#00FF00' });
-    this.events.on('updateUI', function (data) {
-      console.log("update")
-      this.progressBar.setText('Progress : ' + data.progress)
-      this.ammoCount.setText('Ammo : ' + data.ammo)
-    }, this);
-  };
+    this.healthBar = this.add.text(this.increment, this.increment, "", { fontFamily: this.font, fontSize: '32px', fill: '#0000FF' });
+    this.energyCount = this.add.text(this.increment, this.increment * 3, "", { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' });
+    // Create a graphics object
+    const energyGauge = this.add.graphics();
+    // Define the gauge bar properties
+    const backgroundColor = 0xCCCCCC; // Background color of the gauge bar
+    const fillColor = 0x00FF00; // Fill color of the gauge bar
+    const maxValue = 100; // Maximum value of the gauge bar
 
-  update() {
+    // Draw the background of the gauge bar
+    energyGauge.fillStyle(backgroundColor);
+    energyGauge.fillRect(this.increment, this.increment * 3, this.energy, 20);
 
+    // Calculate the fill width based on the current value
+    const fillValue = 75; // Current value of the gauge bar
+    const fillWidth = (fillValue / maxValue) * width;
+
+    // Draw the fill of the gauge bar
+    energyGauge.fillStyle(fillColor);
+    energyGauge.fillRect(x, y, fillWidth, height);
+
+    this.weaponDisplay = this.add.text(this.increment, this.increment * 5, "", { fontFamily: this.font, fontSize: '32px', fill: '#00FF00' });
+    this.message = this.add.text(this.increment, this.increment * 7, "", { fontFamily: this.font, fontSize: '32px', fill: '#00FF00' });
+
+    const currentScene = this.scene.get(this.sceneName);
+    currentScene.updateUI.on('dataUI', (energy, weapon, hp) => {
+      this.energyCount.setText('Energy : ' + energy)
+      this.weaponDisplay.setText(weapon)
+      this.healthBar.setText('HP: ' + hp)
+    });
+
+    currentScene.updateUI.on('newMessage', (message) => {
+
+
+    })
   }
+  update() { }
+
 }
 export default Interface

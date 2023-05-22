@@ -2,7 +2,7 @@ import Weapon from "./gun.js";
 class Rifle extends Weapon {
 
     constructor(scene, x, y) {
-        super(scene, x, y, "gun");
+        super(scene, x, y,);
     }
 
     init() {
@@ -13,6 +13,7 @@ class Rifle extends Weapon {
         this.weaponCanShoot = true;
         this.projectilesPerShoot = 3;
         this.camZoom = 0.55;
+        this.name = "Rifle";
     }
 
     initEvents() {
@@ -20,7 +21,16 @@ class Rifle extends Weapon {
     }
 
     update() {
-
+    }
+    animate(bool) {
+        if (bool) {
+            this.play('rifle_effects', true).setFlipX(bool);
+            this.play('rifle_effects', true).setFlipY(bool);
+        }
+        else {
+            this.play('rifle_effects', true).setFlipX(!bool);
+            this.play('rifle_effects', true).setFlipY(bool);
+        }
     }
 
 }
