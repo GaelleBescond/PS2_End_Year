@@ -98,7 +98,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
-        this.body.acceleration.y += 20;
+       // this.body.acceleration.y += 20;
         if ((space.isDown || wKey.isDown) && this.canThrust && (this.body.velocity.y > 0) && this.jetPackFuel > 0) {
             this.body.velocity.y = this.body.velocity.y / 2
             this.jetPackFuel -= 1;
@@ -110,7 +110,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if ((right.isDown || dKey.isDown) && this.body.acceleration.x < 400) {
                 this.body.acceleration.x += 60;
             }
-            this.setVelocityX(this.body.acceleration.x);
         }
         //air friction
         else if (this.body.velocity.x > 5) {
@@ -133,23 +132,34 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //create a variable containing previous accel to create slide effects
         //create a variable to face where the mouse is pointing (running backwards)
         //create walk animation
-        //create fall animation
-        //create jump/thrust animation
-        //Run animation
-        if (this.body.velocity.x > 20 && this.body.blocked.down) {
-            this.play('player_run_right', true);
-        } else if (this.body.velocity.x < -20 && this.body.blocked.down) {
-            this.play('player_run_left', true);
-        } else if (this.body.blocked.down)
-            //idle animation
-            if (this.facing) {
-                this.play('player_idle_left', true);
+        if (this.body.blocked.down) {
+            if (this.body.velocity.x > 20) {
+                this.play('player_run_right', true).setFlipX(false);
+            } else if (this.body.velocity.x < -20) {
+                this.play('player_run_right', true).setFlipX(true);
+            } else if (this.facing) {
+                this.play('player_idle_right', true).setFlipX(true);
             }
             else {
-                this.play('player_idle_right', true);
+                this.play('player_idle_right', true).setFlipX(false);
             }
 
-
+        } else {
+            if (this.body.velocity.y < 0) {
+                if (this.facing) {
+                    this.play('player_jump_right', true).setFlipX(true);
+                } else {
+                    this.play('player_jump_right', true).setFlipX(false);
+                }
+            }
+            else {
+                if (this.facing) {
+                    this.play('player_fall_right', true).setFlipX(true);
+                } else {
+                    this.play('player_fall_right', true).setFlipX(false);
+                }
+            }
+        }
 
     }
     loseHP(value) {

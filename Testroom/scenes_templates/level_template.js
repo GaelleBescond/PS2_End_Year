@@ -12,7 +12,7 @@ class LevelTemplate extends Phaser.Scene {
       key: name,
       physics: {
         arcade: {
-          debug: false
+          debug: true
         }
       },
       render: {
@@ -31,38 +31,45 @@ class LevelTemplate extends Phaser.Scene {
     this.targetZoom = 0.55;
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
+    this.offset = 36
   }
 
-  create() {
-    const levelMap = this.add.tilemap(this.mapName);
-    const layers = this.loadMap(levelMap);
-  };
 
   loadMap(levelMap) {
     this.loadBackground()
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
     const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
+    const calc_jumpBlocks = levelMap.getObjectLayer("Jump_Blocks")
     const spawnPoints = levelMap.getObjectLayer("Player_Spawn");
     const enemy_SpawnPoints = levelMap.getObjectLayer("Enemies_Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
-    return { spawnPoints, calc_walls, calc_terrain, tileset, enemy_SpawnPoints }
+    return { spawnPoints, calc_walls, calc_terrain, tileset, enemy_SpawnPoints, calc_jumpBlocks }
   }
 
   loadBackground() {
     this.skyparallax = this.add.tileSprite(0, 0, 0, 0, "backgroundSpace")
-      //.setScale(2.5)
+      .setScale(2.5)
       .setOrigin(0.5)
       .setScrollFactor(0.1)
     //.setTint(0x555555);
     this.skyparallax2 = this.add.tileSprite(0, 0, 0, 0, "asteroidBackground2")
-      .setScale(1.5)
+      .setScale(3.5)
       .setOrigin(0.5)
       .setScrollFactor(0.2)
     this.skyparallax3 = this.add.tileSprite(0, 0, 0, 0, "asteroidBackground3")
-      .setScale(1.5)
+      .setScale(3.5)
       .setOrigin(0.5)
       .setScrollFactor(0.3)
+  }
+
+  createSpawns(spawnPoints) {
+    const spawnblocks = this.physics.add.group({ allowGravity: false });
+    spawnPoints.objects.forEach(block => {
+      let object = spawnblocks.create(block.x + 64, block.y - 64)
+      spawnblocks.add(object)
+    })
+    return spawnblocks
   }
 
   playAmbientMusic(value) {
@@ -70,16 +77,16 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   loadPlayer(x, y, sprite) {
-    this.player = new Player(this, x, y, sprite).setScale(0.55).setSize(150, 450, 50, 0);
+    this.player = new Player(this, x, y, sprite).setScale(0.55).setSize(150, 450, 50, 0).setDepth(1);
   }
 
   loadGun(x, y) {
     if (this.chosenGun == 0) {
-      this.gun = new Rifle(this, x, y - 48, 'gun').setScale(0.07);
+      this.gun = new Rifle(this, x, y - this.offset, 'gun').setScale(0.07).setDepth(2);
     } else if (this.chosenGun == 1) {
-      this.gun = new Sniper(this, x, y - 48, 'gun').setScale(0.07);
+      this.gun = new Sniper(this, x, y - this.offset, 'gun').setScale(0.07).setDepth(2);
     } else if (this.chosenGun == 2) {
-      this.gun = new Mortar(this, x, y - 48, 'gun').setScale(0.07);
+      this.gun = new Mortar(this, x, y - this.offset, 'gun').setScale(0.07).setDepth(2);
     }
   }
   gunOrientation() {
@@ -91,27 +98,38 @@ class LevelTemplate extends Phaser.Scene {
     this.gun.setRotation(this.data_holder.gunAngle)
   }
 
-  loadEnemies(spawner, ground) {
+  loadEnemies(spawner, ground, calc_jumpObjects) {
     const enemies = this.add.group();
     spawner.objects.forEach(spawn => {
       let enemy = null;
-
+      let jumpObjects = this.loadJumpBlocks(calc_jumpObjects);
       console.log(spawn.name);
       if (spawn.name == "soldier") {
-        enemy = new Soldier(this, spawn.x, spawn.y, "enemy_soldier").setScale(0.25);
+        enemy = new Soldier(this, spawn.x, spawn.y, "enemy_soldier").setScale(0.25).setDepth(0);
+        this.physics.add.overlap(enemy, jumpObjects, enemy.jump, null, enemy)
       } else if (spawn.name == "tank") {
-        enemy = new Tank(this, spawn.x, spawn.y, "enemy_tank").setScale(1);
+        enemy = new Tank(this, spawn.x, spawn.y, "enemy_tank").setScale(1).setDepth(0);
       } else if (spawn.name == "hover") {
-        enemy = new Hover(this, spawn.x, spawn.y, "enemy_hovercraft").setScale(1);
+        enemy = new Hover(this, spawn.x, spawn.y, "enemy_hovercraft").setScale(1).setDepth(0);
       } else if (spawn.name == "turret") {
-        enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25);
+        enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25).setDepth(0);
       }
       this.physics.add.collider(enemy, ground)
+
       enemies.add(enemy)
     });
     return enemies;
   }
 
+
+  loadJumpBlocks(block) {
+    const blocks = this.physics.add.group({ allowGravity: false });
+    block.objects.forEach(spawn => {
+      let object = blocks.create(spawn.x + 64, spawn.y - 48, "jumpBlock")
+      blocks.add(object)
+    })
+    return blocks
+  }
   createLights() {
     this.lights.enable();
     this.playerLight = this.lights.addLight(this.gun.x, this.gun.y, 512);
@@ -198,14 +216,15 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   generalPositioning() {
+
     //mouse aiming and updated location for the gun
     if (this.data_holder.cameraPosX > 0) {
-      this.gun.x = this.player.x + 5
+      this.gun.x = this.player.x + this.offset
     }
     else if (this.data_holder.cameraPosX < 0) {
-      this.gun.x = this.player.x - 5
+      this.gun.x = this.player.x - this.offset
     }
-    this.gun.y = this.player.y - 5
+    this.gun.y = this.player.y - this.offset
     this.cameraFocal.setPosition(this.player.x + (this.data_holder.cameraPosX) * 0.7, this.player.y + (this.data_holder.cameraPosY) * 0.7)
     // this.playerLight.setPosition(this.gun.x, this.gun.y);
   }

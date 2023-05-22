@@ -6,7 +6,6 @@ class Preload extends Phaser.Scene {
 
     preload() {
         //Images
-        this.load.image('enemy', 'assets/enemy.png');
         this.load.image('enemy_soldier', 'assets/enemy_soldier.png');
         this.load.image('enemy_tank', 'assets/enemy_tank.png');
         this.load.image('enemy_turret', 'assets/enemy_hovercraft.png');
@@ -14,6 +13,7 @@ class Preload extends Phaser.Scene {
 
 
 
+        this.load.image('jumpBlock', 'assets/jumpBlock.png');
         this.load.image('bullet', 'assets/bullet.png');
         this.load.image('asteroidBackground', 'assets/bg.jpg');
         this.load.image('backgroundSpace', 'assets/backgroundSpace.png');
@@ -45,32 +45,31 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
+        const frames = 30
         const musicVolume = 0.35
         const fxVolume = 0.15
        // this.sound.play("fleet", { volume: this.musicVolume });
         this.anims.create({
-            key: "player_idle_left",
-            frames: this.anims.generateFrameNumbers("player", { start: 0, end: 29 }),
-            frameRate: 20,
-            repeat: -1,
-            reverse: true
-        });
-        this.anims.create({
             key: "player_idle_right",
-            frames: this.anims.generateFrameNumbers("player", { start: 30, end: 59 }),
+            frames: this.anims.generateFrameNumbers("player", { start: frames*0, end: frames*1-1 }),
             frameRate: 20,
             repeat: -1,
-        });
-        this.anims.create({
-            key: "player_run_left",
-            frames: this.anims.generateFrameNumbers("player", { start: 89, end: 60 }),
-            frameRate: 20,
-            repeat: -1,
-            //reverse: true
         });
         this.anims.create({
             key: "player_run_right",
-            frames: this.anims.generateFrameNumbers("player", { start: 90, end: 119 }),
+            frames: this.anims.generateFrameNumbers("player", { start: frames*1, end: frames*2-1 }),
+            frameRate: 20,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: "player_jump_right",
+            frames: this.anims.generateFrameNumbers("player", { start: frames*2 ,end: frames*3-1 }),
+            frameRate: 20,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: "player_fall_right",
+            frames: this.anims.generateFrameNumbers("player", { start: frames*3, end: frames*4-1 }),
             frameRate: 20,
             repeat: -1,
         });

@@ -1,0 +1,52 @@
+{
+    "activeFile": "Mission01.json",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Mission01.json": {
+            "scale": 0.20966796875,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1025.4308337214716,
+                "y": 0
+            }
+        },
+        "Mission01.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "Mission02.json": {
+            "scale": 0.13977864583333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1030.200279459711,
+                "y": 1030.2002794597115
+            }
+        },
+        "Mission02.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "Mission03.json": {
+            "scale": 0.13977864583333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1030.200279459711,
+                "y": 1030.2002794597115
+            }
+        },
+        "Mission03.json#Tileset_testroom": {
+            "scaleInDock": 1
+        }
+    },
+    "openFiles": [
+        "Mission01.json",
+        "Mission02.json",
+        "Mission03.json"
+    ],
+    "project": "LevelBuilder.tiled-project",
+    "recentFiles": [
+        "Mission03.json",
+        "Mission02.json",
+        "Mission01.json"
+    ]
+}

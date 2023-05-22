@@ -12,11 +12,14 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         //Variables for enemy
         this.hp = 10;
         this.canMove = true;
+        this.canJump = false
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
         this.patrolRange = 0;
         this.lineOfSight = 0;
+        this.speed = 0;
+        this.body.velocity.x = this.speed;
 
     }
 
@@ -29,12 +32,17 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     turnBack() {
-        if (this.body.blocked.right || this.body.blocked.right) {
-            this.body.velocity.x = -this.body.velocity.x
+        if (this.body.blocked.left || this.body.blocked.right) {
+            this.speed = -this.speed
+            this.body.setVelocityX(this.speed)
         }
     }
 
-
+    jump() {
+        if (this.canJump) {
+            this.body.setVelocityY(-500);
+        }
+    }
 
 }
 

@@ -12,7 +12,7 @@ class Sniper extends Weapon {
         this.weaponCanShoot = true;
         this.ammunition = 10;
         this.projectilesPerShoot = 1;
-        this.camZoom = 0.35;
+        this.camZoom = 0.25;
 
     }
 

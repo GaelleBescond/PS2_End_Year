@@ -20,17 +20,20 @@ class Mission01 extends LevelTemplate {
     this.targetZoom = 0.55;
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
+    this.offset = 36
   };
 
-  create() {
+  create() {    
+    const offset = 36
     const levelMap = this.add.tilemap("Mission01");
     const layers = this.loadMap(levelMap);
-    this.loadPlayer(64, 0, 'player');
+    //const spawn = this.createSpawns(layers);
+    this.loadPlayer(-128*12,-128*4, 'player');
+    this.loadGun(this.player.x, this.player.y,offset);
     this.physics.add.collider(this.player, layers.calc_walls);
-    const enemies = this.loadEnemies(layers.enemy_SpawnPoints, layers.calc_walls);
+    const enemies = this.loadEnemies(layers.enemy_SpawnPoints, layers.calc_walls, layers.calc_jumpBlocks);
     this.physics.add.collider(enemies, layers.calc_walls);
     this.mouseActions(layers, enemies);
-    this.loadGun(this.player.x, this.player.y);
     this.createCamera();
     this.playAmbientMusic();
     this.loadInterface();
