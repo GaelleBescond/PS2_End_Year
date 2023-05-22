@@ -169,6 +169,11 @@ class LevelTemplate extends Phaser.Scene {
       this.data_holder.cameraPosY = pointer.y - 768 / 2;
       this.data_holder.gunAngle = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, this.cameraFocal.x, this.cameraFocal.y);
       this.events.emit('updateUI', this.data_holder);
+      if (this.data_holder.cameraPosX >= 0) {
+        this.player.facing = false;
+      } else {
+        this.player.facing = true;
+      }
     }, this);
   }
 

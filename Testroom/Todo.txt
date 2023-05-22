@@ -1,18 +1,36 @@
 Finish character animations and equipment
 In order of priority:
-- Simple gun
 - Enemies behaviour
+    - shoot on sight
+    - aggro
+    - hover intervention
+    - turret periodic shooting
 - Enemies drops
+    - ammo
+    - hp?
+
 - Tutorial in level Design
 - Main campain post Tutorial
+- Win conditions
+    - kill count 
+    - object reach
 
-
-
-
-
+-Guns:
+    - Simple gun
+        - low stats but infinite ammo
+            - slow reload
+            - 1 damage
+            - medium bullet velocity
+    - Create unique sprites
+    - Create unique Bullets
+    - Remake gun orientation (this.facing, change sprite)
 
 
 Level Design
+    - Training field (movements then weapons)
+
+
+
     - 1 training field (weapons)
     - 2 asteroids (grav tool)
     - 3 ceres (lights)

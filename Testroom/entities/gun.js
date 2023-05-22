@@ -9,14 +9,14 @@ class Weapon extends Phaser.Physics.Arcade.Sprite {
     }
 
     init() {
-        this.bulletVelocity = 1500;
-        this.weaponCooldown = 100;
+        this.bulletVelocity = 0;
+        this.weaponCooldown = 0;
+        this.ammoConsumption = 0
         this.weaponCanShoot = true;
-        this.ammunition = 100
-        this.projectilesPerShoot = 1;
+        this.projectilesPerShoot = 0;
         this.splashRadius = 0;
         this.splashDamage = 0;
-        this.camZoom = 1;
+        this.camZoom = 0;
     }
 
     initEvents() {

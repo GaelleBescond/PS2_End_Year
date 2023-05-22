@@ -21,7 +21,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentRifleAmmo = 0;
         this.currentMortarAmmo = 0;
         this.currentSniperAmmo = 0;
-        this.currentEquipedWeapon = "Rifle";
         this.cursors = this.scene.input.keyboard.createCursorKeys();
     }
 
@@ -30,7 +29,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        //made for QWERTY, configured in AZERT
+        //made as QWERTY, configured in AZERTY
         const { left, right, up, down, space } = this.cursors;
         const wKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         const aKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -45,14 +44,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else {
             this.airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
         }
-
         //Animations
-        if (this.body.velocity.x > 0) {
-            this.facing = false
-        }
-        else if (this.body.velocity.x < 0) {
-            this.facing = true
-        }
         this.animate();
     }
 
@@ -98,7 +90,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
-       // this.body.acceleration.y += 20;
+         this.body.acceleration.y += 20;
         if ((space.isDown || wKey.isDown) && this.canThrust && (this.body.velocity.y > 0) && this.jetPackFuel > 0) {
             this.body.velocity.y = this.body.velocity.y / 2
             this.jetPackFuel -= 1;
@@ -130,41 +122,36 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     animate() {
         //create a variable containing previous accel to create slide effects
-        //create a variable to face where the mouse is pointing (running backwards)
         //create walk animation
+        //create backwards animation
         if (this.body.blocked.down) {
             if (this.body.velocity.x > 20) {
-                this.play('player_run_right', true).setFlipX(false);
+                if (this.facing) {
+                    this.play('player_run_backwards_right', true).setFlipX(this.facing);
+                } else {
+                    this.play('player_run_right', true).setFlipX(this.facing);
+                }
             } else if (this.body.velocity.x < -20) {
-                this.play('player_run_right', true).setFlipX(true);
-            } else if (this.facing) {
-                this.play('player_idle_right', true).setFlipX(true);
+                if (this.facing) {
+                    this.play('player_run_right', true).setFlipX(this.facing);
+                } else {
+                    this.play('player_run_backwards_right', true).setFlipX(this.facing);
+                }
+            } else {
+                this.play('player_idle_right', true).setFlipX(this.facing);
             }
-            else {
-                this.play('player_idle_right', true).setFlipX(false);
-            }
-
         } else {
             if (this.body.velocity.y < 0) {
-                if (this.facing) {
-                    this.play('player_jump_right', true).setFlipX(true);
-                } else {
-                    this.play('player_jump_right', true).setFlipX(false);
-                }
-            }
-            else {
-                if (this.facing) {
-                    this.play('player_fall_right', true).setFlipX(true);
-                } else {
-                    this.play('player_fall_right', true).setFlipX(false);
-                }
+                this.play('player_jump_right', true).setFlipX(this.facing);
+            } else {
+                this.play('player_fall_right', true).setFlipX(this.facing);
             }
         }
-
     }
+
     loseHP(value) {
         this.hp -= value;
     }
-}
 
+}
 export default Player;
