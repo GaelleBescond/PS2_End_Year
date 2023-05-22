@@ -25,9 +25,16 @@ In order of priority:
     env 3/2 - Fourth scene (go outside base, soldiers + tanks + hovers)
     env 2   - Fifth scene (entrenched, grav tool + all enemies converging) -> Create mobs spawners
 
+- Beta test
+    - List volunteers
+    - Create executable
+    - Create google form
+    - Publish beta-test on itch.io
+
+
 Main Menu:
 - Settings
-    - keys (WiP)
+    - keys (WiP) (export data des touches?)
 
 Light on cursor
 terrain texture

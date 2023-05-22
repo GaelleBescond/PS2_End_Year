@@ -190,7 +190,17 @@ class LevelTemplate extends Phaser.Scene {
   shootBullet(x, y, angle, layers, target) {
     this.player.energy -= this.gun.consumption;
     this.gun.weaponCanShoot = false;
-    this.bullet = this.physics.add.sprite(x, y, 'bullet')
+    if (this.chosenGun == 0) {
+      this.bullet = this.physics.add.sprite(x, y, 'bullet')
+    } else if (this.chosenGun == 1) {
+      this.bullet = this.physics.add.sprite(x, y, 'bullet')
+    } else if (this.chosenGun == 2) {
+      this.bullet = this.physics.add.sprite(x, y, 'mortar_orb').setScale(0.25)
+      this.bullet.play("mortar_orb_effects")
+    } else {
+      this.bullet = this.physics.add.sprite(x, y, 'bullet')
+    }
+
     this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
     this.physics.add.collider(this.bullet, target, this.damage, null, this)
     this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);

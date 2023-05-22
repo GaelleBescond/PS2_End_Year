@@ -10,8 +10,6 @@ class Preload extends Phaser.Scene {
         this.load.image('enemy_tank', 'assets/enemy_tank.png');
         this.load.image('enemy_turret', 'assets/enemy_hovercraft.png');
         this.load.image('crosshair', 'assets/crosshair.png');
-        //this.load.image('gunX', 'assets/0000.png');
-
 
 
         this.load.image('jumpBlock', 'assets/jumpBlock.png');
@@ -27,6 +25,8 @@ class Preload extends Phaser.Scene {
             { frameWidth: 512, frameHeight: 256 });
         this.load.spritesheet("gun", "assets/gun.png",
             { frameWidth: 1024, frameHeight: 256 });
+        this.load.spritesheet('mortar_orb', 'assets/mortar_bullet.png',
+            { frameWidth: 256, frameHeight: 256 });
 
         //Audio
         this.load.audio('fleet', 'assets/sound/Fleet.mp3');
@@ -85,7 +85,12 @@ class Preload extends Phaser.Scene {
             frameRate: 20,
             repeat: -1,
         });
-
+        this.anims.create({
+            key: "mortar_orb_effects",
+            frames: this.anims.generateFrameNumbers("mortar_orb", { start: 0, end: 36 }),
+            frameRate: 20,
+            repeat: -1,
+        });
 
         this.scene.start("MainMenu", {
             musicVolume: musicVolume,

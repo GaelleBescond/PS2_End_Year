@@ -20,8 +20,9 @@ class Interface extends Phaser.Scene {
   }
   init(data) {
     this.sceneName = data.sceneName;
-    this.energy = data.energy;
+    this.maxEnergy = data.energy;
     this.gunName = data.gunName;
+    this.maxHp = data.hp;
 
   }
 
@@ -31,33 +32,15 @@ class Interface extends Phaser.Scene {
     this.scene.bringToTop();
     this.healthBar = this.add.text(this.increment, this.increment, "", { fontFamily: this.font, fontSize: '32px', fill: '#0000FF' });
     this.energyCount = this.add.text(this.increment, this.increment * 3, "", { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' });
-    // Create a graphics object
-    const energyGauge = this.add.graphics();
-    // Define the gauge bar properties
-    const backgroundColor = 0xCCCCCC; // Background color of the gauge bar
-    const fillColor = 0x00FF00; // Fill color of the gauge bar
-    const maxValue = 100; // Maximum value of the gauge bar
-
-    // Draw the background of the gauge bar
-    energyGauge.fillStyle(backgroundColor);
-    energyGauge.fillRect(this.increment, this.increment * 3, this.energy, 20);
-
-    // Calculate the fill width based on the current value
-    const fillValue = 75; // Current value of the gauge bar
-    const fillWidth = (fillValue / maxValue) * width;
-
-    // Draw the fill of the gauge bar
-    energyGauge.fillStyle(fillColor);
-    energyGauge.fillRect(x, y, fillWidth, height);
-
     this.weaponDisplay = this.add.text(this.increment, this.increment * 5, "", { fontFamily: this.font, fontSize: '32px', fill: '#00FF00' });
     this.message = this.add.text(this.increment, this.increment * 7, "", { fontFamily: this.font, fontSize: '32px', fill: '#00FF00' });
 
     const currentScene = this.scene.get(this.sceneName);
-    currentScene.updateUI.on('dataUI', (energy, weapon, hp) => {
-      this.energyCount.setText('Energy : ' + energy)
+    currentScene.updateUI.on('dataUI', (energy, weapon, hp, x, y) => {
       this.weaponDisplay.setText(weapon)
       this.healthBar.setText('HP: ' + hp)
+      this.energyupdate(energy);
+      this.hpUpdate(hp);
     });
 
     currentScene.updateUI.on('newMessage', (message) => {
@@ -67,5 +50,28 @@ class Interface extends Phaser.Scene {
   }
   update() { }
 
+  energyupdate(energy) {
+    const energyGauge = this.add.graphics();
+    energyGauge.setDepth(0)
+    energyGauge.clear()
+    energyGauge.fillStyle(0xCCCCCC);
+    energyGauge.fillRect(this.increment, this.increment * 3, 100 * 3, 32);
+    const fill = (energy / this.maxEnergy) * 100;
+    energyGauge.fillStyle(0x444488);
+    energyGauge.fillRect(this.increment, this.increment * 3, fill * 3, 32);
+    this.energyCount.setText('Energy : ' + energy).setDepth(1)
+  }
+
+  hpUpdate(hp) {
+    const healthGauge = this.add.graphics();
+    healthGauge.setDepth(0)
+    healthGauge.clear()
+    healthGauge.fillStyle(0xCCCCCC);
+    healthGauge.fillRect(this.increment, this.increment, 100 * 3, 32);
+    const fill = (hp / 10) * 100;
+    healthGauge.fillStyle(0x884400);
+    healthGauge.fillRect(this.increment, this.increment, fill * 3, 32);
+    this.healthBar.setText('Armour : ' + hp).setDepth(1)
+  }
 }
 export default Interface

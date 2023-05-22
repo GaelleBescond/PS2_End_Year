@@ -44,7 +44,7 @@ class Mission01 extends LevelTemplate {
   };
 
   update() {
-    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp);
+    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp,);
     //gameplay methods
     this.generalPositioning();
     this.updateCamera();
