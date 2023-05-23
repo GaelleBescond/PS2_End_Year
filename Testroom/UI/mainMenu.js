@@ -80,7 +80,7 @@ class MainMenu extends Phaser.Scene {
 
 
         this.buttonResume.on('pointerdown', () => this.switchMenu.call(this, '0'));
-        this.buttonGame.on('pointerdown', () => this.startLevel.call(this, 'Mission01'));
+        this.buttonGame.on('pointerdown', () => this.startLevel.call(this, 'Mission01_scene01'));
         this.buttonTutorial.on('pointerdown', () => this.startLevel.call(this, 'Tutorial'));
         this.buttonSettings.on('pointerdown', () => this.switchMenu.call(this, 'Settings'));
         this.buttonTestroom.on('pointerdown', () =>  this.switchMenu.call(this, '0'));

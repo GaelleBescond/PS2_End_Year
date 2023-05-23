@@ -11,7 +11,7 @@ class Preload extends Phaser.Scene {
         this.load.image('enemy_turret', 'assets/enemy_hovercraft.png');
         this.load.image('crosshair', 'assets/crosshair.png');
 
-
+        this.load.image('practice_target', 'assets/practice_target.png');
         this.load.image('jumpBlock', 'assets/jumpBlock.png');
         this.load.image('bullet', 'assets/bullet.png');
         this.load.image('asteroidBackground', 'assets/bg.jpg');
@@ -39,8 +39,8 @@ class Preload extends Phaser.Scene {
         this.load.image("tileset_image", "assets/Tileset_game.png");
         this.load.tilemapTiledJSON("Testroom", "levels/Testroom.json");
         this.load.tilemapTiledJSON("Tutorial", "levels/Tutorial.json");
-        this.load.tilemapTiledJSON("Mission01", "levels/Mission01.json");
-        this.load.tilemapTiledJSON("Mission02", "levels/Mission02.json");
+        this.load.tilemapTiledJSON("Mission01_scene01", "levels/Mission01_scene01.json");
+        //this.load.tilemapTiledJSON("Mission02", "levels/Mission02.json");
 
     }
 
@@ -48,7 +48,7 @@ class Preload extends Phaser.Scene {
         const frames = 30
         const musicVolume = 0.35
         const fxVolume = 0.15
-        // this.sound.play("fleet", { volume: this.musicVolume });
+        this.sound.play("fleet", { volume: this.musicVolume });
         this.anims.create({
             key: "player_idle_right",
             frames: this.anims.generateFrameNumbers("player", { start: frames * 0, end: frames * 1 - 1 }),

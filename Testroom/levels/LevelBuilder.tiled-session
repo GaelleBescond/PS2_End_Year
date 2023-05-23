@@ -1,5 +1,5 @@
 {
-    "activeFile": "Mission01.json",
+    "activeFile": "Mission01_scene01.json",
     "expandedProjectPaths": [
         "."
     ],
@@ -15,12 +15,53 @@
         "Mission01.json#Tileset_testroom": {
             "scaleInDock": 1
         },
+        "Mission01_map.json": {
+            "expandedObjectLayers": [
+                11
+            ],
+            "scale": 0.0625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -1392,
+                "y": -464
+            }
+        },
+        "Mission01_map.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "Mission01_scene01.json": {
+            "expandedObjectLayers": [
+                4,
+                9,
+                6
+            ],
+            "scale": 0.0625,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 64,
+                "y": -128
+            }
+        },
+        "Mission01_scene01.json#Tileset_testroom": {
+            "scaleInDock": 0.33
+        },
+        "Mission01_scene02.json": {
+            "scale": 0.20966796875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1025.4308337214716,
+                "y": 0
+            }
+        },
+        "Mission01_scene02.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
         "Mission02.json": {
             "scale": 0.13977864583333333,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1030.200279459711,
-                "y": 1030.2002794597115
+                "x": 1030.2002794597113,
+                "y": 1026.6231951560317
             }
         },
         "Mission02.json#Tileset_testroom": {
@@ -36,17 +77,44 @@
         },
         "Mission03.json#Tileset_testroom": {
             "scaleInDock": 1
+        },
+        "Mission04.json": {
+            "scale": 0.13977864583333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1030.200279459711,
+                "y": 1030.2002794597115
+            }
+        },
+        "Mission04.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "Mission06.json": {
+            "scale": 0.13977864583333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1030.200279459711,
+                "y": 1030.2002794597115
+            }
+        },
+        "Mission06.json#Tileset_testroom": {
+            "scaleInDock": 1
         }
     },
     "openFiles": [
-        "Mission01.json",
-        "Mission02.json",
-        "Mission03.json"
+        "Mission01_map.json",
+        "Mission01_scene01.json",
+        "Mission01_scene02.json"
     ],
     "project": "LevelBuilder.tiled-project",
     "recentFiles": [
+        "Mission01_map.json",
+        "Mission01_scene02.json",
+        "Mission01_scene01.json",
+        "Mission01.json",
+        "Mission04.json",
+        "Mission06.json",
         "Mission03.json",
-        "Mission02.json",
-        "Mission01.json"
+        "Mission02.json"
     ]
 }

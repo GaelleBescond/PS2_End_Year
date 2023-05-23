@@ -6,13 +6,14 @@ import Soldier from "../entities/enemy_soldier.js";
 import Tank from "../entities/enemy_tank.js";
 import Hover from "../entities/enemy_hover.js";
 import Turret from "../entities/enemy_turret.js";
+import Practice from "../entities/enemy_practice.js";
 class LevelTemplate extends Phaser.Scene {
   constructor(name) {
     super({
       key: name,
       physics: {
         arcade: {
-          debug: false
+          debug: true
         }
       },
       render: {
@@ -106,6 +107,8 @@ class LevelTemplate extends Phaser.Scene {
         enemy = new Hover(this, spawn.x, spawn.y, "enemy_hovercraft").setScale(1).setDepth(0);
       } else if (spawn.name == "turret") {
         enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25).setDepth(0);
+      }else if (spawn.name == "practice") {
+        enemy = new Practice(this, spawn.x, spawn.y, "practice_target").setScale(0.25).setDepth(0);
       }
       this.physics.add.collider(enemy, ground)
 

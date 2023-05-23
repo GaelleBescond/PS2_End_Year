@@ -43,6 +43,17 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.body.setVelocityY(-500);
         }
     }
+    stabilize() {
+        if (this.stableY < this.body.y) {
+            this.body.acceleration.y -= 10;
+        } else if (this.stableY > this.body.y) {
+            this.body.acceleration.y += 10;
+        }
+        if (Math.abs(this.stableY - this.body.y) < 1) {
+            this.body.acceleration.y = 0;
+        }
+        this.body.setVelocityY(this.body.acceleration.y)
+    }
 
 }
 
