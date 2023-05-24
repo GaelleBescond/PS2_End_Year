@@ -1,15 +1,10 @@
 In order of priority:
-- Enemies behaviour
-    - shoot on sight
-    - aggro
-    - turret periodic shooting
 - Enemies drops
     - Better models and texture
     - merit
 
 - Win conditions
-    - kill count 
-    - object reach
+    - escape
 
 -Guns:
     - Create unique sprites

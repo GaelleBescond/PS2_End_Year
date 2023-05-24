@@ -17,7 +17,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
         this.canThrust = true;
-        this.jetPackFuel = 300;
         this.energy = 300
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.airStatus = true;
@@ -42,7 +41,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
             this.airStatus = false;
         } else {
-            this.delayedEvent = this.scene.time.delayedCall(200, () => {
+            this.delayedEvent = this.scene.time.delayedCall(400, () => {
                 this.airStatus = true;
             });
         }
@@ -156,7 +155,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    damage(value) {
+    loseHP(value) {
         this.hp -= value;
     }
 

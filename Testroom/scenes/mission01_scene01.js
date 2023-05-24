@@ -25,14 +25,15 @@ class Mission01_scene01 extends LevelTemplate {
   create() {
     const offset = 36
     const levelMap = this.add.tilemap("Mission01_scene01");
-    const layers = this.loadMap(levelMap);
+    this.layers = this.loadMap(levelMap);
     //const spawn = this.createSpawns(layers);
     this.loadPlayer(128 * 12, -128 * 4, 'player');
     this.loadGun(this.player.x, this.player.y, offset);
-    this.physics.add.collider(this.player, layers.calc_walls);
-    this.enemies = this.loadEnemies(layers.enemy_SpawnPoints, layers.calc_walls, layers.calc_jumpBlocks);
-    this.physics.add.collider(this.enemies, layers.calc_walls);
-    this.mouseActions(layers, this.enemies);
+    this.physics.add.collider(this.player, this.layers.calc_walls);
+    this.enemies = this.loadEnemies(this.layers.enemy_SpawnPoints, this.layers.calc_walls, this.layers.calc_jumpBlocks);
+    this.physics.add.collider(this.enemies, this.layers.calc_walls);
+    this.physics.add.collider(this.player, this.enemies);
+    this.mouseActions(this.layers, this.enemies);
     this.createCamera();
     this.playAmbientMusic();
     this.loadInterface("Mission01_scene01", this.player.energy, this.gun.name);
@@ -41,7 +42,6 @@ class Mission01_scene01 extends LevelTemplate {
     this.eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.qKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.updateUI = new Phaser.Events.EventEmitter();
-    console.log(this.enemies)
   };
 
   update() {
@@ -55,8 +55,8 @@ class Mission01_scene01 extends LevelTemplate {
     if (this.enemies) {
       this.enemies.getChildren().forEach((enemy) => {
         enemy.checkLineOfSight(this.player)
+        this.shootEnemyBullet(enemy, this.layers)
       });
-
     };
   }
 }

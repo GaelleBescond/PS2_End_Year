@@ -12,8 +12,8 @@ class Preload extends Phaser.Scene {
         this.load.image('crosshair', 'assets/crosshair.png');
 
         this.load.image('practice_target', 'assets/practice_target.png');
-        this.load.image('jumpBlock', 'assets/jumpBlock.png');
         this.load.image('bullet', 'assets/bullet.png');
+        this.load.image('sniper_bullet', 'assets/sniper_bullet.png');
         this.load.image('asteroidBackground', 'assets/bg.jpg');
         this.load.image('backgroundSpace', 'assets/backgroundSpace.png');
         this.load.image('asteroidBackground2', 'assets/asteroidsFar.png');

@@ -9,6 +9,7 @@ class Practice extends Enemy {
 
     init() {
         this.hp = 5;
+        this.name = "practice"
         this.stableY = this.body.y;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;

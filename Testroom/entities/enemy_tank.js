@@ -10,15 +10,21 @@ class Tank extends Enemy {
     init() {
         this.hp = 30;
         this.canMove = true;
-        this.canJump = false
+        this.canShoot = true;
+        this.cooldown = 2000;
         this.range = 1500;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.patrolRange = 0;
-        this.lineOfSight = 0;
+        this.lineOfSight = 3000;
         this.speed = 300;
         this.body.velocity.x = this.speed;
+        this.bulletVelocity = 4500;
+        this.bulletAngle = 0;
+        this.bulletDamage = 5;
         this.name = "tank"
+        this.isOnCooldown = false;
+        this.targetInRange= false;
     }
 
     update() {

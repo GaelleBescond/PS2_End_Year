@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "E:/Github/PS2_End_Year/Testroom/levels/Mission01.json",
+    "activeFile": "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene01.json",
     "expandedProjectPaths": [
         ".",
         "E:/Github/PS2_End_Year/Testroom/levels"
@@ -44,6 +44,28 @@
             }
         },
         "E:/Github/PS2_End_Year/Testroom/levels/Mission01.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene01.json": {
+            "scale": 0.03125,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": -2416,
+                "y": 7232
+            }
+        },
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene01.json#Tileset_testroom": {
+            "scaleInDock": 1
+        },
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene02.json": {
+            "scale": 0.13745930989583333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1029.3955360843051,
+                "y": 0
+            }
+        },
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene02.json#Tileset_testroom": {
             "scaleInDock": 1
         },
         "E:/Github/PS2_End_Year/Testroom/levels/Mission02.json": {
@@ -154,15 +176,13 @@
     "map.tileWidth": 128,
     "map.width": 120,
     "openFiles": [
-        "E:/Github/PS2_End_Year/Testroom/levels/Mission01.json",
-        "E:/Github/PS2_End_Year/Testroom/levels/Mission02.json",
-        "E:/Github/PS2_End_Year/Testroom/levels/Mission03.json",
-        "E:/Github/PS2_End_Year/Testroom/levels/Mission04.json",
-        "E:/Github/PS2_End_Year/Testroom/levels/Mission06.json"
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene01.json"
     ],
     "project": "PS2.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene01.json",
+        "E:/Github/PS2_End_Year/Testroom/levels/Mission01_scene02.json",
         "E:/Github/PS2_End_Year/Testroom/levels/Mission06.json",
         "E:/Github/PS2_End_Year/Testroom/levels/Mission04.json",
         "E:/Github/PS2_End_Year/Testroom/levels/Mission03.json",

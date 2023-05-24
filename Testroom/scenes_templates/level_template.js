@@ -39,13 +39,13 @@ class LevelTemplate extends Phaser.Scene {
   loadMap(levelMap) {
     this.loadBackground()
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
-    const calc_terrain = levelMap.createLayer("Background", tileset);
+    // const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
     const calc_jumpBlocks = levelMap.getObjectLayer("Jump_Blocks")
     const spawnPoints = levelMap.getObjectLayer("Player_Spawn");
     const enemy_SpawnPoints = levelMap.getObjectLayer("Enemies_Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
-    return { spawnPoints, calc_walls, calc_terrain, tileset, enemy_SpawnPoints, calc_jumpBlocks }
+    return { spawnPoints, calc_walls, /*calc_terrain,*/ tileset, enemy_SpawnPoints, calc_jumpBlocks }
   }
 
   loadBackground() {
@@ -96,11 +96,8 @@ class LevelTemplate extends Phaser.Scene {
     const enemies = this.add.group();
     spawner.objects.forEach(spawn => {
       let enemy = null;
-      let jumpObjects = this.loadJumpBlocks(calc_jumpObjects);
-      //console.log(spawn.name);
       if (spawn.name == "soldier") {
         enemy = new Soldier(this, spawn.x, spawn.y, "enemy_soldier").setScale(0.25).setDepth(0);
-        this.physics.add.overlap(enemy, jumpObjects, enemy.jump, null, enemy)
       } else if (spawn.name == "tank") {
         enemy = new Tank(this, spawn.x, spawn.y, "enemy_tank").setScale(1).setDepth(0);
       } else if (spawn.name == "hover") {
@@ -122,12 +119,6 @@ class LevelTemplate extends Phaser.Scene {
       enemy.update(this.player);
     })
   }
-
-  checkLineOfSight(startObject, targetObject) {
-    // Implement your line-of-sight checking logic here
-    // Return true if there is a clear line of sight, false otherwise
-  }
-
 
   loadJumpBlocks(block) {
     const blocks = this.physics.add.group({ allowGravity: false });
@@ -214,9 +205,9 @@ class LevelTemplate extends Phaser.Scene {
     } else {
       this.bullet = this.physics.add.sprite(originX, originY, 'bullet')
     }
+    this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
     this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
     this.physics.add.collider(this.bullet, target, this.damage, null, this)
-    this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
     this.sound.play("shoot", { volume: this.fxVolume });
     this.time.delayedCall(1000, () => {
       this.gun.weaponCanShoot = true;
@@ -224,6 +215,44 @@ class LevelTemplate extends Phaser.Scene {
     this.time.delayedCall(20000, () => {
       this.bullet.destroy();
     });
+  }
+
+  shootEnemyBullet(enemy, layers) {
+    if (enemy.name != "practice" && enemy.targetInRange) {
+      if (enemy.canShoot) {
+        enemy.canShoot = false;
+        if (enemy.name == "soldier") {
+          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+        } else if (enemy.name == "tank") {
+          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+        } else if (enemy.name == "hover") {
+          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'mortar_orb').setScale(0.25).setCircle(100)
+          this.enemyBullet.play("mortar_orb_effects")
+        } else {
+          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet')
+        }
+        this.enemyBullet.setVelocity(Math.cos(enemy.bulletAngle) * enemy.bulletVelocity, Math.sin(enemy.bulletAngle) * enemy.bulletVelocity);
+        this.physics.add.collider(this.enemyBullet, layers.calc_walls, this.destroy, null, this)
+        this.physics.add.collider(this.player, this.enemyBullet, (player, bullet) => {
+          this.damagePlayer(player, bullet, enemy);
+        }, null, this);
+        this.sound.play("shoot", { volume: this.fxVolume });//add distance player/enemy
+        this.time.delayedCall(10000, () => {
+          this.enemyBullet.destroy();
+        });
+      } else if (!enemy.canShoot && !enemy.isOnCooldown) {
+        enemy.isOnCooldown = true;
+        this.time.delayedCall(enemy.cooldown, () => {
+          enemy.canShoot = true
+          enemy.isOnCooldown = false;
+        });
+      }
+    }
+  }
+
+  damagePlayer(target, bullet, value) {
+    bullet.destroy()
+    target.hp -= value
   }
 
   damage(bullet, target) {
@@ -235,6 +264,7 @@ class LevelTemplate extends Phaser.Scene {
       target.destroy()
     }
   }
+
   destroy(object1) {
     object1.destroy()
   }

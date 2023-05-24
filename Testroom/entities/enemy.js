@@ -12,6 +12,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         //Variables for enemy
         this.hp = 10;
         this.canMove = true;
+        this.canShoot = false;
+        this.cooldown = 0;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
@@ -19,6 +21,13 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.lineOfSight = 0;
         this.speed = 0;
         this.body.velocity.x = this.speed;
+        this.bulletVelocity = 0;
+        this.bulletAngle = 0;
+        this.bulletDamage = 0;
+        this.name = ""
+        this.isOnCooldown = false;
+        this.targetInRange= false;
+
 
     }
 
@@ -41,11 +50,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    jump() {
-        //  console.log("jump")
-        this.body.setVelocityY(-500);
-    }
-
     stabilize() {
         if (this.stableY < this.body.y) {
             this.body.acceleration.y -= 10;
@@ -57,20 +61,50 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
         this.body.setVelocityY(this.body.acceleration.y)
     }
+
     checkLineOfSight(player) {
         const distance = Phaser.Math.Distance.Between(this.x, this.y, player.x, player.y);
-        console.log(distance)
+        this.bulletAngle = Phaser.Math.Angle.Between(this.x, this.y, player.x, player.y);
+        if (distance <= this.lineOfSight / 2) {
+            this.targetInRange = true;
+        } else {
+            this.targetInRange = false;
+        }
         if (distance <= this.lineOfSight) {
-            if (checkLineOfSight(this, player)) {
-                this.shoot();
-            }
+            this.aggro(player);
+        } else if (this.canPatrol) {
+            this.patrolMode();
         }
     }
-    shoot() {
-        // Implement your shooting logic for the enemy
-        // For example, create a bullet, trigger an animation, etc.
-    }
 
+
+    aggro(player) {
+        this.canPatrol = true
+        console.log("aggro", this.name)
+        let way = this.x - player.x;
+        if (this.x < player.x) {
+            way = 1
+        } else {
+            way = -1
+        }
+        this.setVelocityX(this.speed * way)
+
+    }
+    patrolMode() {
+        this.canPatrol = false;
+        console.log("patrol", this.name)
+        let way = Phaser.Math.Between(-1, 1);
+        if (way > 0) {
+            way = 1
+        } else {
+            way = -1
+        }
+        this.setVelocityX(this.speed * way)
+
+
+    }
 }
+
+
 
 export default Enemy;
