@@ -18,6 +18,7 @@ class Tank extends Enemy {
         this.lineOfSight = 0;
         this.speed = 300;
         this.body.velocity.x = this.speed;
+        this.name = "tank"
     }
 
     update() {

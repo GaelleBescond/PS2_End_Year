@@ -89,7 +89,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //jump
         if (space.isDown || wKey.isDown) {
-            this.body.acceleration.y = -600;
+            this.body.acceleration.y = -700;
             this.setVelocityY(this.body.acceleration.y);
         } else {
             this.body.acceleration.y = 0;
@@ -156,7 +156,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    loseHP(value) {
+    damage(value) {
         this.hp -= value;
     }
 

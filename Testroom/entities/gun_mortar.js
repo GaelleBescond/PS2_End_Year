@@ -27,7 +27,6 @@ class Mortar extends Weapon {
 
     }
     animate(bool) {
-
         if (bool) {
             this.play('rifle_effects', true).setFlipX(bool);
             this.play('rifle_effects', true).setFlipY(bool);

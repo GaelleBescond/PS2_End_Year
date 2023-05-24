@@ -107,21 +107,32 @@ class LevelTemplate extends Phaser.Scene {
         enemy = new Hover(this, spawn.x, spawn.y, "enemy_hovercraft").setScale(1).setDepth(0);
       } else if (spawn.name == "turret") {
         enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25).setDepth(0);
-      }else if (spawn.name == "practice") {
+      } else if (spawn.name == "practice") {
         enemy = new Practice(this, spawn.x, spawn.y, "practice_target").setScale(0.25).setDepth(0);
       }
+      enemy.update(this.player);
       this.physics.add.collider(enemy, ground)
-
       enemies.add(enemy)
     });
     return enemies;
+  }
+
+  enemiesBehaviour(enemies) {
+    this.enemies.forEach(enemy => {
+      enemy.update(this.player);
+    })
+  }
+
+  checkLineOfSight(startObject, targetObject) {
+    // Implement your line-of-sight checking logic here
+    // Return true if there is a clear line of sight, false otherwise
   }
 
 
   loadJumpBlocks(block) {
     const blocks = this.physics.add.group({ allowGravity: false });
     block.objects.forEach(spawn => {
-      let object = blocks.create(spawn.x + 64, spawn.y - 48, "jumpBlock")
+      let object = blocks.create(spawn.x + 64, spawn.y - 32, "jumpBlock")
       blocks.add(object)
     })
     return blocks
@@ -190,20 +201,19 @@ class LevelTemplate extends Phaser.Scene {
     });
   }
 
-  shootBullet(x, y, angle, layers, target) {
+  shootBullet(originX, originY, angle, layers, target) {
     this.player.energy -= this.gun.consumption;
     this.gun.weaponCanShoot = false;
     if (this.chosenGun == 0) {
-      this.bullet = this.physics.add.sprite(x, y, 'bullet')
+      this.bullet = this.physics.add.sprite(originX, originY, 'bullet').setCircle(10)
     } else if (this.chosenGun == 1) {
-      this.bullet = this.physics.add.sprite(x, y, 'bullet')
+      this.bullet = this.physics.add.sprite(originX, originY, 'bullet').setCircle(10)
     } else if (this.chosenGun == 2) {
-      this.bullet = this.physics.add.sprite(x, y, 'mortar_orb').setScale(0.25)
+      this.bullet = this.physics.add.sprite(originX, originY, 'mortar_orb').setScale(0.25).setCircle(100)
       this.bullet.play("mortar_orb_effects")
     } else {
-      this.bullet = this.physics.add.sprite(x, y, 'bullet')
+      this.bullet = this.physics.add.sprite(originX, originY, 'bullet')
     }
-
     this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
     this.physics.add.collider(this.bullet, target, this.damage, null, this)
     this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
@@ -215,6 +225,7 @@ class LevelTemplate extends Phaser.Scene {
       this.bullet.destroy();
     });
   }
+
   damage(bullet, target) {
     bullet.destroy()
     target.loseHP(this.gun.damage)
@@ -229,7 +240,7 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   generalPositioning() {
-    //mouse aiming and updated location for the gun
+    //updates gun location
     if (this.data_holder.cameraPosX > 0) {
       this.gun.x = this.player.x
     }

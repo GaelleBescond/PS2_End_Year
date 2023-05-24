@@ -37,6 +37,6 @@ Main Menu:
     - keys (WiP) (export data des touches?)
 
 Light on cursor
-terrain texture
+terrain texture wip
 
 Research sound

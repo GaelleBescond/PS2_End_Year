@@ -13,6 +13,7 @@ class Turret extends Enemy {
         this.body.velocity.x = -100;
         this.patrolRange = 0;
         this.lineOfSight = 0;
+        this.name = "turret"
     }
     create() {
 

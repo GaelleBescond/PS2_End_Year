@@ -35,6 +35,7 @@ const config = {
   ...SHARED_CONFIG,
   physics: {
     arcade: {
+      pixelArt:true,
       tileBias: 128
     },
   },

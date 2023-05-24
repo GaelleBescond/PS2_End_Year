@@ -19,6 +19,7 @@ class Hover extends Enemy {
         this.stableY = this.body.y;
         this.speed = 500;
         this.body.velocity.x = this.speed;
+        this.name = "hover"
     }
 
     update() {

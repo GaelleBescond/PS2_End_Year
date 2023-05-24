@@ -31,15 +31,16 @@
         },
         "Mission01_scene01.json": {
             "expandedObjectLayers": [
-                4,
                 9,
+                11,
+                4,
                 6
             ],
-            "scale": 0.0625,
-            "selectedLayer": 1,
+            "scale": 0.125,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 64,
-                "y": -128
+                "x": 6176,
+                "y": -528
             }
         },
         "Mission01_scene01.json#Tileset_testroom": {
@@ -54,7 +55,7 @@
             }
         },
         "Mission01_scene02.json#Tileset_testroom": {
-            "scaleInDock": 1
+            "scaleInDock": 0.33
         },
         "Mission02.json": {
             "scale": 0.13977864583333333,
