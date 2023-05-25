@@ -10,6 +10,7 @@ class Preload extends Phaser.Scene {
         this.load.image('enemy_tank', 'assets/enemy_tank.png');
         this.load.image('enemy_turret', 'assets/enemy_hovercraft.png');
         this.load.image('crosshair', 'assets/crosshair.png');
+        this.load.image('checkpoint', 'assets/checkpoint.png');
 
         this.load.image('practice_target', 'assets/practice_target.png');
         this.load.image('bullet', 'assets/bullet.png');
@@ -40,7 +41,7 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON("Testroom", "levels/Testroom.json");
         this.load.tilemapTiledJSON("Tutorial", "levels/Tutorial.json");
         this.load.tilemapTiledJSON("Mission01_scene01", "levels/Mission01_scene01.json");
-        //this.load.tilemapTiledJSON("Mission02", "levels/Mission02.json");
+        this.load.tilemapTiledJSON("Mission01_scene02", "levels/Mission01_scene02.json");
 
     }
 

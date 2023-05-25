@@ -21,7 +21,7 @@ class Tank extends Enemy {
         this.body.velocity.x = this.speed;
         this.bulletVelocity = 4500;
         this.bulletAngle = 0;
-        this.bulletDamage = 5;
+        this.bulletDamage = 15;
         this.name = "tank"
         this.isOnCooldown = false;
         this.targetInRange= false;

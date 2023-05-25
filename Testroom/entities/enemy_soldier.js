@@ -9,7 +9,7 @@ class Soldier extends Enemy {
         this.hp = 10;
         this.canMove = true;
         this.canShoot = true;
-        this.cooldown = 1000;
+        this.cooldown = 2000;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.patrolRange = 0;
@@ -19,9 +19,9 @@ class Soldier extends Enemy {
         this.name = "soldier"
         this.bulletVelocity = 2500;
         this.bulletAngle = 0;
-        this.bulletDamage = 1;
+        this.bulletDamage = 3;
         this.isOnCooldown = false;
-        this.targetInRange= false;
+        this.targetInRange = false;
     }
 
     update(player) {
@@ -35,11 +35,12 @@ class Soldier extends Enemy {
     }
 
     jump() {
-        //  console.log("jump")
-        this.body.setVelocityY(-600);
-        this.delayedEvent = this.scene.time.delayedCall(200, () => {
-            this.body.setVelocityX(this.speed);
-        });
+        if (this.body.blocked.down) {
+            this.body.setVelocityY(-600);
+            this.delayedEvent = this.scene.time.delayedCall(200, () => {
+                this.body.setVelocityX(this.speed);
+            });
+        }
     }
 }
 

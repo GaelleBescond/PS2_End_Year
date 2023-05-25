@@ -80,7 +80,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     aggro(player) {
         this.canPatrol = true
-        console.log("aggro", this.name)
         let way = this.x - player.x;
         if (this.x < player.x) {
             way = 1
@@ -92,7 +91,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     patrolMode() {
         this.canPatrol = false;
-        console.log("patrol", this.name)
         let way = Phaser.Math.Between(-1, 1);
         if (way > 0) {
             way = 1

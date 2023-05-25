@@ -68,10 +68,10 @@ class Interface extends Phaser.Scene {
     healthGauge.clear()
     healthGauge.fillStyle(0xCCCCCC);
     healthGauge.fillRect(this.increment * 4, this.increment, 100 * 3, 32);
-    const fill = (hp / 10) * 100;
+    const fill = (hp / this.maxHp) * 100;
     healthGauge.fillStyle(0x884400);
     healthGauge.fillRect(this.increment * 4, this.increment, fill * 3, 32);
-    this.healthBar.setText('Armour : ' + hp).setDepth(1)
+    this.healthBar.setText('Armor : ' + hp).setDepth(1)
   }
 }
 export default Interface

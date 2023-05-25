@@ -11,7 +11,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     init() {
         //Variables for player
         this.facing = false;
-        this.hp = 10;
+        this.hp = 100;
         this.canMove = true;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
@@ -38,6 +38,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
             if (this.energy < 300) {
                 this.energy += 1;
+                if (this.energy < 0) {
+                    this.energy = 0
+                }
             }
             this.airStatus = false;
         } else {
@@ -156,6 +159,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     loseHP(value) {
+        console.log(value)
         this.hp -= value;
     }
 

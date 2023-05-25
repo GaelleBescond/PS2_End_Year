@@ -23,6 +23,7 @@ class LevelTemplate extends Phaser.Scene {
 
   }
   init(data) {
+    this.nextSceneName = ""
     this.mapName = data.mapName;
     this.data_holder = data.data_holder;
     this.musicVolume = data.musicVolume;
@@ -33,19 +34,21 @@ class LevelTemplate extends Phaser.Scene {
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
     this.offset = 36
+    this.spawnX = 0;
+    this.spawnY = 0;
+
   }
 
 
   loadMap(levelMap) {
     this.loadBackground()
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
-    // const calc_terrain = levelMap.createLayer("Background", tileset);
+    //const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
-    const calc_jumpBlocks = levelMap.getObjectLayer("Jump_Blocks")
-    const spawnPoints = levelMap.getObjectLayer("Player_Spawn");
+    const checkPoints = levelMap.getObjectLayer("Player_Spawn");
     const enemy_SpawnPoints = levelMap.getObjectLayer("Enemies_Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
-    return { spawnPoints, calc_walls, /*calc_terrain,*/ tileset, enemy_SpawnPoints, calc_jumpBlocks }
+    return { checkPoints, calc_walls,/* calc_terrain,*/ tileset, enemy_SpawnPoints }
   }
 
   loadBackground() {
@@ -64,13 +67,39 @@ class LevelTemplate extends Phaser.Scene {
       .setScrollFactor(0.3)
   }
 
-  createSpawns(spawnPoints) {
+  createSpawns(checkPoints) {
     const spawnblocks = this.physics.add.group({ allowGravity: false });
-    spawnPoints.objects.forEach(block => {
-      let object = spawnblocks.create(block.x + 64, block.y - 64)
-      spawnblocks.add(object)
+    checkPoints.objects.forEach(block => {
+      let object = null;
+      if (block.name == "Spawn") {
+        object = spawnblocks.create(block.x + 64, block.y - 64, "checkpoint")
+        this.spawnX = object.x
+        this.spawnY = object.y
+      } else if (block.name == "Checkpoint") {
+        object = spawnblocks.create(block.x + 64, block.y - 64, "checkpoint")
+        
+    console.log(this.player)
+    console.log(object)
+        this.physics.add.overlap(this.player, object, this.setSpawn)
+      } else if (block.name == "Win") {
+        object = spawnblocks.create(block.x + 64, block.y - 64, "checkpoint")
+       this.physics.add.overlap(this.player, object, this.victory, null, this)
+      }
     })
     return spawnblocks
+  }
+
+  setSpawn(object) {
+    this.spawnX = object.x;
+    this.spawnY = object.y;
+    console.log(this.spawnX, this.spawnY)
+  }
+
+  victory() {
+    this.scene.start(this.nextSceneName, {
+      musicVolume: this.musicVolume,
+      fxVolume: this.fxVolume,
+    });
   }
 
   playAmbientMusic(value) {
@@ -105,7 +134,7 @@ class LevelTemplate extends Phaser.Scene {
       } else if (spawn.name == "turret") {
         enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25).setDepth(0);
       } else if (spawn.name == "practice") {
-        enemy = new Practice(this, spawn.x, spawn.y, "practice_target").setScale(0.25).setDepth(0);
+        enemy = new Practice(this, spawn.x, spawn.y, "practice_target").setScale(0.25).setDepth(0).setImmovable(true);
       }
       enemy.update(this.player);
       this.physics.add.collider(enemy, ground)
@@ -156,11 +185,12 @@ class LevelTemplate extends Phaser.Scene {
     this.cameras.main.setZoom(this.targetZoom * 1.2);
   }
 
-  loadInterface(sceneName, energy, gunName) {
+  loadInterface(sceneName, energy, gunName, hp) {
     this.scene.run('Interface', {
       sceneName,
       energy,
       gunName,
+      hp
     });
   }
 
@@ -234,7 +264,7 @@ class LevelTemplate extends Phaser.Scene {
         this.enemyBullet.setVelocity(Math.cos(enemy.bulletAngle) * enemy.bulletVelocity, Math.sin(enemy.bulletAngle) * enemy.bulletVelocity);
         this.physics.add.collider(this.enemyBullet, layers.calc_walls, this.destroy, null, this)
         this.physics.add.collider(this.player, this.enemyBullet, (player, bullet) => {
-          this.damagePlayer(player, bullet, enemy);
+          this.damagePlayer(player, bullet, enemy.bulletDamage);
         }, null, this);
         this.sound.play("shoot", { volume: this.fxVolume });//add distance player/enemy
         this.time.delayedCall(10000, () => {
@@ -253,6 +283,7 @@ class LevelTemplate extends Phaser.Scene {
   damagePlayer(target, bullet, value) {
     bullet.destroy()
     target.hp -= value
+    console.log(value)
   }
 
   damage(bullet, target) {
@@ -303,12 +334,6 @@ class LevelTemplate extends Phaser.Scene {
     };
   }
 
-  victory(sceneName) {
-    this.scene.start(sceneName, {
-      musicVolume: this.musicVolume,
-      fxVolume: this.fxVolume,
-    });
-  }
 
   swapGun(eKey, qKey) {
     if ((eKey.isDown || qKey.isDown) && this.canSwap) {

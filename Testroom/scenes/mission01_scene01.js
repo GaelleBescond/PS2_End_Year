@@ -5,6 +5,7 @@ class Mission01_scene01 extends LevelTemplate {
   }
 
   init(data) {
+    this.nextSceneName = "Mission01_scene02"
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
@@ -20,14 +21,18 @@ class Mission01_scene01 extends LevelTemplate {
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
     this.offset = 36
+    this.spawnX = 0;
+    this.spawnY = 0;
+
   };
 
   create() {
     const offset = 36
     const levelMap = this.add.tilemap("Mission01_scene01");
     this.layers = this.loadMap(levelMap);
-    //const spawn = this.createSpawns(layers);
-    this.loadPlayer(128 * 12, -128 * 4, 'player');
+    this.loadPlayer(this.spawnX, this.spawnY, 'player');
+    this.checkPoints = this.createSpawns(this.layers.checkPoints);
+    this.player.setPosition(this.spawnX, this.spawnY,)
     this.loadGun(this.player.x, this.player.y, offset);
     this.physics.add.collider(this.player, this.layers.calc_walls);
     this.enemies = this.loadEnemies(this.layers.enemy_SpawnPoints, this.layers.calc_walls, this.layers.calc_jumpBlocks);
@@ -36,7 +41,7 @@ class Mission01_scene01 extends LevelTemplate {
     this.mouseActions(this.layers, this.enemies);
     this.createCamera();
     this.playAmbientMusic();
-    this.loadInterface("Mission01_scene01", this.player.energy, this.gun.name);
+    this.loadInterface("Mission01_scene01", this.player.energy, this.gun.name, this.player.hp);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
     this.eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
@@ -50,8 +55,8 @@ class Mission01_scene01 extends LevelTemplate {
     this.generalPositioning();
     this.updateCamera();
     //level tools for player
-    this.swapGun(this.eKey, this.qKey);
-    this.gravityTool();
+      //this.swapGun(this.eKey, this.qKey);
+      //this.gravityTool();
     if (this.enemies) {
       this.enemies.getChildren().forEach((enemy) => {
         enemy.checkLineOfSight(this.player)

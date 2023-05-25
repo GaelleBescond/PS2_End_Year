@@ -23,7 +23,7 @@ class Hover extends Enemy {
         this.name = "hover"
         this.bulletVelocity = 1500;
         this.bulletAngle = 0;
-        this.bulletDamage = 1;
+        this.bulletDamage = 25;
         this.isOnCooldown = false;
         this.targetInRange= false;
     }

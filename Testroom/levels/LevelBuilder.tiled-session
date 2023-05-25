@@ -1,5 +1,5 @@
 {
-    "activeFile": "Mission01_scene01.json",
+    "activeFile": "Mission01_scene03.json",
     "expandedProjectPaths": [
         "."
     ],
@@ -31,31 +31,45 @@
         },
         "Mission01_scene01.json": {
             "expandedObjectLayers": [
-                9,
-                11,
                 4,
+                11,
                 6
             ],
-            "scale": 0.125,
-            "selectedLayer": 5,
+            "scale": 0.0625,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 6176,
-                "y": -528
+                "x": 5696,
+                "y": -336
             }
         },
         "Mission01_scene01.json#Tileset_testroom": {
-            "scaleInDock": 0.33
+            "scaleInDock": 0.25
         },
         "Mission01_scene02.json": {
-            "scale": 0.20966796875,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                4,
+                6
+            ],
+            "scale": 0.33,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1025.4308337214716,
-                "y": 0
+                "x": 151.51515151515173,
+                "y": -81.81818181818176
             }
         },
         "Mission01_scene02.json#Tileset_testroom": {
             "scaleInDock": 0.33
+        },
+        "Mission01_scene03.json": {
+            "scale": 0.0625,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1600,
+                "y": -1824
+            }
+        },
+        "Mission01_scene03.json#Tileset_testroom": {
+            "scaleInDock": 1
         },
         "Mission02.json": {
             "scale": 0.13977864583333333,
@@ -103,15 +117,16 @@
         }
     },
     "openFiles": [
-        "Mission01_map.json",
         "Mission01_scene01.json",
-        "Mission01_scene02.json"
+        "Mission01_scene02.json",
+        "Mission01_scene03.json"
     ],
     "project": "LevelBuilder.tiled-project",
     "recentFiles": [
-        "Mission01_map.json",
-        "Mission01_scene02.json",
         "Mission01_scene01.json",
+        "Mission01_scene02.json",
+        "Mission01_scene03.json",
+        "Mission01_map.json",
         "Mission01.json",
         "Mission04.json",
         "Mission06.json",
