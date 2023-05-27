@@ -12,14 +12,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Variables for player
         this.facing = false;
         this.hp = 100;
+        this.maxhp = this.hp;
         this.canMove = true;
         this.body.maxVelocity.x = 800;
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
         this.canThrust = true;
         this.energy = 300
+        this.maxEnergy = this.energy;
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.airStatus = true;
+        this.goingDown = false;
     }
     initEvents() {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
@@ -33,7 +36,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         const sKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         const dKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-        //movements
+        if (space.isDown && sKey.isDown) {
+            this.goingDown = true;
+        } else {
+            this.goingDown = false
+        }
+
+
         if (this.body.blocked.down) {
             this.groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey);
             if (this.energy < 300) {
@@ -90,7 +99,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         //jump
-        if (space.isDown || wKey.isDown) {
+        if ((space.isDown || wKey.isDown) && sKey.isUp) {
             this.body.acceleration.y = -700;
             this.setVelocityY(this.body.acceleration.y);
         } else {
@@ -100,7 +109,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     airMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
         this.body.acceleration.y += 20;
-        if ((space.isDown || wKey.isDown) && this.canThrust && (this.body.velocity.y > 0) && this.energy > 0) {
+        if ((space.isDown || wKey.isDown) && sKey.isUp && this.canThrust && (this.body.velocity.y > 0) && this.energy > 0) {
             this.body.velocity.y = this.body.velocity.y / 2
             this.energy -= 1;
         }

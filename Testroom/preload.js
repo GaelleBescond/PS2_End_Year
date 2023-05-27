@@ -13,8 +13,10 @@ class Preload extends Phaser.Scene {
         this.load.image('checkpoint', 'assets/checkpoint.png');
 
         this.load.image('practice_target', 'assets/practice_target.png');
+        this.load.image('door', 'assets/door.png');
         this.load.image('bullet', 'assets/bullet.png');
         this.load.image('sniper_bullet', 'assets/sniper_bullet.png');
+        this.load.image('platform', 'assets/platform.png');
         this.load.image('asteroidBackground', 'assets/bg.jpg');
         this.load.image('backgroundSpace', 'assets/backgroundSpace.png');
         this.load.image('asteroidBackground2', 'assets/asteroidsFar.png');
@@ -26,11 +28,20 @@ class Preload extends Phaser.Scene {
             { frameWidth: 512, frameHeight: 256 });
         this.load.spritesheet("gun", "assets/gun.png",
             { frameWidth: 1024, frameHeight: 256 });
+        this.load.spritesheet("sniper", "assets/sniper.png",
+            { frameWidth: 1024, frameHeight: 256 });
+        this.load.spritesheet("mortar", "assets/mortar.png",
+            { frameWidth: 1024, frameHeight: 256 });
         this.load.spritesheet('mortar_orb', 'assets/mortar_bullet.png',
             { frameWidth: 256, frameHeight: 256 });
 
         //Audio
-        this.load.audio('fleet', 'assets/sound/Fleet.mp3');
+        this.load.audio('fleet', 'assets/sound/SS_Fleet.mp3');
+        this.load.audio('city', 'assets/sound/SS_City.mp3');
+        this.load.audio('main', 'assets/sound/SS_Main.mp3');
+        this.load.audio('lost', 'assets/sound/SS_Lost.mp3');
+        this.load.audio('moon', 'assets/sound/SS_Moon.mp3');
+        this.load.audio('zone', 'assets/sound/SS_Zone.mp3');
         this.load.audio('shoot', 'assets/sound/LaserShoot.mp3');
         this.load.audio('menu', 'assets/sound/Menu.mp3');
         this.load.audio('empty_gun', 'assets/sound/GunEmpty.mp3');
@@ -38,8 +49,7 @@ class Preload extends Phaser.Scene {
 
         //Maps & levels
         this.load.image("tileset_image", "assets/Tileset_game.png");
-        this.load.tilemapTiledJSON("Testroom", "levels/Testroom.json");
-        this.load.tilemapTiledJSON("Tutorial", "levels/Tutorial.json");
+        this.load.tilemapTiledJSON("Beta_test", "levels/Beta_test.json");
         this.load.tilemapTiledJSON("Mission01_scene01", "levels/Mission01_scene01.json");
         this.load.tilemapTiledJSON("Mission01_scene02", "levels/Mission01_scene02.json");
 
@@ -49,7 +59,7 @@ class Preload extends Phaser.Scene {
         const frames = 30
         const musicVolume = 0.35
         const fxVolume = 0.15
-        this.sound.play("fleet", { volume: this.musicVolume });
+        this.sound.play("zone", { volume: musicVolume });
         this.anims.create({
             key: "player_idle_right",
             frames: this.anims.generateFrameNumbers("player", { start: frames * 0, end: frames * 1 - 1 }),
@@ -83,6 +93,18 @@ class Preload extends Phaser.Scene {
         this.anims.create({
             key: "rifle_effects",
             frames: this.anims.generateFrameNumbers("gun", { start: 0, end: 36 }),
+            frameRate: 20,
+            repeat: -1,
+        });
+         this.anims.create({
+            key: "sniper_effects",
+            frames: this.anims.generateFrameNumbers("sniper", { start: 0, end: 36 }),
+            frameRate: 20,
+            repeat: -1,
+        }); 
+        this.anims.create({
+            key: "mortar_effects",
+            frames: this.anims.generateFrameNumbers("mortar", { start: 0, end: 36 }),
             frameRate: 20,
             repeat: -1,
         });

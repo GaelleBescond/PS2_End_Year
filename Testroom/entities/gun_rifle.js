@@ -7,7 +7,7 @@ class Rifle extends Weapon {
 
     init() {
         this.bulletVelocity = 2500;
-        this.damage = 1;
+        this.damage = 2;
         this.consumption = 10
         this.weaponCooldown = 100;
         this.weaponCanShoot = true;

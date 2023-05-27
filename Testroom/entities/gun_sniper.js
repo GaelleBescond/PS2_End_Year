@@ -28,12 +28,12 @@ class Sniper extends Weapon {
     animate(bool) {
 
         if (bool) {
-            this.play('rifle_effects', true).setFlipX(bool);
-            this.play('rifle_effects', true).setFlipY(bool);
+            this.play('sniper_effects', true).setFlipX(bool);
+            this.play('sniper_effects', true).setFlipY(bool);
         }
         else {
-            this.play('rifle_effects', true).setFlipX(!bool);
-            this.play('rifle_effects', true).setFlipY(bool);
+            this.play('sniper_effects', true).setFlipX(!bool);
+            this.play('sniper_effects', true).setFlipY(bool);
         }
     }
 }

@@ -5,7 +5,7 @@ class Mission01_scene02 extends LevelTemplate {
   }
 
   init(data) {
-    this.sceneName= "Mission01_scene02"
+    this.sceneName = "Mission01_scene02"
     this.nextSceneName = "Mission01_scene03"
     this.data_holder = {
       gunAngle: 0,
@@ -24,6 +24,9 @@ class Mission01_scene02 extends LevelTemplate {
     this.offset = 36
     this.spawnX = 0;
     this.spawnY = 0;
+    this.wincondition = false;
+    this.killcount = 0;
+    this.sceneEnemies = 0;
 
   };
 
@@ -41,7 +44,7 @@ class Mission01_scene02 extends LevelTemplate {
     this.physics.add.collider(this.player, this.enemies);
     this.mouseActions(this.layers, this.enemies);
     this.createCamera();
-    this.playAmbientMusic();
+    this.playAmbientMusic("moon");
     this.loadInterface(this.sceneName, this.player.energy, this.gun.name, this.player.hp);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -51,19 +54,28 @@ class Mission01_scene02 extends LevelTemplate {
   };
 
   update() {
-    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp,);
     //gameplay methods
     this.generalPositioning();
     this.updateCamera();
     //level tools for player
-      //this.swapGun(this.eKey, this.qKey);
-      //this.gravityTool();
+    //this.swapGun(this.eKey, this.qKey);
+    //this.gravityTool();
     if (this.enemies) {
       this.enemies.getChildren().forEach((enemy) => {
         enemy.checkLineOfSight(this.player)
         this.shootEnemyBullet(enemy, this.layers)
       });
     };
+    if (!this.wincondition) {
+      if (this.killcount >= this.sceneEnemies) { this.wincondition = true; }
+    }
+
+    if (this.player.hp <= 0) {
+      this.player.hp = this.player.maxhp
+      this.player.energy = this.player.maxEnergy
+      this.player.setPosition(this.spawnX, this.spawnY)
+    }
+    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp,);
   }
 }
 export default Mission01_scene02

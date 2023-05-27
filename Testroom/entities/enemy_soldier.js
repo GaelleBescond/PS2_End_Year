@@ -19,7 +19,7 @@ class Soldier extends Enemy {
         this.name = "soldier"
         this.bulletVelocity = 2500;
         this.bulletAngle = 0;
-        this.bulletDamage = 3;
+        this.bulletDamage = 5;
         this.isOnCooldown = false;
         this.targetInRange = false;
     }
@@ -38,8 +38,11 @@ class Soldier extends Enemy {
         if (this.body.blocked.down) {
             this.body.setVelocityY(-600);
             this.delayedEvent = this.scene.time.delayedCall(200, () => {
-                this.body.setVelocityX(this.speed);
+                if (this.body) {
+                    this.body.setVelocityX(this.speed);
+                }
             });
+
         }
     }
 }

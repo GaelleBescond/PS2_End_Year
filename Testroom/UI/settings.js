@@ -4,7 +4,7 @@ class Settings extends Phaser.Scene {
         super("Settings");
     }
 
-    
+
     init(data) {
         this.musicVolume = data.musicVolume;
         this.fxVolume = data.fxVolume;
@@ -37,8 +37,8 @@ class Settings extends Phaser.Scene {
         if (this.musicVolume < 0) {
             this.musicVolume = 0;
         }
-        console.log(this.musicVolume)
         this.sound.setVolume(this.musicVolume, "fleet")
+        this.textVolumeValue.setText( this.musicVolume * 100 + "%") 
     }
 
     changeFxVolume(value) {
@@ -46,8 +46,8 @@ class Settings extends Phaser.Scene {
         if (this.fxVolume < 0) {
             this.fxVolume = 0;
         }
-        console.log(this.fxVolume)
         this.sound.play("shoot", { volume: this.fxVolume })
+        this.textFXVolumeValue.setText( this.fxVolume * 100 + "%") 
     }
 
     volume() {
@@ -69,6 +69,10 @@ class Settings extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.buttonVolumePlus.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.buttonVolumePlus.setStyle({ fill: this.colorMain }))
+
+        this.textVolumeValue = this.add.text(16 * 32, 16 * 9, this.musicVolume * 100 + "%", { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
+            .setOrigin(0, 0.5)
+            .setPadding(10);
     }
 
     soundEffects() {
@@ -90,6 +94,9 @@ class Settings extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .on('pointerover', () => this.buttonFxPlus.setStyle({ fill: this.colorOver }))
             .on('pointerout', () => this.buttonFxPlus.setStyle({ fill: this.colorMain }))
+        this.textFXVolumeValue = this.add.text(16 * 32, 16 * 18, this.fxVolume * 100 + "%", { fontFamily: this.font, fontSize: '32px', fill: '#FF0000' })
+            .setOrigin(0, 0.5)
+            .setPadding(10);
 
     }
 

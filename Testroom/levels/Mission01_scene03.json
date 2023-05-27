@@ -3298,7 +3298,7 @@
          "startx":-176,
          "starty":-32,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":304,
          "x":0,
          "y":0
@@ -6504,6 +6504,18 @@
                  "width":0,
                  "x":-384,
                  "y":-128
+                }, 
+                {
+                 "class":"",
+                 "height":0,
+                 "id":309,
+                 "name":"Win",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":-3200,
+                 "y":512
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -6512,7 +6524,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":309,
+ "nextobjectid":310,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

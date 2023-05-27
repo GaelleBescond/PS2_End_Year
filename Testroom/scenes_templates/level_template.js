@@ -7,13 +7,14 @@ import Tank from "../entities/enemy_tank.js";
 import Hover from "../entities/enemy_hover.js";
 import Turret from "../entities/enemy_turret.js";
 import Practice from "../entities/enemy_practice.js";
+import Door from "../entities/enemy_door.js";
 class LevelTemplate extends Phaser.Scene {
   constructor(name) {
     super({
       key: name,
       physics: {
         arcade: {
-          debug: true
+          debug: false
         }
       },
       render: {
@@ -36,6 +37,10 @@ class LevelTemplate extends Phaser.Scene {
     this.offset = 36
     this.spawnX = 0;
     this.spawnY = 0;
+    this.wincondition = false;
+    this.killcount = 0;
+    this.sceneEnemies = 0;
+    this.progress = 0
 
   }
 
@@ -43,12 +48,13 @@ class LevelTemplate extends Phaser.Scene {
   loadMap(levelMap) {
     this.loadBackground()
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
-    //const calc_terrain = levelMap.createLayer("Background", tileset);
+    const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
     const checkPoints = levelMap.getObjectLayer("Player_Spawn");
+    const platforms = levelMap.getObjectLayer("Platforms");
     const enemy_SpawnPoints = levelMap.getObjectLayer("Enemies_Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
-    return { checkPoints, calc_walls,/* calc_terrain,*/ tileset, enemy_SpawnPoints }
+    return { checkPoints, calc_walls, calc_terrain, tileset, enemy_SpawnPoints, platforms, }
   }
 
   loadBackground() {
@@ -77,33 +83,72 @@ class LevelTemplate extends Phaser.Scene {
         this.spawnY = object.y
       } else if (block.name == "Checkpoint") {
         object = spawnblocks.create(block.x + 64, block.y - 64, "checkpoint")
-        
-    console.log(this.player)
-    console.log(object)
-        this.physics.add.overlap(this.player, object, this.setSpawn)
+        this.physics.add.overlap(object, this.player, this.setSpawn, null, this)
       } else if (block.name == "Win") {
         object = spawnblocks.create(block.x + 64, block.y - 64, "checkpoint")
-       this.physics.add.overlap(this.player, object, this.victory, null, this)
+        this.physics.add.overlap(this.player, object, this.victory, null, this)
       }
     })
     return spawnblocks
+  }
+  createPlatforms(platformSpawn) {
+    const platforms = this.physics.add.group({
+      allowGravity: false,
+      immovable: true,
+    });
+    platformSpawn.objects.forEach(block => {
+      let object = platforms.create(block.x + 64, block.y, "platform")
+      object.body.checkCollision.down = false;
+      object.body.checkCollision.right = false;
+      object.body.checkCollision.left = false;
+      this.physics.add.collider(object, this.player, this.getDown, null, this)
+    });
+
+    return platforms
+  }
+
+  getDown(object) {
+    if (this.player.goingDown) {
+      object.body.checkCollision.up = false;
+    } else {
+      object.body.checkCollision.up = true;
+    }
+    console.log(object.body.checkCollision.up)
   }
 
   setSpawn(object) {
     this.spawnX = object.x;
     this.spawnY = object.y;
-    console.log(this.spawnX, this.spawnY)
   }
 
   victory() {
-    this.scene.start(this.nextSceneName, {
-      musicVolume: this.musicVolume,
-      fxVolume: this.fxVolume,
-    });
+    if (this.wincondition) {
+      this.scene.stop();
+      this.scene.start(this.nextSceneName, {
+        musicVolume: this.musicVolume,
+        fxVolume: this.fxVolume,
+      });
+    }
+
   }
 
-  playAmbientMusic(value) {
-    this.sound.play("fleet", { volume: this.musicVolume });
+  playerDeath() {
+    // this.scene.stop();
+    this.scene.remove();
+    this.scene.restart();
+    /* this.scene.start(this.sceneName, {
+       musicVolume: this.musicVolume,
+       fxVolume: this.fxVolume,
+     });*/
+
+
+
+  }
+
+  playAmbientMusic(music) {
+    console.log(music)
+    this.game.sound.stopAll()
+    this.sound.play(music, { volume: this.musicVolume, loop: true });
   }
 
   loadPlayer(x, y, sprite) {
@@ -114,9 +159,9 @@ class LevelTemplate extends Phaser.Scene {
     if (this.chosenGun == 0) {
       this.gun = new Rifle(this, x, y - this.offset, 'gun').setScale(0.3).setDepth(2);
     } else if (this.chosenGun == 1) {
-      this.gun = new Sniper(this, x, y - this.offset, 'gun').setScale(0.6).setDepth(2);
+      this.gun = new Sniper(this, x, y - this.offset, 'sniper').setScale(0.3).setDepth(2);
     } else if (this.chosenGun == 2) {
-      this.gun = new Mortar(this, x, y - this.offset, 'gun').setScale(0.8).setDepth(2);
+      this.gun = new Mortar(this, x, y - this.offset, 'mortar').setScale(0.3).setDepth(2);
     }
   }
 
@@ -135,9 +180,12 @@ class LevelTemplate extends Phaser.Scene {
         enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25).setDepth(0);
       } else if (spawn.name == "practice") {
         enemy = new Practice(this, spawn.x, spawn.y, "practice_target").setScale(0.25).setDepth(0).setImmovable(true);
+      } else if (spawn.name == "door") {
+        enemy = new Door(this, spawn.x, spawn.y, "door").setScale(0.50).setDepth(0).setImmovable(true);
       }
       enemy.update(this.player);
       this.physics.add.collider(enemy, ground)
+      this.sceneEnemies += 1;
       enemies.add(enemy)
     });
     return enemies;
@@ -228,7 +276,7 @@ class LevelTemplate extends Phaser.Scene {
     if (this.chosenGun == 0) {
       this.bullet = this.physics.add.sprite(originX, originY, 'bullet').setCircle(10)
     } else if (this.chosenGun == 1) {
-      this.bullet = this.physics.add.sprite(originX, originY, 'bullet').setCircle(10)
+      this.bullet = this.physics.add.sprite(originX, originY, 'sniper_bullet').setCircle(10)
     } else if (this.chosenGun == 2) {
       this.bullet = this.physics.add.sprite(originX, originY, 'mortar_orb').setScale(0.25).setCircle(100)
       this.bullet.play("mortar_orb_effects")
@@ -283,15 +331,14 @@ class LevelTemplate extends Phaser.Scene {
   damagePlayer(target, bullet, value) {
     bullet.destroy()
     target.hp -= value
-    console.log(value)
   }
 
   damage(bullet, target) {
     bullet.destroy()
     target.loseHP(this.gun.damage)
-    //console.log(target.hp)
     if (target.hp <= 0) {
       this.events.off(Phaser.Scenes.Events.UPDATE, target.update, target);
+      this.killcount += 1;
       target.destroy()
     }
   }

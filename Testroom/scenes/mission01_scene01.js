@@ -5,6 +5,7 @@ class Mission01_scene01 extends LevelTemplate {
   }
 
   init(data) {
+    this.sceneName = "Mission01_scene01"
     this.nextSceneName = "Mission01_scene02"
     this.data_holder = {
       gunAngle: 0,
@@ -23,12 +24,16 @@ class Mission01_scene01 extends LevelTemplate {
     this.offset = 36
     this.spawnX = 0;
     this.spawnY = 0;
-
+    this.wincondition = false;
+    this.killcount = 0;
+    this.sceneEnemies = 0;
+    this.progress = 0.0
+    this.message = "";
   };
 
   create() {
     const offset = 36
-    const levelMap = this.add.tilemap("Mission01_scene01");
+    const levelMap = this.add.tilemap(this.sceneName);
     this.layers = this.loadMap(levelMap);
     this.loadPlayer(this.spawnX, this.spawnY, 'player');
     this.checkPoints = this.createSpawns(this.layers.checkPoints);
@@ -40,8 +45,8 @@ class Mission01_scene01 extends LevelTemplate {
     this.physics.add.collider(this.player, this.enemies);
     this.mouseActions(this.layers, this.enemies);
     this.createCamera();
-    this.playAmbientMusic();
-    this.loadInterface("Mission01_scene01", this.player.energy, this.gun.name, this.player.hp);
+    //this.playAmbientMusic();
+    this.loadInterface(this.sceneName, this.player.energy, this.gun.name, this.player.hp);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
     this.eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
@@ -50,19 +55,33 @@ class Mission01_scene01 extends LevelTemplate {
   };
 
   update() {
-    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp,);
+    this.progress = this.killcount / this.sceneEnemies
+
+    this.updateUI.emit('newMessage', this.message);
     //gameplay methods
     this.generalPositioning();
     this.updateCamera();
     //level tools for player
-      //this.swapGun(this.eKey, this.qKey);
-      //this.gravityTool();
+    //this.swapGun(this.eKey, this.qKey);
+    //this.gravityTool();
     if (this.enemies) {
       this.enemies.getChildren().forEach((enemy) => {
         enemy.checkLineOfSight(this.player)
         this.shootEnemyBullet(enemy, this.layers)
       });
     };
+
+    if (!this.wincondition) {
+      if (this.killcount >= this.sceneEnemies) {
+        this.wincondition = true;
+      }
+    }
+
+    if (this.player.hp <= 0) {
+      this.playerDeath()
+    }
+    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp,this.progress);
   }
+
 }
 export default Mission01_scene01

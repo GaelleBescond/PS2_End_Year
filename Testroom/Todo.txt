@@ -1,10 +1,27 @@
+TO DO: saturday:
+    //- investigate slowdowns
+    - Publish GitPage + form
+    - 
+    
+https://forms.gle/dQizt5WSTEEwqfRe7
+
+
+
+
+
 In order of priority:
-- Enemies drops
+- Narrative UI 
+
+- create splash damage round boxes
+
+- Enemies 
+    - drops hp and energy
     - Better models and texture
-    - merit
+
 
 - Win conditions
     - escape
+    - clear all enemies
 
 -Guns:
     - Create unique sprites
@@ -13,12 +30,12 @@ In order of priority:
 
 
 -Campain Level Design
-    env 3/1 - Training field (movements then weapons)
-    env 1/2 - First scene (only soldiers)
-    env 2/3 - Second scene (tanks + soldiers, go inside base)
-    env 3   - Third scene (inside base, soldiers + lights)
-    env 3/2 - Fourth scene (go outside base, soldiers + tanks + hovers)
-    env 2   - Fifth scene (entrenched, grav tool + all enemies converging) -> Create mobs spawners
+wip env 3/1 - Scene 1 (movements then weapons)
+wip env 1/2 - Scene 2 (only soldiers, go inside base)
+    env 2/3 - Scene 3 (+ mortar, defend base against tanks, go under base)
+    env 3   - Scene 4 (soldiers + lights, go )
+    env 3/2 - Scene 5 (go outside base, soldiers + tanks + hovers)
+    env 2   - Scene 6 (entrenched, grav tool + all enemies converging) -> Create mobs spawners
 
 - Beta test
     - List volunteers
@@ -34,4 +51,4 @@ Main Menu:
 Light on cursor
 terrain texture wip
 
-Research sound
+Research sound fx

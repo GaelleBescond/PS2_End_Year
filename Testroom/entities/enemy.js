@@ -26,7 +26,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.bulletDamage = 0;
         this.name = ""
         this.isOnCooldown = false;
-        this.targetInRange= false;
+        this.targetInRange = false;
 
 
     }
@@ -71,20 +71,25 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.targetInRange = false;
         }
         if (distance <= this.lineOfSight) {
-            this.aggro(player);
+            this.aggro(player, distance);
         } else if (this.canPatrol) {
             this.patrolMode();
         }
     }
 
 
-    aggro(player) {
+    aggro(player, ) {
+        const distance = Phaser.Math.Distance.Between(this.x, 0, player.x, 0);
         this.canPatrol = true
         let way = this.x - player.x;
-        if (this.x < player.x) {
-            way = 1
+        if (distance > 1000) {
+            if (this.x < player.x) {
+                way = 1
+            } else {
+                way = -1
+            }
         } else {
-            way = -1
+            way = 0
         }
         this.setVelocityX(this.speed * way)
 

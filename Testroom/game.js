@@ -9,6 +9,7 @@ import Key_Bindings from './UI/keyBindings.js';
 
 import TestRoom from './scenes/testroom.js';
 import Tutorial from './scenes/tutorial.js';
+import Beta_test from './scenes/Beta_test.js';
 import Mission01_scene01 from './scenes/mission01_scene01.js';
 import Mission01_scene02 from './scenes/mission01_scene02.js';
 
@@ -26,7 +27,7 @@ const SHARED_CONFIG = {
   }
 }
 
-const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate, Tutorial, Mission01_scene01,  Mission01_scene02,];
+const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate, Tutorial, Beta_test, Mission01_scene01, Mission01_scene02,];
 const createScene = Scene => new Scene(SHARED_CONFIG) //A voir
 const initScenes = () => Scenes.map(createScene)
 
@@ -35,9 +36,12 @@ const config = {
   ...SHARED_CONFIG,
   physics: {
     arcade: {
-      pixelArt:true,
+      pixelArt: true,
       tileBias: 128
-    },
+    }, 
+    fps: {
+      target: 60 
+    }
   },
   scene: initScenes()
 };
