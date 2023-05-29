@@ -6,13 +6,11 @@ import MainMenu from './UI/mainMenu.js';
 import Settings from './UI/settings.js';
 import Key_Bindings from './UI/keyBindings.js';
 
-
-import TestRoom from './scenes/testroom.js';
-import Tutorial from './scenes/tutorial.js';
-import Beta_test from './scenes/Beta_test.js';
 import Mission01_scene01 from './scenes/mission01_scene01.js';
 import Mission01_scene02 from './scenes/mission01_scene02.js';
-
+import Mission01_scene03 from './scenes/mission01_scene03.js';
+import Mission01_scene04 from './scenes/mission01_scene04.js';
+import Mission01_scene05 from './scenes/mission01_scene05.js';
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const ZOOM_FACTOR = 2;
@@ -27,7 +25,7 @@ const SHARED_CONFIG = {
   }
 }
 
-const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, TestRoom, LevelTemplate, Tutorial, Beta_test, Mission01_scene01, Mission01_scene02,];
+const Scenes = [PreloadScene, Interface, MainMenu, Settings, Key_Bindings, LevelTemplate, Mission01_scene01, Mission01_scene02,];
 const createScene = Scene => new Scene(SHARED_CONFIG) //A voir
 const initScenes = () => Scenes.map(createScene)
 
