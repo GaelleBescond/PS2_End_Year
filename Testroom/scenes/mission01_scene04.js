@@ -1,12 +1,12 @@
 import LevelTemplate from "../scenes_templates/level_template.js";
-class Mission01_scene02 extends LevelTemplate {
+class Mission01_scene04 extends LevelTemplate {
   constructor() {
-    super("Mission01_scene02");
+    super("Mission01_scene04");
   }
 
   init(data) {
-    this.sceneName = "Mission01_scene02"
-    this.nextSceneName = "Mission01_scene03"
+    this.sceneName = "Mission01_scene04"
+    this.nextSceneName = "Mission01_scene05"
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
@@ -16,16 +16,17 @@ class Mission01_scene02 extends LevelTemplate {
     this.fxVolume = data.fxVolume;
     this.chosenGun = 0;
     this.canSwap = true;
+    this.maxWeapons = 2;
     this.targetZoom = 0.55;
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
     this.offset = 36
     this.spawnX = 0;
     this.spawnY = 0;
-    this.wincondition = true;
+    this.wincondition = false;
     this.killcount = 0;
     this.sceneEnemies = 0;
-    this.objective = "Get back to the base!";
+    this.objective = "Reach the escape pod using the tunnel to the west";
     this.popUp = "";
 
   };
@@ -37,7 +38,6 @@ class Mission01_scene02 extends LevelTemplate {
     this.loadPlayer(this.spawnX, this.spawnY, 'player');
     this.checkPoints = this.createSpawns(this.layers.checkPoints);
     this.player.setPosition(this.spawnX, this.spawnY,)
-    this.platforms = this.createPlatforms(this.layers.platforms)
     this.loadGun(this.player.x, this.player.y, offset);
     this.physics.add.collider(this.player, this.layers.calc_walls);
     this.enemies = this.loadEnemies(this.layers.enemy_SpawnPoints, this.layers.calc_walls);
@@ -45,7 +45,7 @@ class Mission01_scene02 extends LevelTemplate {
     this.physics.add.collider(this.player, this.enemies);
     this.mouseActions(this.layers, this.enemies);
     this.createCamera();
-    this.playAmbientMusic("moon");
+    this.playAmbientMusic("city");
     this.loadInterface(this.sceneName, this.player.energy, this.gun.name, this.player.hp);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -59,7 +59,7 @@ class Mission01_scene02 extends LevelTemplate {
     this.generalPositioning();
     this.updateCamera();
     //level tools for player
-    //this.swapGun(this.eKey, this.qKey);
+    this.swapGun(this.eKey, this.qKey, this.maxWeapons);
     //this.gravityTool();
     if (this.enemies) {
       this.enemies.getChildren().forEach((enemy) => {
@@ -67,8 +67,25 @@ class Mission01_scene02 extends LevelTemplate {
         this.shootEnemyBullet(enemy, this.layers)
       });
     };
-    this.progress = Phaser.Math.Distance.Between(this.spawnX, this.spawnY, -384, -328) / Phaser.Math.Distance.Between(this.player.x, this.player.y, -384, -328);
+
+    if (this.wincondition) {
+      this.progress = Phaser.Math.Distance.Between(this.spawnX, this.spawnY, 1152, 2816) / Phaser.Math.Distance.Between(this.player.x, this.player.y, 1152, 2816);
+    } else {
+      this.progress = Phaser.Math.Distance.Between(this.spawnX, this.spawnY, -13248, 2624) / Phaser.Math.Distance.Between(this.player.x, this.player.y, -13696, 2624);
+    }
+    console.log(this.spawnX, this.spawnY, this.wincondition)
+
+    if (this.spawnX == -13248 && this.spawnY == 2624 && !this.wincondition) {
+      this.wincondition = true;
+      this.objective = "The path is blocked, the mining site in the east might still be open"
+      this.popUp = ""
+    }
     this.progress = 100 - (1 / this.progress) * 100
+    if (this.progress >= 100) {
+      this.progress = 100
+    } else if (this.progress <= 0) {
+      this.progress = 0
+    }
     if (this.player.hp <= 0) {
       this.player.hp = this.player.maxhp
       this.player.energy = this.player.maxEnergy
@@ -78,4 +95,4 @@ class Mission01_scene02 extends LevelTemplate {
     this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp, this.progress);
   }
 }
-export default Mission01_scene02
+export default Mission01_scene04

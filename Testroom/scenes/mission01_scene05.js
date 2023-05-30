@@ -1,33 +1,36 @@
 import LevelTemplate from "../scenes_templates/level_template.js";
-class Mission01_scene02 extends LevelTemplate {
+class Mission01_scene05 extends LevelTemplate {
   constructor() {
-    super("Mission01_scene02");
+    super("Mission01_scene05");
   }
 
   init(data) {
-    this.sceneName = "Mission01_scene02"
-    this.nextSceneName = "Mission01_scene03"
+    this.sceneName = "Mission01_scene05"
+    this.nextSceneName = "Mission01_scene06"
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
-      cameraPosY: 0
+      cameraPosY: 0,
+      enemiesNumber: 0,
+      progress: 0
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
     this.chosenGun = 0;
     this.canSwap = true;
+    this.maxWeapons = 2;
     this.targetZoom = 0.55;
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
     this.offset = 36
     this.spawnX = 0;
     this.spawnY = 0;
-    this.wincondition = true;
+    this.wincondition = false;
     this.killcount = 0;
     this.sceneEnemies = 0;
-    this.objective = "Get back to the base!";
-    this.popUp = "";
-
+    this.objective = "Gather the 3 components to reactivate the drill";
+    this.popUp = "We have lost control of the autodefence turrets. Stay alert!";
+    this.components = 0;
   };
 
   create() {
@@ -45,7 +48,7 @@ class Mission01_scene02 extends LevelTemplate {
     this.physics.add.collider(this.player, this.enemies);
     this.mouseActions(this.layers, this.enemies);
     this.createCamera();
-    this.playAmbientMusic("moon");
+    this.playAmbientMusic("lost");
     this.loadInterface(this.sceneName, this.player.energy, this.gun.name, this.player.hp);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -55,11 +58,12 @@ class Mission01_scene02 extends LevelTemplate {
   };
 
   update() {
+
     //gameplay methods
     this.generalPositioning();
     this.updateCamera();
     //level tools for player
-    //this.swapGun(this.eKey, this.qKey);
+    this.swapGun(this.eKey, this.qKey, this.maxWeapons);
     //this.gravityTool();
     if (this.enemies) {
       this.enemies.getChildren().forEach((enemy) => {
@@ -67,8 +71,11 @@ class Mission01_scene02 extends LevelTemplate {
         this.shootEnemyBullet(enemy, this.layers)
       });
     };
-    this.progress = Phaser.Math.Distance.Between(this.spawnX, this.spawnY, -384, -328) / Phaser.Math.Distance.Between(this.player.x, this.player.y, -384, -328);
-    this.progress = 100 - (1 / this.progress) * 100
+
+    if (this.components >= 3) {
+      this.wincondition = true
+    }
+
     if (this.player.hp <= 0) {
       this.player.hp = this.player.maxhp
       this.player.energy = this.player.maxEnergy
@@ -78,4 +85,4 @@ class Mission01_scene02 extends LevelTemplate {
     this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp, this.progress);
   }
 }
-export default Mission01_scene02
+export default Mission01_scene05

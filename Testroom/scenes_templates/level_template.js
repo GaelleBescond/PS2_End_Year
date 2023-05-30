@@ -1,13 +1,17 @@
 import Player from "../entities/player.js";
+//weapons
 import Rifle from "../entities/gun_rifle.js";
 import Sniper from "../entities/gun_sniper.js";
 import Mortar from "../entities/gun_mortar.js";
+//hostiles
 import Soldier from "../entities/enemy_soldier.js";
 import Tank from "../entities/enemy_tank.js";
 import Hover from "../entities/enemy_hover.js";
 import Turret from "../entities/enemy_turret.js";
+//destructible
 import Practice from "../entities/enemy_practice.js";
 import Door from "../entities/enemy_door.js";
+
 class LevelTemplate extends Phaser.Scene {
   constructor(name) {
     super({
@@ -97,7 +101,7 @@ class LevelTemplate extends Phaser.Scene {
       immovable: true,
     });
     platformSpawn.objects.forEach(block => {
-      let object = platforms.create(block.x + 64, block.y, "platform")
+      let object = platforms.create(block.x + 64, block.y + 4, "platform")
       object.body.checkCollision.down = false;
       object.body.checkCollision.right = false;
       object.body.checkCollision.left = false;
@@ -132,19 +136,6 @@ class LevelTemplate extends Phaser.Scene {
 
   }
 
-  playerDeath() {
-    // this.scene.stop();
-    this.scene.remove();
-    this.scene.restart();
-    /* this.scene.start(this.sceneName, {
-       musicVolume: this.musicVolume,
-       fxVolume: this.fxVolume,
-     });*/
-
-
-
-  }
-
   playAmbientMusic(music) {
     console.log(music)
     this.game.sound.stopAll()
@@ -155,7 +146,7 @@ class LevelTemplate extends Phaser.Scene {
     this.player = new Player(this, x, y, sprite).setScale(0.55).setSize(150, 450, 50, 0).setDepth(1);
   }
 
-  loadGun(x, y) {
+  loadGun(x, y, maxWeapons) {
     if (this.chosenGun == 0) {
       this.gun = new Rifle(this, x, y - this.offset, 'gun').setScale(0.3).setDepth(2);
     } else if (this.chosenGun == 1) {
@@ -166,10 +157,11 @@ class LevelTemplate extends Phaser.Scene {
   }
 
 
-  loadEnemies(spawner, ground, calc_jumpObjects) {
+  loadEnemies(spawner, ground) {
     const enemies = this.add.group();
     spawner.objects.forEach(spawn => {
       let enemy = null;
+
       if (spawn.name == "soldier") {
         enemy = new Soldier(this, spawn.x, spawn.y, "enemy_soldier").setScale(0.25).setDepth(0);
       } else if (spawn.name == "tank") {
@@ -177,12 +169,13 @@ class LevelTemplate extends Phaser.Scene {
       } else if (spawn.name == "hover") {
         enemy = new Hover(this, spawn.x, spawn.y, "enemy_hovercraft").setScale(1).setDepth(0);
       } else if (spawn.name == "turret") {
-        enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(0.25).setDepth(0);
+        enemy = new Turret(this, spawn.x, spawn.y, "enemy_turret").setScale(1).setDepth(0).setImmovable(true);
       } else if (spawn.name == "practice") {
         enemy = new Practice(this, spawn.x, spawn.y, "practice_target").setScale(0.25).setDepth(0).setImmovable(true);
       } else if (spawn.name == "door") {
         enemy = new Door(this, spawn.x, spawn.y, "door").setScale(0.50).setDepth(0).setImmovable(true);
       }
+      enemy.setAngle(spawn.rotation);
       enemy.update(this.player);
       this.physics.add.collider(enemy, ground)
       this.sceneEnemies += 1;
@@ -197,14 +190,6 @@ class LevelTemplate extends Phaser.Scene {
     })
   }
 
-  loadJumpBlocks(block) {
-    const blocks = this.physics.add.group({ allowGravity: false });
-    block.objects.forEach(spawn => {
-      let object = blocks.create(spawn.x + 64, spawn.y - 32, "jumpBlock")
-      blocks.add(object)
-    })
-    return blocks
-  }
   createLights() {
     this.lights.enable();
     this.playerLight = this.lights.addLight(this.gun.x, this.gun.y, 512);
@@ -366,14 +351,13 @@ class LevelTemplate extends Phaser.Scene {
     const gKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
     //Gravity tool
     if (gKey.isDown) {
+      this.physics.world.gravity.y = 2600;
       if ((this.player.body.velocity.x && this.player.body.velocity.y) != 0) {
         if (this.player.body.velocity.x > 0) {
           this.player.body.acceleration.x -= 10;
         } else if (this.player.body.velocity.x < 0) {
           this.player.body.acceleration.x += 10;
         }
-      } else {
-        this.physics.world.gravity.y = 2600;
       }
     }
     else {
@@ -382,13 +366,13 @@ class LevelTemplate extends Phaser.Scene {
   }
 
 
-  swapGun(eKey, qKey) {
+  swapGun(eKey, qKey, maxWeapons) {
     if ((eKey.isDown || qKey.isDown) && this.canSwap) {
       this.canSwap = false;
       if (eKey.isDown) {
-        if (this.chosenGun <= 2) {
+        if (this.chosenGun <= maxWeapons) {
           this.chosenGun += 1;
-          if (this.chosenGun > 2) {
+          if (this.chosenGun > maxWeapons) {
             this.chosenGun = 0;
           }
           this.gun.destroy();

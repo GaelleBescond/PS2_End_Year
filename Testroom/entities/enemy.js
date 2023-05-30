@@ -78,7 +78,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
 
-    aggro(player, ) {
+    aggro(player) {
         const distance = Phaser.Math.Distance.Between(this.x, 0, player.x, 0);
         this.canPatrol = true
         let way = this.x - player.x;

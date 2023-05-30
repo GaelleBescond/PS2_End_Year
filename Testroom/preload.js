@@ -8,7 +8,7 @@ class Preload extends Phaser.Scene {
         //Images
         this.load.image('enemy_soldier', 'assets/enemy_soldier.png');
         this.load.image('enemy_tank', 'assets/enemy_tank.png');
-        this.load.image('enemy_turret', 'assets/enemy_hovercraft.png');
+        this.load.image('enemy_turret', 'assets/enemy_turret.png');
         this.load.image('crosshair', 'assets/crosshair.png');
         this.load.image('checkpoint', 'assets/checkpoint.png');
 
@@ -52,6 +52,9 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON("Beta_test", "levels/Beta_test.json");
         this.load.tilemapTiledJSON("Mission01_scene01", "levels/Mission01_scene01.json");
         this.load.tilemapTiledJSON("Mission01_scene02", "levels/Mission01_scene02.json");
+        this.load.tilemapTiledJSON("Mission01_scene03", "levels/Mission01_scene03.json");
+        this.load.tilemapTiledJSON("Mission01_scene04", "levels/Mission01_scene04.json");
+        this.load.tilemapTiledJSON("Mission01_scene05", "levels/Mission01_scene05.json");
 
     }
 
@@ -59,7 +62,7 @@ class Preload extends Phaser.Scene {
         const frames = 30
         const musicVolume = 0.35
         const fxVolume = 0.15
-        this.sound.play("zone", { volume: musicVolume });
+        this.sound.play("zone", { volume: musicVolume, loop: true });
         this.anims.create({
             key: "player_idle_right",
             frames: this.anims.generateFrameNumbers("player", { start: frames * 0, end: frames * 1 - 1 }),
@@ -96,12 +99,12 @@ class Preload extends Phaser.Scene {
             frameRate: 20,
             repeat: -1,
         });
-         this.anims.create({
+        this.anims.create({
             key: "sniper_effects",
             frames: this.anims.generateFrameNumbers("sniper", { start: 0, end: 36 }),
             frameRate: 20,
             repeat: -1,
-        }); 
+        });
         this.anims.create({
             key: "mortar_effects",
             frames: this.anims.generateFrameNumbers("mortar", { start: 0, end: 36 }),

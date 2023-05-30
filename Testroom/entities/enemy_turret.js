@@ -6,16 +6,23 @@ class Turret extends Enemy {
     }
 
     init() {
-        this.hp = 20;
-        this.canMove = false;
-        this.canJump = false
-        this.range = 5000;
-        this.body.velocity.x = -100;
-        this.patrolRange = 0;
-        this.lineOfSight = 0;
+        this.hp = 40;
+        this.canMove = true;
+        this.canShoot = true;
+        this.cooldown = 2000;
+
+
+        this.lineOfSight = 5000;
+        this.speed = 0;
+        this.body.velocity.x = this.speed;
+        this.bulletVelocity = 2500;
+        this.bulletAngle = 0;
+        this.bulletDamage = 15;
         this.name = "turret"
-    }
-    create() {
+        this.body.setAllowGravity(false)
+        this.isOnCooldown = false;
+        this.targetInRange = false;
+
 
     }
 
@@ -23,7 +30,6 @@ class Turret extends Enemy {
         if (this.body) {
 
         }
-
 
     }
 

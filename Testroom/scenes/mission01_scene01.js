@@ -10,9 +10,7 @@ class Mission01_scene01 extends LevelTemplate {
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
-      cameraPosY: 0,
-      enemiesNumber: 0,
-      progress: 0
+      cameraPosY: 0
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;
@@ -28,7 +26,9 @@ class Mission01_scene01 extends LevelTemplate {
     this.killcount = 0;
     this.sceneEnemies = 0;
     this.progress = 0.0
-    this.message = "";
+
+    this.objective = "Let's get started, destroy all targets and reach the flag in the east";
+    this.popUp = "Use Q,D and Z/Space to move, left click to shoot";
   };
 
   create() {
@@ -38,14 +38,15 @@ class Mission01_scene01 extends LevelTemplate {
     this.loadPlayer(this.spawnX, this.spawnY, 'player');
     this.checkPoints = this.createSpawns(this.layers.checkPoints);
     this.player.setPosition(this.spawnX, this.spawnY,)
+    this.platforms = this.createPlatforms(this.layers.platforms)
     this.loadGun(this.player.x, this.player.y, offset);
     this.physics.add.collider(this.player, this.layers.calc_walls);
-    this.enemies = this.loadEnemies(this.layers.enemy_SpawnPoints, this.layers.calc_walls, this.layers.calc_jumpBlocks);
+    this.enemies = this.loadEnemies(this.layers.enemy_SpawnPoints, this.layers.calc_walls);
     this.physics.add.collider(this.enemies, this.layers.calc_walls);
     this.physics.add.collider(this.player, this.enemies);
     this.mouseActions(this.layers, this.enemies);
     this.createCamera();
-    //this.playAmbientMusic();
+    this.playAmbientMusic("main");
     this.loadInterface(this.sceneName, this.player.energy, this.gun.name, this.player.hp);
     this.mouseMovements();
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -55,9 +56,8 @@ class Mission01_scene01 extends LevelTemplate {
   };
 
   update() {
-    this.progress = this.killcount / this.sceneEnemies
-
-    this.updateUI.emit('newMessage', this.message);
+    this.progress = this.killcount / this.sceneEnemies * 100;
+    this.updateUI.emit('newMessage', this.objective, this.popUp);
     //gameplay methods
     this.generalPositioning();
     this.updateCamera();
@@ -80,7 +80,7 @@ class Mission01_scene01 extends LevelTemplate {
     if (this.player.hp <= 0) {
       this.playerDeath()
     }
-    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp,this.progress);
+    this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp, this.progress);
   }
 
 }

@@ -68,32 +68,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     groundMovements(left, right, up, down, space, wKey, aKey, sKey, dKey) {
-        if (left.isDown || right.isDown || aKey.isDown || dKey.isDown) {
-            if (left.isDown || aKey.isDown) {
-                if (this.body.velocity.x > 0) {
-                    this.body.acceleration.x = -2400;
-                }
-                else {
-                    this.body.acceleration.x = -800;
-                }
-            }
-            if (right.isDown || dKey.isDown) {
-                if (this.body.velocity.x < 0) {
-                    this.body.acceleration.x = 2400;
-                } else {
-                    this.body.acceleration.x = 800;
-                }
-            }
-
-        } else if (this.body.velocity.x >= 100) {
-            this.body.acceleration.x -= 100;
-        } else if (this.body.velocity.x <= - 100) {
-            this.body.acceleration.x += 100;
-        } else if (-20 < this.body.velocity.x < 20) {
+        if (left.isDown || aKey.isDown) {
+            this.body.acceleration.x = -2400;
+        } else if (right.isDown || dKey.isDown) {
+            this.body.acceleration.x = 2400;
+        } else if (-5 < this.body.velocity.x < 5) {
             //ground friction
             this.setVelocityX(0);
             this.body.acceleration.x = 0;
-        }
+        } else { this.body.acceleration.x = this.body.acceleration * 0.9; }
+
         if (this.body.blocked.right || this.body.blocked.left) {
             this.body.acceleration.x = 0
         }
