@@ -266,16 +266,15 @@ class LevelTemplate extends Phaser.Scene {
     } else if (this.chosenGun == 1) {
       bullet = this.physics.add.sprite(originX, originY, 'bullet_sniper').setCircle(10)
       texture = 'particle_sniper'
-      sound = 'shoot'
+      sound = 'sound_sniper'
     } else if (this.chosenGun == 2) {
       bullet = this.physics.add.sprite(originX, originY, 'bullet_mortar').setCircle(10)
       texture = 'particle_mortar'
-      sound = 'shoot'
+      sound = 'sound_mortar'
     } else {
       bullet = this.physics.add.sprite(originX, originY, 'bullet')
-    }
-
-
+    }   
+    // Emit particles
     const emitter = this.add.particles(texture).setDepth(2).createEmitter({
       follow: bullet,
       lifespan: 150,
@@ -283,8 +282,6 @@ class LevelTemplate extends Phaser.Scene {
       quantity: 1,
       blendMode: 'ADD'
     });;
-
-    // Emit particles...
     const particle = emitter.emitParticle();
     this.time.delayedCall(1000, () => {
       console.log(emitter)
@@ -296,7 +293,6 @@ class LevelTemplate extends Phaser.Scene {
     if (bullet.texture.key == 'bullet_mortar') {
       this.physics.add.collider(bullet, layers.calc_walls, this.splashDamage, null, this)
       this.physics.add.collider(bullet, target, (bullet, target) => {
-        console.log("damage:", this.gun.damage)
         this.damage(bullet, target, this.gun.damage);
         this.splashDamage(bullet);
       }, null, this);
@@ -304,7 +300,6 @@ class LevelTemplate extends Phaser.Scene {
     } else {
       this.physics.add.collider(bullet, layers.calc_walls, this.destroy, null, this)
       this.physics.add.collider(bullet, target, (bullet, target) => {
-        console.log("damage:", this.gun.damage)
         this.damage(bullet, target, this.gun.damage);
         bullet.destroy();
       }, null, this);
@@ -325,16 +320,19 @@ class LevelTemplate extends Phaser.Scene {
 
   shootEnemyBullet(enemy, layers) {
     let enemyBullet = null
+    let sound= null
     if (enemy.name != "practice" && enemy.targetInRange) {
       if (enemy.canShoot) {
         enemy.canShoot = false;
         if (enemy.name == "soldier") {
           enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+          sound = 'sound_rifle'
         } else if (enemy.name == "tank") {
           enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+          sound = 'sound_sniper'
         } else if (enemy.name == "hover") {
           enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'mortar_orb').setScale(0.25).setCircle(100)
-          enemyBullet.play("mortar_orb_effects")
+          sound = 'sound_mortar'
         } else {
           enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet')
         }
@@ -345,7 +343,7 @@ class LevelTemplate extends Phaser.Scene {
           this.damagePlayer(player, bullet, enemy.bulletDamage);
           bullet.destroy()
         }, null, this);
-        this.sound.play("shoot", { volume: this.fxVolume });//add distance player/enemy
+        this.sound.play(sound, { volume: this.fxVolume });//add distance player/enemy
         this.time.delayedCall(10000, () => {
           enemyBullet.destroy();
         });
@@ -361,6 +359,8 @@ class LevelTemplate extends Phaser.Scene {
 
 
   splashDamage(bullet) {
+    this.sound.play("sound_explosion", { volume: this.fxVolume });
+
     let explosion = this.physics.add.sprite(bullet.x, bullet.y)
       .setScale(this.gun.splashRadius / 256)
       .setOrigin(0.5, 0.5)
@@ -371,7 +371,6 @@ class LevelTemplate extends Phaser.Scene {
     explosion.body.setAllowGravity(false)
     this.physics.add.overlap(explosion, this.enemies, (explosion, target) => {
       this.damage(explosion, target, this.gun.splashDamage);
-      console.log("mdr")
     }, null, this);
     this.physics.add.overlap(this.player, explosion, (player, bullet) => {
       this.damagePlayer(player, bullet, this.gun.splashDamage);
@@ -390,7 +389,6 @@ class LevelTemplate extends Phaser.Scene {
 
   damage(bullet, target, value) {
     target.loseHP(value)
-    console.log(target.hp)
     if (target.hp <= 0) {
       this.events.off(Phaser.Scenes.Events.UPDATE, target.update, target);
       this.killcount += 1;

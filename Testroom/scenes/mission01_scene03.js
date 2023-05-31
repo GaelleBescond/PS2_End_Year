@@ -33,6 +33,8 @@ class Mission01_scene03 extends LevelTemplate {
   };
 
   create() {
+   /* const canvas = this.sys.canvas;
+    canvas.style.cursor = "none";*/
     const offset = 36
     const levelMap = this.add.tilemap(this.sceneName);
     this.layers = this.loadMap(levelMap);

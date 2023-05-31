@@ -71,6 +71,17 @@ class Interface extends Phaser.Scene {
   }
   update() { }
 
+  hpUpdate(hp) {
+    const healthGauge = this.add.graphics();
+    healthGauge.setDepth(0)
+    healthGauge.clear()
+    healthGauge.fillStyle(0xFF0000);
+    healthGauge.fillRect(this.increment * 4, this.increment, 100 * 3, 32);
+    const fill = (hp / this.maxHp) * 100;
+    healthGauge.fillStyle(0x00FF00);
+    healthGauge.fillRect(this.increment * 4, this.increment, fill * 3, 32);
+    this.healthBar.setText('Armor : ' + hp).setDepth(1)
+  }
   energyUpdate(energy) {
     const energyGauge = this.add.graphics();
     energyGauge.setDepth(0)
@@ -83,17 +94,7 @@ class Interface extends Phaser.Scene {
     this.energyCount.setText('Energy : ' + energy).setDepth(1)
   }
 
-  hpUpdate(hp) {
-    const healthGauge = this.add.graphics();
-    healthGauge.setDepth(0)
-    healthGauge.clear()
-    healthGauge.fillStyle(0xCCCCCC);
-    healthGauge.fillRect(this.increment * 4, this.increment, 100 * 3, 32);
-    const fill = (hp / this.maxHp) * 100;
-    healthGauge.fillStyle(0x884400);
-    healthGauge.fillRect(this.increment * 4, this.increment, fill * 3, 32);
-    this.healthBar.setText('Armor : ' + hp).setDepth(1)
-  }
+
 
   progressUpdate(progress) {
     const progressGauge = this.add.graphics();

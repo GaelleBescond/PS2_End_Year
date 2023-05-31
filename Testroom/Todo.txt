@@ -1,49 +1,29 @@
-TO DO: saturday:
-    //- investigate slowdowns
-    - Publish GitPage + form
-    - 
-    
-https://forms.gle/dQizt5WSTEEwqfRe7
+- UI:
+    - Narrative
+    - Player clarity (hp, energy)
+    - Particle emission on jetpack
+    - Particle emission on energy regen
 
-
-
-
-
-In order of priority:
-- Narrative UI 
-
-- create splash damage round boxes
 
 - Enemies 
     - drops hp and energy
-    - Better models and texture
-
-
-- Win conditions
-    - escape
-    - clear all enemies
+    - Create tank model
+    - create hover model
+    - create turret model
+    - create soldier/robot model
 
 -Guns:
-    - Create unique sprites
-    - Create unique Bullets
-    - Create splash damage for mortar
-
-
--Campain Level Design
-wip env 3/1 - Scene 1 (movements then weapons)
-wip env 1/2 - Scene 2 (only soldiers, go inside base)
-    env 2/3 - Scene 3 (+ mortar, defend base against tanks, go under base)
-    env 3   - Scene 4 (soldiers + lights, go )
-    env 3/2 - Scene 5 (go outside base, soldiers + tanks + hovers)
-    env 2   - Scene 6 (entrenched, grav tool + all enemies converging) -> Create mobs spawners
+    - Create mortar sprite
+    - create mortar bullet + particle
+    - create sniper sprite
+    - create sniper bullet + particle
+    - create rifle bullet + particle
 
 - Beta test
     - List volunteers
     - Create executable
     - Create google form
-    - Publish beta-test on itch.io
-
-
+    
 Main Menu:
 - Settings
     - keys (WiP) (export data des touches?)

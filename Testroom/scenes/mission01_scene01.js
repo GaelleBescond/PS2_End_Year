@@ -32,6 +32,10 @@ class Mission01_scene01 extends LevelTemplate {
   };
 
   create() {
+    const canvas = this.sys.canvas;
+    canvas.style.cursor = "none";
+
+
     const offset = 36
     const levelMap = this.add.tilemap(this.sceneName);
     this.layers = this.loadMap(levelMap);
@@ -56,6 +60,7 @@ class Mission01_scene01 extends LevelTemplate {
   };
 
   update() {
+  console.log(this.player.body.velocity)
     this.progress = this.killcount / this.sceneEnemies * 100;
     this.updateUI.emit('newMessage', this.objective, this.popUp);
     //gameplay methods
