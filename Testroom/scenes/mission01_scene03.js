@@ -16,7 +16,7 @@ class Mission01_scene03 extends LevelTemplate {
     this.fxVolume = data.fxVolume;
     this.chosenGun = 1;
     this.canSwap = true;
-    this.maxWeapons = 1;
+    this.maxWeapons = 2;
     this.targetZoom = 0.55;
     this.physics.world.gravity.y = 1000;
     this.baseGravity = this.physics.world.gravity.y
@@ -26,7 +26,7 @@ class Mission01_scene03 extends LevelTemplate {
     this.wincondition = false;
     this.killcount = 0;
     this.sceneEnemies = 0;
-    this.timer = 8500
+    this.timer = 0;
     this.objective = "Use your sniper to defend the base";
     this.popUp = "Use A/E to switch weapons";
     this.progress = 0
@@ -62,7 +62,7 @@ class Mission01_scene03 extends LevelTemplate {
     this.updateCamera();
     if (this.progress < 100) {
       this.timer += 1;
-      this.progress = (this.timer / 9000) * 100
+      this.progress = (this.timer / 3000) * 100
       if (this.progress >= 100) {
         this.progress = 100
       }
@@ -72,7 +72,7 @@ class Mission01_scene03 extends LevelTemplate {
     }
     //level tools for player
     this.swapGun(this.eKey, this.qKey, this.maxWeapons);
-    if (this.maxWeapons == 1 && this.timer > 5000) {
+    if (this.maxWeapons == 1 && this.timer > 1500) {
       this.maxWeapons = 2
       this.objective = "We have provided you a mortar to help"
       this.popUp = "The mortar is good to deal with groups of enemies and tanks"
@@ -85,7 +85,7 @@ class Mission01_scene03 extends LevelTemplate {
       });
     };
     if (!this.wincondition) {
-      if (this.timer == 9000) {
+      if (this.timer == 3000) {
         this.wincondition = true;
       }
     }

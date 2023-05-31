@@ -18,7 +18,7 @@ class LevelTemplate extends Phaser.Scene {
       key: name,
       physics: {
         arcade: {
-          debug: false
+          debug: true
         }
       },
       render: {
@@ -52,13 +52,13 @@ class LevelTemplate extends Phaser.Scene {
   loadMap(levelMap) {
     this.loadBackground()
     const tileset = levelMap.addTilesetImage("Tileset_testroom", "tileset_image");
-    const calc_terrain = levelMap.createLayer("Background", tileset);
+    // const calc_terrain = levelMap.createLayer("Background", tileset);
     const calc_walls = levelMap.createLayer("Walls", tileset)
     const checkPoints = levelMap.getObjectLayer("Player_Spawn");
     const platforms = levelMap.getObjectLayer("Platforms");
     const enemy_SpawnPoints = levelMap.getObjectLayer("Enemies_Spawn");
     calc_walls.setCollisionByProperty({ isSolid: true });
-    return { checkPoints, calc_walls, calc_terrain, tileset, enemy_SpawnPoints, platforms, }
+    return { checkPoints, calc_walls, /*calc_terrain,*/ tileset, enemy_SpawnPoints, platforms, }
   }
 
   loadBackground() {
@@ -117,7 +117,6 @@ class LevelTemplate extends Phaser.Scene {
     } else {
       object.body.checkCollision.up = true;
     }
-    console.log(object.body.checkCollision.up)
   }
 
   setSpawn(object) {
@@ -137,7 +136,6 @@ class LevelTemplate extends Phaser.Scene {
   }
 
   playAmbientMusic(music) {
-    console.log(music)
     this.game.sound.stopAll()
     this.sound.play(music, { volume: this.musicVolume, loop: true });
   }
@@ -184,7 +182,7 @@ class LevelTemplate extends Phaser.Scene {
     return enemies;
   }
 
-  enemiesBehaviour(enemies) {
+  enemiesBehaviour() {
     this.enemies.forEach(enemy => {
       enemy.update(this.player);
     })
@@ -258,50 +256,98 @@ class LevelTemplate extends Phaser.Scene {
   shootBullet(originX, originY, angle, layers, target) {
     this.player.energy -= this.gun.consumption;
     this.gun.weaponCanShoot = false;
+    let texture = null;
+    let sound = null
+    let bullet = null
     if (this.chosenGun == 0) {
-      this.bullet = this.physics.add.sprite(originX, originY, 'bullet').setCircle(10)
+      bullet = this.physics.add.sprite(originX, originY, 'bullet').setCircle(10)
+      texture = 'particle_rifle'
+      sound = 'shoot'
     } else if (this.chosenGun == 1) {
-      this.bullet = this.physics.add.sprite(originX, originY, 'sniper_bullet').setCircle(10)
+      bullet = this.physics.add.sprite(originX, originY, 'bullet_sniper').setCircle(10)
+      texture = 'particle_sniper'
+      sound = 'shoot'
     } else if (this.chosenGun == 2) {
-      this.bullet = this.physics.add.sprite(originX, originY, 'mortar_orb').setScale(0.25).setCircle(100)
-      this.bullet.play("mortar_orb_effects")
+      bullet = this.physics.add.sprite(originX, originY, 'bullet_mortar').setCircle(10)
+      texture = 'particle_mortar'
+      sound = 'shoot'
     } else {
-      this.bullet = this.physics.add.sprite(originX, originY, 'bullet')
+      bullet = this.physics.add.sprite(originX, originY, 'bullet')
     }
-    this.bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
-    this.physics.add.collider(this.bullet, layers.calc_walls, this.destroy, null, this)
-    this.physics.add.collider(this.bullet, target, this.damage, null, this)
-    this.sound.play("shoot", { volume: this.fxVolume });
+
+
+    const emitter = this.add.particles(texture).setDepth(2).createEmitter({
+      follow: bullet,
+      lifespan: 150,
+      alpha: 0.2,
+      quantity: 1,
+      blendMode: 'ADD'
+    });;
+
+    // Emit particles...
+    const particle = emitter.emitParticle();
     this.time.delayedCall(1000, () => {
+      console.log(emitter)
+      emitter.killAll();
+    });
+
+
+    bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
+    if (bullet.texture.key == 'bullet_mortar') {
+      this.physics.add.collider(bullet, layers.calc_walls, this.splashDamage, null, this)
+      this.physics.add.collider(bullet, target, (bullet, target) => {
+        console.log("damage:", this.gun.damage)
+        this.damage(bullet, target, this.gun.damage);
+        this.splashDamage(bullet);
+      }, null, this);
+
+    } else {
+      this.physics.add.collider(bullet, layers.calc_walls, this.destroy, null, this)
+      this.physics.add.collider(bullet, target, (bullet, target) => {
+        console.log("damage:", this.gun.damage)
+        this.damage(bullet, target, this.gun.damage);
+        bullet.destroy();
+      }, null, this);
+    }
+
+
+    this.physics.add.collider(emitter, layers.calc_walls, this.destroy, null, this)
+    this.physics.add.collider(emitter, target, this.destroy, null, this)
+    this.sound.play(sound, { volume: this.fxVolume });
+
+    this.time.delayedCall(this.gun.weaponCooldown, () => {
       this.gun.weaponCanShoot = true;
     });
     this.time.delayedCall(20000, () => {
-      this.bullet.destroy();
+      bullet.destroy();
     });
   }
 
   shootEnemyBullet(enemy, layers) {
+    let enemyBullet = null
     if (enemy.name != "practice" && enemy.targetInRange) {
       if (enemy.canShoot) {
         enemy.canShoot = false;
         if (enemy.name == "soldier") {
-          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
         } else if (enemy.name == "tank") {
-          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
         } else if (enemy.name == "hover") {
-          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'mortar_orb').setScale(0.25).setCircle(100)
-          this.enemyBullet.play("mortar_orb_effects")
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'mortar_orb').setScale(0.25).setCircle(100)
+          enemyBullet.play("mortar_orb_effects")
         } else {
-          this.enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet')
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet')
         }
-        this.enemyBullet.setVelocity(Math.cos(enemy.bulletAngle) * enemy.bulletVelocity, Math.sin(enemy.bulletAngle) * enemy.bulletVelocity);
-        this.physics.add.collider(this.enemyBullet, layers.calc_walls, this.destroy, null, this)
-        this.physics.add.collider(this.player, this.enemyBullet, (player, bullet) => {
+        enemyBullet.setVelocity(Math.cos(enemy.bulletAngle) * enemy.bulletVelocity, Math.sin(enemy.bulletAngle) * enemy.bulletVelocity);
+        this.physics.add.collider(enemyBullet, layers.calc_walls, this.destroy, null, this)
+
+        this.physics.add.collider(this.player, enemyBullet, (player, bullet) => {
           this.damagePlayer(player, bullet, enemy.bulletDamage);
+          bullet.destroy()
         }, null, this);
         this.sound.play("shoot", { volume: this.fxVolume });//add distance player/enemy
         this.time.delayedCall(10000, () => {
-          this.enemyBullet.destroy();
+          enemyBullet.destroy();
         });
       } else if (!enemy.canShoot && !enemy.isOnCooldown) {
         enemy.isOnCooldown = true;
@@ -313,14 +359,38 @@ class LevelTemplate extends Phaser.Scene {
     }
   }
 
-  damagePlayer(target, bullet, value) {
+
+  splashDamage(bullet) {
+    let explosion = this.physics.add.sprite(bullet.x, bullet.y)
+      .setScale(this.gun.splashRadius / 256)
+      .setOrigin(0.5, 0.5)
+      .setCircle(128)
+      .setDepth(2)
+      .play("mortar_orb_effects")
+
+    explosion.body.setAllowGravity(false)
+    this.physics.add.overlap(explosion, this.enemies, (explosion, target) => {
+      this.damage(explosion, target, this.gun.splashDamage);
+      console.log("mdr")
+    }, null, this);
+    this.physics.add.overlap(this.player, explosion, (player, bullet) => {
+      this.damagePlayer(player, bullet, this.gun.splashDamage);
+    }, null, this);
+
     bullet.destroy()
-    target.hp -= value
+
+    this.time.delayedCall(1000, () => {
+      explosion.destroy();
+    });
   }
 
-  damage(bullet, target) {
-    bullet.destroy()
-    target.loseHP(this.gun.damage)
+  damagePlayer(target, bullet, value) {
+    target.loseHP(value)
+  }
+
+  damage(bullet, target, value) {
+    target.loseHP(value)
+    console.log(target.hp)
     if (target.hp <= 0) {
       this.events.off(Phaser.Scenes.Events.UPDATE, target.update, target);
       this.killcount += 1;

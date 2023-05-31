@@ -10,9 +10,7 @@ class Mission01_scene05 extends LevelTemplate {
     this.data_holder = {
       gunAngle: 0,
       cameraPosX: 0,
-      cameraPosY: 0,
-      enemiesNumber: 0,
-      progress: 0
+      cameraPosY: 0
     };
     this.musicVolume = data.musicVolume;
     this.fxVolume = data.fxVolume;

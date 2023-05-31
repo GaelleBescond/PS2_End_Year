@@ -11,11 +11,15 @@ class Preload extends Phaser.Scene {
         this.load.image('enemy_turret', 'assets/enemy_turret.png');
         this.load.image('crosshair', 'assets/crosshair.png');
         this.load.image('checkpoint', 'assets/checkpoint.png');
+        this.load.image('particle_rifle', 'assets/particle_rifle.png');
+        this.load.image('particle_sniper', 'assets/particle_sniper.png');
+        this.load.image('particle_mortar', 'assets/particle_mortar.png');
 
         this.load.image('practice_target', 'assets/practice_target.png');
         this.load.image('door', 'assets/door.png');
-        this.load.image('bullet', 'assets/bullet.png');
-        this.load.image('sniper_bullet', 'assets/sniper_bullet.png');
+        this.load.image('bullet', 'assets/bullet_rifle.png');
+        this.load.image('bullet_sniper', 'assets/bullet_sniper.png');
+        this.load.image('bullet_mortar', 'assets/bullet_mortar.png');
         this.load.image('platform', 'assets/platform.png');
         this.load.image('asteroidBackground', 'assets/bg.jpg');
         this.load.image('backgroundSpace', 'assets/backgroundSpace.png');
@@ -114,8 +118,7 @@ class Preload extends Phaser.Scene {
         this.anims.create({
             key: "mortar_orb_effects",
             frames: this.anims.generateFrameNumbers("mortar_orb", { start: 0, end: 36 }),
-            frameRate: 20,
-            repeat: -1,
+            frameRate: 36,
         });
 
         this.scene.start("MainMenu", {

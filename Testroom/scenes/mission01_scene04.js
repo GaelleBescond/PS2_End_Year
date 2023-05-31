@@ -73,7 +73,6 @@ class Mission01_scene04 extends LevelTemplate {
     } else {
       this.progress = Phaser.Math.Distance.Between(this.spawnX, this.spawnY, -13248, 2624) / Phaser.Math.Distance.Between(this.player.x, this.player.y, -13696, 2624);
     }
-    console.log(this.spawnX, this.spawnY, this.wincondition)
 
     if (this.spawnX == -13248 && this.spawnY == 2624 && !this.wincondition) {
       this.wincondition = true;

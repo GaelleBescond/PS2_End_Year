@@ -14,7 +14,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.hp = 100;
         this.maxhp = this.hp;
         this.canMove = true;
-        this.body.maxVelocity.x = 800;
+        this.body.maxVelocity.x = 1200;
         this.body.maxVelocity.y = 1000;
         this.body.acceleration.x = 0;
         this.canThrust = true;
@@ -23,6 +23,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.airStatus = true;
         this.goingDown = false;
+        this.iFrame = false;
     }
     initEvents() {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
@@ -152,8 +153,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     loseHP(value) {
-        console.log(value)
-        this.hp -= value;
+        if (!this.iFrame) {
+            this.hp -= value;
+            this.iFrame = true
+            this.setTint(0xFF0000)
+            this.delayedEvent = this.scene.time.delayedCall(500, () => {
+                this.iFrame = false;
+                this.setTint()
+            });
+        }
     }
 
 }

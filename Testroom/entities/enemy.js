@@ -27,6 +27,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.name = ""
         this.isOnCooldown = false;
         this.targetInRange = false;
+        this.iFrame = false
 
 
     }
@@ -40,7 +41,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     loseHP(value) {
-        this.hp -= value;
+        if (!this.iFrame) {
+            this.hp -= value;
+            this.iFrame = true
+            this.setTint(0xFF0000)
+            this.delayedEvent = this.scene.time.delayedCall(500, () => {
+                this.iFrame = false;
+                this.setTint()
+            });
+        }
     }
 
     turnBack() {

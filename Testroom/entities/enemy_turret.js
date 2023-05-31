@@ -22,12 +22,13 @@ class Turret extends Enemy {
         this.body.setAllowGravity(false)
         this.isOnCooldown = false;
         this.targetInRange = false;
-
+        this.isHostile = true
 
     }
 
     update() {
         if (this.body) {
+           
 
         }
 
