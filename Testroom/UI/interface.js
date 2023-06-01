@@ -31,6 +31,7 @@ class Interface extends Phaser.Scene {
   }
 
   create() {
+    this.crosshair = this.add.sprite(0, 0, "crosshair").setScale(0.1)
     this.font = 'Mecha'
     this.increment = 16;
     this.scene.bringToTop();
@@ -68,20 +69,23 @@ class Interface extends Phaser.Scene {
       this.popUP.setText(popUp)
 
     })
+
+    this.crosshairUpdate()
   }
   update() { }
 
   hpUpdate(hp) {
+    const fill = (hp / this.maxHp) * 100;
     const healthGauge = this.add.graphics();
     healthGauge.setDepth(0)
     healthGauge.clear()
     healthGauge.fillStyle(0xFF0000);
     healthGauge.fillRect(this.increment * 4, this.increment, 100 * 3, 32);
-    const fill = (hp / this.maxHp) * 100;
     healthGauge.fillStyle(0x00FF00);
     healthGauge.fillRect(this.increment * 4, this.increment, fill * 3, 32);
     this.healthBar.setText('Armor : ' + hp).setDepth(1)
   }
+
   energyUpdate(energy) {
     const energyGauge = this.add.graphics();
     energyGauge.setDepth(0)
@@ -106,6 +110,12 @@ class Interface extends Phaser.Scene {
     progressGauge.fillStyle(0x444488);
     progressGauge.fillRect(this.increment * 4, this.increment * 7, fill * 3, 32);
     this.progressBar.setText('Progress : ' + Math.ceil(progress)).setDepth(1)
+  }
+
+  crosshairUpdate() {
+    this.input.on('pointermove', (pointer) => {
+      this.crosshair.setPosition(pointer.x, pointer.y)
+    }, this);
   }
 }
 

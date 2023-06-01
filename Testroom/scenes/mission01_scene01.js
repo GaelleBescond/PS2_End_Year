@@ -32,8 +32,7 @@ class Mission01_scene01 extends LevelTemplate {
   };
 
   create() {
-    const canvas = this.sys.canvas;
-    canvas.style.cursor = "none";
+    this.input.setDefaultCursor('none');
 
 
     const offset = 36
@@ -60,7 +59,6 @@ class Mission01_scene01 extends LevelTemplate {
   };
 
   update() {
-  console.log(this.player.body.velocity)
     this.progress = this.killcount / this.sceneEnemies * 100;
     this.updateUI.emit('newMessage', this.objective, this.popUp);
     //gameplay methods
@@ -86,6 +84,7 @@ class Mission01_scene01 extends LevelTemplate {
       this.playerDeath()
     }
     this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp, this.progress);
+    this.localUI();
   }
 
 }

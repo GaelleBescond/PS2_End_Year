@@ -18,7 +18,7 @@ class LevelTemplate extends Phaser.Scene {
       key: name,
       physics: {
         arcade: {
-          debug: true
+          debug: false
         }
       },
       render: {
@@ -45,6 +45,7 @@ class LevelTemplate extends Phaser.Scene {
     this.killcount = 0;
     this.sceneEnemies = 0;
     this.progress = 0
+    this.crosshair = null
 
   }
 
@@ -197,7 +198,7 @@ class LevelTemplate extends Phaser.Scene {
 
   createCamera() {
     //set camera between player and mouse (average coordinates)
-    this.cameraFocal = this.physics.add.sprite(this.player.x, this.player.y, "crosshair")
+    this.cameraFocal = this.physics.add.sprite(this.player.x, this.player.y, "checkpoint")
       .setScale(0.15);
     this.cameraFocal.body.setAllowGravity(false);
     this.cameras.main.startFollow(this.cameraFocal);
@@ -273,7 +274,8 @@ class LevelTemplate extends Phaser.Scene {
       sound = 'sound_mortar'
     } else {
       bullet = this.physics.add.sprite(originX, originY, 'bullet')
-    }   
+    }
+
     // Emit particles
     const emitter = this.add.particles(texture).setDepth(2).createEmitter({
       follow: bullet,
@@ -281,12 +283,12 @@ class LevelTemplate extends Phaser.Scene {
       alpha: 0.2,
       quantity: 1,
       blendMode: 'ADD'
-    });;
-    const particle = emitter.emitParticle();
-    this.time.delayedCall(1000, () => {
-      console.log(emitter)
-      emitter.killAll();
     });
+    const particle = emitter.emitParticle();
+    this.time.delayedCall(4000, () => {
+      this.killParticles(emitter)
+    });
+
 
 
     bullet.setVelocity(Math.cos(angle) * this.gun.bulletVelocity, Math.sin(angle) * this.gun.bulletVelocity);
@@ -306,8 +308,8 @@ class LevelTemplate extends Phaser.Scene {
     }
 
 
-    this.physics.add.collider(emitter, layers.calc_walls, this.destroy, null, this)
-    this.physics.add.collider(emitter, target, this.destroy, null, this)
+
+
     this.sound.play(sound, { volume: this.fxVolume });
 
     this.time.delayedCall(this.gun.weaponCooldown, () => {
@@ -320,19 +322,22 @@ class LevelTemplate extends Phaser.Scene {
 
   shootEnemyBullet(enemy, layers) {
     let enemyBullet = null
-    let sound= null
+    let sound = null
     if (enemy.name != "practice" && enemy.targetInRange) {
       if (enemy.canShoot) {
         enemy.canShoot = false;
         if (enemy.name == "soldier") {
-          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet_rifle').setCircle(10)
           sound = 'sound_rifle'
         } else if (enemy.name == "tank") {
-          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet').setCircle(10)
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet_sniper').setCircle(10)
           sound = 'sound_sniper'
         } else if (enemy.name == "hover") {
           enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'mortar_orb').setScale(0.25).setCircle(100)
           sound = 'sound_mortar'
+        } else if (enemy.name == "turret") {
+          enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet_rifle').setScale(0.25).setCircle(100)
+          sound = 'shoot'
         } else {
           enemyBullet = this.physics.add.sprite(enemy.x, enemy.y, 'bullet')
         }
@@ -357,6 +362,10 @@ class LevelTemplate extends Phaser.Scene {
     }
   }
 
+  killParticles(emitter) {
+    emitter.killAll();
+    emitter.remove();
+  }
 
   splashDamage(bullet) {
     this.sound.play("sound_explosion", { volume: this.fxVolume });
@@ -464,6 +473,49 @@ class LevelTemplate extends Phaser.Scene {
   }
   swapCooldown() {
     this.canSwap = true;
+  }
+
+
+  localUI() {
+    let fill = (this.player.hp / this.player.maxhp) * 100;
+    if (fill < 0) {
+      fill = 0
+    }
+
+
+    const healthBar = this.add.graphics();
+    healthBar.setDepth(0)
+    healthBar.fillStyle(0xFF0000);
+    healthBar.fillRect(0, 0, 100, 8);
+    healthBar.fillStyle(0x00FF00);
+    healthBar.fillRect(0, 0, fill, 8);
+    healthBar.x = this.player.body.x;
+    healthBar.y = this.player.body.y + 300;
+    fill = (this.player.energy / this.player.maxEnergy) * 100;
+    if (fill < 0) {
+      fill = 0
+    }
+    const energyBar = this.add.graphics();
+    energyBar.setDepth(0)
+    energyBar.fillStyle(0xFF8800);
+    energyBar.fillRect(0, 0, fill, 8);
+    energyBar.x = this.player.body.x;
+    energyBar.y = this.player.body.y + 308;
+
+
+
+
+
+    this.time.delayedCall(1, () => {
+      healthBar.clear()
+      energyBar.clear()
+
+    }, this);
+
+
+
+
+
   }
 }
 

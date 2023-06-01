@@ -31,8 +31,8 @@ class Mission01_scene02 extends LevelTemplate {
   };
 
   create() {
-    const canvas = this.sys.canvas;
-    canvas.style.cursor = "none";
+    this.input.setDefaultCursor('none');
+
     const offset = 36
     const levelMap = this.add.tilemap(this.sceneName);
     this.layers = this.loadMap(levelMap);
@@ -78,6 +78,7 @@ class Mission01_scene02 extends LevelTemplate {
     }
     this.updateUI.emit('newMessage', this.objective, this.popUp);
     this.updateUI.emit('dataUI', this.player.energy, this.gun.name, this.player.hp, this.progress);
+    this.localUI();
   }
 }
 export default Mission01_scene02

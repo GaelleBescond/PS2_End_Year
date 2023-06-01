@@ -46,14 +46,14 @@ class Preload extends Phaser.Scene {
         this.load.audio('lost', 'assets/sound/SS_Lost.mp3');
         this.load.audio('moon', 'assets/sound/SS_Moon.mp3');
         this.load.audio('zone', 'assets/sound/SS_Zone.mp3');
-        this.load.audio('menu', 'assets/sound/Menu.mp3');
-        this.load.audio('empty_gun', 'assets/sound/GunEmpty.mp3');
+        this.load.audio('menu', 'assets/sound/Menu.mp3');;
         
         this.load.audio('shoot', 'assets/sound/LaserShoot.mp3');
-        //this.load.audio('sound_rifle', 'assets/sound/sound_rifle.mp3');
+        this.load.audio('sound_rifle', 'assets/sound/sound_rifle.mp3');
         this.load.audio('sound_sniper', 'assets/sound/sound_sniper.mp3');
         this.load.audio('sound_mortar', 'assets/sound/sound_mortar.mp3');
         this.load.audio('sound_explosion', 'assets/sound/sound_explosion.mp3');
+        this.load.audio('empty_gun', 'assets/sound/GunEmpty.mp3')
 
 
         //Maps & levels

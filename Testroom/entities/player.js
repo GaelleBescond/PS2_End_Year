@@ -19,6 +19,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.acceleration.x = 0;
         this.canThrust = true;
         this.energy = 300
+        this.energy = this.energy
         this.maxEnergy = this.energy;
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.airStatus = true;
@@ -69,7 +70,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         //Animations
         this.animate();
-
     }
 
     groundMovements(left, right, up, down, space, aKey, sKey, dKey) {
@@ -92,14 +92,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+
     airMovements(left, right, up, down, space, aKey, sKey, dKey) {
         let accel = 120
-        if (space.isDown && sKey.isUp && this.canThrust && (this.body.velocity.y > 0) && this.energy > 0) {
-            this.body.velocity.y = this.body.velocity.y / 2
-            this.energy -= 1;
+
+
+
+
+
+        if (this.canThrust && this.energy > 0) {
+            if (space.isDown && sKey.isUp && this.body.velocity.y > 0) {
+                this.energy -= 1;
+                this.body.velocity.y = this.body.velocity.y / 2
+            }
             if (aKey.isDown) {
+                this.energy -= 1;
                 this.body.acceleration.x -= accel;
             } else if (dKey.isDown) {
+                this.energy -= 1;
                 this.body.acceleration.x += accel;
             } else {
                 this.body.acceleration.x = 0;
