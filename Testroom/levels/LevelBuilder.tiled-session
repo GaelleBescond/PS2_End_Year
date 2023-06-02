@@ -1,5 +1,5 @@
 {
-    "activeFile": "Mission01_scene01.json",
+    "activeFile": "Mission01_scene04.json",
     "expandedProjectPaths": [
         "."
     ],
@@ -12,8 +12,8 @@
             "scale": 0.0625,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 448,
-                "y": 736
+                "x": -2048,
+                "y": 5128
             }
         },
         "Beta_test.json#Tileset_testroom": {
@@ -51,11 +51,11 @@
                 4,
                 6
             ],
-            "scale": 0.25,
-            "selectedLayer": 5,
+            "scale": 0.125,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 2676,
-                "y": -536
+                "x": 4752,
+                "y": -2048
             }
         },
         "Mission01_scene01.json#Tileset_testroom": {
@@ -80,13 +80,17 @@
         },
         "Mission01_scene03.json": {
             "expandedObjectLayers": [
-                6
+                15,
+                11,
+                4,
+                6,
+                16
             ],
-            "scale": 0.125,
+            "scale": 0.0625,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": -3072,
-                "y": 5116
+                "x": -3488,
+                "y": -1184
             }
         },
         "Mission01_scene03.json#Tileset_testroom": {
@@ -99,11 +103,11 @@
                 4,
                 6
             ],
-            "scale": 0.0625,
-            "selectedLayer": 5,
+            "scale": 0.125,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": -176,
-                "y": -432
+                "x": -1624,
+                "y": 1696
             }
         },
         "Mission01_scene04.json#Tileset_testroom": {
@@ -213,7 +217,8 @@
         "Mission01_scene05.json",
         "Mission01_scene03.json",
         "Beta_test.json",
-        "Mission01_scene01.json"
+        "Mission01_scene01.json",
+        "Mission01_scene04.json"
     ],
     "project": "LevelBuilder.tiled-project",
     "recentFiles": [

@@ -1,8 +1,6 @@
 - UI:
     - Narrative
-    - Player clarity (hp, energy)
     - Particle emission on jetpack
-    - Particle emission on energy regen
 
 
 - Enemies 
