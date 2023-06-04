@@ -1,0 +1,32 @@
+- UI:
+    - Narrative
+
+- LD:
+    - Level 4 -> extend
+    - Level 5
+    - Level 6
+
+- Enemies 
+    - drops hp and energy
+    - Create tank spritesheet
+    - create hover model
+    - create turret model
+    - create soldier/robot model
+
+-Guns:
+    - Create mortar sprite
+    - create mortar bullet + particle
+    - create sniper sprite
+    - create sniper bullet + particle
+    - create rifle bullet + particle
+
+- Beta test
+    - List volunteers
+    - Create executable
+    - Create google form
+    
+Main Menu:
+- Settings
+    - keys (WiP) (export data des touches?)
+
+terrain texture wip
